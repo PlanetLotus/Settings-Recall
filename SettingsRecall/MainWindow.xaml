@@ -1,8 +1,8 @@
 ﻿<Window x:Class="SettingsRecall.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="SettingsRecall" Height="520" Width="780" ResizeMode="CanMinimize">
     <Grid>
-        
+      
     </Grid>
 </Window>
