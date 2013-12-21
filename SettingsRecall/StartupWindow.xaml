@@ -1,0 +1,10 @@
+﻿<Window x:Name="Startup_Window" x:Class="SettingsRecall.StartupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Welcome" Height="200" Width="300">
+    <Grid>
+        <Button Content="Backup Settings" HorizontalAlignment="Left" Width="159" Margin="64,36,0,98" Click="Button_Click_1"/>
+        <Button Content="Restore Saved Settings" HorizontalAlignment="Left" Width="159" Margin="64,89,0,44" Click="Button_Click_2"/>
+
+    </Grid>
+</Window>

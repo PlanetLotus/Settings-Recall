@@ -18,16 +18,12 @@ namespace SettingsRecall
     /// <summary>
     /// Interaction logic for BackupPage.xaml
     /// </summary>
-    public partial class BackupPage : Page
+    public partial class BackupPage : UserControl
     {
         public BackupPage()
         {
             InitializeComponent();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

@@ -24,5 +24,23 @@ namespace SettingsRecall
         {
             InitializeComponent();
         }
+
+        // Displays the backup page when the user chooses to
+        // from the startup window
+        public void ShowBackupPage()
+        {
+            // instantiate the UserControl
+            BackupPage backup_page = new BackupPage();
+            this.Content = backup_page;
+        }
+
+        // Display restore page
+        public void ShowRestorePage()
+        {
+            // instantiate the UserControl       
+            RestorePage restore_page = new RestorePage();
+            this.Content = restore_page;
+        }
+
     }
 }

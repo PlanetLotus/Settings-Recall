@@ -10,19 +10,33 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace SettingsRecall
 {
     /// <summary>
-    /// Interaction logic for RestorePage.xaml
+    /// Interaction logic for StartupWindow.xaml
     /// </summary>
-    public partial class RestorePage : UserControl
+    public partial class StartupWindow : Window
     {
-        public RestorePage()
+        public String main_page;
+
+        public StartupWindow()
         {
             InitializeComponent();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            main_page = "backup";
+            this.Close();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            main_page = "restore";
+            this.Close();
+        }
+
     }
 }
