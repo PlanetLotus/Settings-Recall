@@ -14,7 +14,8 @@ namespace SettingsRecall
         ///     Default Constructor for SQLiteDatabase Class.
         /// </summary>
         public SQLiteDatabase() {
-            dbConnection = "Data Source=test.db";
+            // This path will need updated when in production...should simply remove the ../../
+            dbConnection = "Data Source=../../test.db";
         }
 
         /// <summary>
