@@ -112,7 +112,8 @@ namespace SettingsRecall
             }
             try {
                 this.ExecuteNonQuery(String.Format("update {0} set {1} where {2};", tableName, vals, where));
-            } catch {
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
                 returnCode = false;
             }
             return returnCode;

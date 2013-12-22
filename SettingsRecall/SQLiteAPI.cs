@@ -26,7 +26,7 @@ namespace SettingsRecall {
         /// <param name="description">An optional description of the program.</param>
         /// <returns>Boolean success or failure.</returns>
         public bool AddProgram(string programName, Dictionary<string, Dictionary<string, string>> paths, string description) {
-            // Convert data to a JSON string
+            // Convert paths to a JSON string
             string json_paths = JsonConvert.SerializeObject(paths);
             Console.WriteLine(json_paths);
 
@@ -54,7 +54,36 @@ namespace SettingsRecall {
         /// <param name="paths">A list of paths to program settings files.</param>
         /// <param name="description">An optional description of the program.</param>
         /// <returns>Boolean success or failure.</returns>
-        public bool EditProgram(string programName, List<string> paths, string description) {
+        public bool EditProgram(string programName, Dictionary<string, Dictionary<string, string>> paths=null, string description=null) {
+            // Make sure there's something to update
+            if (paths == null && description == null) {
+                Console.WriteLine("Nothing to update! Returning...");
+                return false;
+            }
+
+            // Prepare the data for db
+            Dictionary<string, string> update = new Dictionary<string, string>();
+
+            // Optional parameter: Convert paths to a JSON string
+            if (paths != null) {
+                string json_paths = JsonConvert.SerializeObject(paths);
+                update.Add("Paths", json_paths);
+                Console.WriteLine(json_paths);
+            }
+
+            // Optional parameter: Add description
+            if (description != null) {
+                update.Add("Description", description);
+            }
+
+            // Insert into db
+            try {
+                db.Update("Program", update, String.Format("Name = '{0}'", programName));
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
             return true;
         }
 
