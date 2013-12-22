@@ -19,9 +19,40 @@ namespace SettingsRecall
     /// </summary>
     public partial class AddProgramWindow : Window
     {
+        private List<string> PathList = new List<string>();
+        
+
         public AddProgramWindow()
         {
             InitializeComponent();
         }
+
+        // click add files button
+        // adds paths to the list from an open file dialog
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            // instantiate new OpenFileDialog
+            Microsoft.Win32.OpenFileDialog open_dlg = new Microsoft.Win32.OpenFileDialog();
+            open_dlg.CheckFileExists = false; // user CAN enter nonexistent files!
+            open_dlg.Multiselect = true; // allow selection of multiple files
+
+            // show dialog
+            Nullable<bool> result = open_dlg.ShowDialog();
+
+            // add selected file paths to list
+            if (result == true)
+            {
+                foreach (string path in open_dlg.FileNames)
+                {
+                    PathList.Add(path);
+                    System.Diagnostics.Debug.WriteLine(path);
+                }
+            }
+            PathListBox.ItemsSource = PathList;
+        }
+
+
+
+
     }
 }
