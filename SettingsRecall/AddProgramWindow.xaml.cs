@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,13 @@ namespace SettingsRecall
     /// </summary>
     public partial class AddProgramWindow : Window
     {
-        private List<string> PathList = new List<string>();
+        private ObservableCollection<string> PathList = new ObservableCollection<string>();
         
 
         public AddProgramWindow()
         {
             InitializeComponent();
+            PathListBox.ItemsSource = PathList;
         }
 
         // click add files button
@@ -45,10 +47,8 @@ namespace SettingsRecall
                 foreach (string path in open_dlg.FileNames)
                 {
                     PathList.Add(path);
-                    System.Diagnostics.Debug.WriteLine(path);
                 }
             }
-            PathListBox.ItemsSource = PathList;
         }
 
 
