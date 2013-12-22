@@ -20,6 +20,7 @@ namespace SettingsRecall
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,6 +42,7 @@ namespace SettingsRecall
             RestorePage restore_page = new RestorePage();
             this.Content = restore_page;
         }
+
 
     }
 }
