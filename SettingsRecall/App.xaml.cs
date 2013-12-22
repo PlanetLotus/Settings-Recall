@@ -13,10 +13,12 @@ namespace SettingsRecall
     /// </summary>
     public partial class App : Application
     {
+        public static MainWindow mainWindow;
+
         void App_Startup(object sender, StartupEventArgs e)
         {
             // instantiate and show the main window
-            MainWindow mainWindow = new MainWindow();
+            mainWindow = new MainWindow();
             mainWindow.Show();
 
             // instantiate the startup window

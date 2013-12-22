@@ -51,5 +51,17 @@ namespace SettingsRecall
             folder_label.Content = Globals.load_save_location;
         }
 
+        // click 'Add Other Program' button
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            // instantiate dialog box
+            AddProgramWindow APWindow = new AddProgramWindow();
+
+            // configure dialog box and open modally
+            APWindow.Owner = App.mainWindow;
+            APWindow.ShowDialog();
+
+        }
+
     }
 }

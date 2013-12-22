@@ -25,7 +25,9 @@ namespace SettingsRecall
             InitializeComponent();
         }
 
-        // Set the global save/load location with a dialog
+        /// <summary>
+        /// Set the global save/load location with a dialog
+        /// </summary>
         public void SetLoadSaveLocation()
         {
             System.Windows.Forms.DialogResult result; // return value of dialog box
