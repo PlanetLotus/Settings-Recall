@@ -71,10 +71,48 @@ namespace SettingsRecall {
         /// Retrieve a list of programs from the database.
         /// </summary>
         /// <param name="list">Which list to retrieve.</param>
-        /// <returns></returns>
-        public List<string> GetProgramList(string list) {
+        /// <returns>The DataTable retrieved from the db.</returns>
+        public DataTable GetProgramList(string list) {
             // Not currently sure whether there will be more than one list in the db. Might just be the global list.
-            return null;
+
+            // Fetch the global list..not using this function's parameter at the moment
+            String query = "SELECT Name, Paths, Description FROM Program;";
+            DataTable dt;
+            try {
+                dt = db.GetDataTable(query);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+            return dt;
+        }
+
+        /// <summary>
+        /// Retrieve a list of program names from the database.
+        /// </summary>
+        /// <param name="list">Which list to retrieve.</param>
+        /// <returns>A list of names. One entry per row in the table.</returns>
+        public List<string> GetProgramNameList(string list) {
+            // Not currently sure whether there will be more than one list in the db. Might just be the global list.
+
+            // Fetch the global list..not using this function's parameter at the moment
+            String query = "SELECT Name FROM Program;";
+            DataTable dt;
+            try {
+                dt = db.GetDataTable(query);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+            // Convert datatable to list
+            List<string> names = new List<string>();
+            foreach (DataRow row in dt.Rows) {
+                names.Add(row["Name"].ToString());
+            }
+
+            return names;
         }
     }
 }
