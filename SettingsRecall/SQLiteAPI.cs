@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SettingsRecall {
     class SQLiteAPI {
@@ -20,10 +22,28 @@ namespace SettingsRecall {
         /// Add a new program to the database.
         /// </summary>
         /// <param name="programName">The name of the program to be added.</param>
-        /// <param name="paths">A list of paths to program settings files.</param>
+        /// <param name="paths">A series of paths to program settings files.</param>
         /// <param name="description">An optional description of the program.</param>
         /// <returns>Boolean success or failure.</returns>
-        public bool AddProgram(string programName, List<string> paths, string description) {
+        public bool AddProgram(string programName, Dictionary<string, Dictionary<string, string>> paths, string description) {
+            // Convert data to a JSON string
+            string json_paths = JsonConvert.SerializeObject(paths);
+            Console.WriteLine(json_paths);
+
+            // Prepare the data for db
+            Dictionary<string, string> insert = new Dictionary<string, string>();
+            insert.Add("Name", programName);
+            insert.Add("Paths", json_paths);
+            insert.Add("Description", description);
+
+            // Insert into db
+            try {
+                db.Insert("Program", insert);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
             return true;
         }
 
