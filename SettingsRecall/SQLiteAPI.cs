@@ -93,6 +93,13 @@ namespace SettingsRecall {
         /// <param name="programName">The name of the program to be deleted.</param>
         /// <returns>Boolean success or failure.</returns>
         public bool DeleteProgram(string programName) {
+            // This functionality could be extended to delete a program given a path or description, too...
+            try {
+                db.Delete("Program", String.Format("Name = '{0}'", programName));
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return false;
+            }
             return true;
         }
 
