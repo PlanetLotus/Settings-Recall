@@ -19,6 +19,14 @@ namespace SettingsRecall {
         }
 
         /// <summary>
+        /// Creates a new SQLiteDatabase object with specified database file.
+        /// </summary>
+        /// <param name="dbInputFile"></param>
+        public SQLiteAPI(string dbInputFile) {
+            db = new SQLiteDatabase(dbInputFile);
+        }
+
+        /// <summary>
         /// Add a new program to the database.
         /// </summary>
         /// <param name="programName">The name of the program to be added.</param>
