@@ -51,6 +51,25 @@ namespace SettingsRecall
             }
         }
 
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteListItem(PathListBox.SelectedIndex);
+        }
+
+        /// <summary>
+        /// delete item at index from PathList
+        /// </summary>
+        /// <param name="index">PathList index</param>
+        private void DeleteListItem(int index)
+        {
+            if (index > -1) // an item is selected
+            {
+                PathList.RemoveAt(index);
+            }
+        }
+
+        
+
 
 
 

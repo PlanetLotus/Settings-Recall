@@ -11,5 +11,6 @@
         <Label Content="Version Name:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="VersionNameText" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="176" Margin="102,47,0,0"/>
         <Button x:Name="SaveProgramButton" Content="Save Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="83" Margin="326,365,0,0"/>
+        <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,365,0,0" Click="DeleteButton_Click"/>
     </Grid>
 </Window>
