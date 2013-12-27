@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data;
 
 namespace SettingsRecall
 {
@@ -26,6 +27,7 @@ namespace SettingsRecall
         {
             InitializeComponent();
             PathListBox.ItemsSource = PathList;
+            DataTable programTable = Globals.sqlite_api.GetProgramList("String"); 
         }
 
         // click add files button
@@ -69,11 +71,14 @@ namespace SettingsRecall
 
         private void SaveProgramButton_Click(object sender, RoutedEventArgs e)
         {
+            string name = ProgramNameText.Text;
+            string version = VersionNameText.Text;
+            string description = descriptionText.Text;
 
             // Make sure all fields are valid
             // check 'program name'. Make sure name is valid and not already
             // in the database.
-            if (ProgramNameText.Text.Length < 1)
+            if (name.Length < 1)
             {
                 ErrorMessageBox no_name_msg = new ErrorMessageBox("Please enter a program name.");
                 no_name_msg.show();
@@ -81,11 +86,11 @@ namespace SettingsRecall
             }
             else
             {
-                ; // search the db
+                ;// search the db
             }
 
             // check the 'version name'
-            if (VersionNameText.Text.Length < 1)
+            if (version.Length < 1)
             {
                 ErrorMessageBox no_ver_msg = new ErrorMessageBox("Please enter a version name.");
                 no_ver_msg.show();
@@ -108,10 +113,43 @@ namespace SettingsRecall
                 ; // other restrictions?
             }
 
-
+            // Add program to db. GeneratePaths creates the 'paths' dictionary for the db.
+            if (!Globals.sqlite_api.AddProgram(name, GeneratePaths(version, PathList), description)) {
+                // Error!
+                // Handle Me!
+                ;
+            }
 
             this.Close();
         }
+
+        /// <summary>
+        /// Helper - Generates a paths dictionary which can be used in the db.
+        /// </summary>
+        /// <param name="version">Version name</param>
+        /// <param name="files">Files list</param>
+        /// <returns></returns>
+        private Dictionary<string, Dictionary<string, string>> GeneratePaths(string version, ObservableCollection<string> files)
+        {
+            int index = 0;
+            Dictionary<string, Dictionary<string, string>> paths =
+                new Dictionary<string,Dictionary<string,string>>();
+            Dictionary<string, string> inner = 
+                new Dictionary<string,string>();
+            
+            // create the inner dictionary first
+            foreach (string path in PathList)
+            {
+                inner.Add(index.ToString(), path);
+                index++;
+            }
+
+            // insert the inner into paths along with the version name
+            paths.Add(version, inner);
+
+            return paths;
+        }
+
 
     }
 }
