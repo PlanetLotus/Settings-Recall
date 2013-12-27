@@ -22,7 +22,6 @@ namespace SettingsRecall
     {
         private ObservableCollection<string> PathList = new ObservableCollection<string>();
         
-
         public AddProgramWindow()
         {
             InitializeComponent();
@@ -68,10 +67,51 @@ namespace SettingsRecall
             }
         }
 
-        
+        private void SaveProgramButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            // Make sure all fields are valid
+            // check 'program name'. Make sure name is valid and not already
+            // in the database.
+            if (ProgramNameText.Text.Length < 1)
+            {
+                ErrorMessageBox no_name_msg = new ErrorMessageBox("Please enter a program name.");
+                no_name_msg.show();
+                return;
+            }
+            else
+            {
+                ; // search the db
+            }
+
+            // check the 'version name'
+            if (VersionNameText.Text.Length < 1)
+            {
+                ErrorMessageBox no_ver_msg = new ErrorMessageBox("Please enter a version name.");
+                no_ver_msg.show();
+                return;
+            }
+            else
+            {
+                ; // other restrictions?
+            }
+
+            // check the file list
+            if (PathList.Count < 1)
+            {
+                ErrorMessageBox no_files_msg = new ErrorMessageBox("No files selected.");
+                no_files_msg.show();
+                return;
+            }
+            else
+            {
+                ; // other restrictions?
+            }
 
 
 
+            this.Close();
+        }
 
     }
 }

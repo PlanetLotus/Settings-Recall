@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace SettingsRecall {
-    class SQLiteAPI {
+    public class SQLiteAPI {
         SQLiteDatabase db;
 
         /// <summary>

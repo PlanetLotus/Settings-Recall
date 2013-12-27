@@ -73,6 +73,7 @@
       <DependentUpon>AddProgramWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="APITest.cs" />
+    <Compile Include="ErrorMessageBox.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="SQLiteAPI.cs" />
     <Compile Include="SQLiteDatabase.cs" />

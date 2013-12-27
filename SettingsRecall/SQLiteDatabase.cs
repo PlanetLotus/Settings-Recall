@@ -7,7 +7,7 @@ namespace SettingsRecall
 {
     // This class was borrowed from:
     // http://www.dreamincode.net/forums/topic/157830-using-sqlite-with-c%23/
-    class SQLiteDatabase {
+    public class SQLiteDatabase {
         String dbConnection;
 
         /// <summary>

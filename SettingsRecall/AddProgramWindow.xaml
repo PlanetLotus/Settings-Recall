@@ -2,15 +2,22 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:SettingsRecall" x:Class="SettingsRecall.AddProgramWindow"
-        Title="AddProgramWindow" Height="426" Width="427">
+        Title="AddProgramWindow" Height="462" Width="427"
+        ShowInTaskbar="False">
+    
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="335*"/>
+            <ColumnDefinition Width="84*"/>
+        </Grid.ColumnDefinitions>
         <Label Content="Program Name:" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="AddFilesButton" Content="Add Files" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="307,47,0,0" Click="Button_Click_1"/>
-        <ListBox x:Name="PathListBox" HorizontalAlignment="Left" Height="281" Margin="10,79,0,0" VerticalAlignment="Top" Width="399"/>
-        <TextBox x:Name="ProgramNameText" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="176" Margin="102,19,0,0"/>
+        <Button x:Name="AddFilesButton" Content="Add File(s)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="307,47,0,0" Click="Button_Click_1" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="PathListBox" HorizontalAlignment="Left" Height="281" Margin="10,79,0,0" VerticalAlignment="Top" Width="399" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="ProgramNameText" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" Margin="102,19,0,0"/>
         <Label Content="Version Name:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="VersionNameText" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="176" Margin="102,47,0,0"/>
-        <Button x:Name="SaveProgramButton" Content="Save Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="83" Margin="326,365,0,0"/>
+        <Button x:Name="SaveProgramButton" Content="Save Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="83" Margin="326,401,0,0" Click="SaveProgramButton_Click" Grid.ColumnSpan="2"/>
         <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,365,0,0" Click="DeleteButton_Click"/>
+        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="246,401,0,0" IsCancel="True"/>
     </Grid>
 </Window>
