@@ -1,0 +1,11 @@
+﻿<Window x:Class="SettingsRecall.ChooseEditProgramWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Choose Program to Edit" Height="341" Width="295">
+    <Grid>
+        <ListBox x:Name="programListBox" HorizontalAlignment="Left" Height="272" Margin="10,10,0,0" VerticalAlignment="Top" Width="267"/>
+        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="122,287,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="OKButton" Content="OK" HorizontalAlignment="Left" Margin="202,287,0,0" VerticalAlignment="Top" Width="75"/>
+
+    </Grid>
+</Window>

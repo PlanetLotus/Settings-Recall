@@ -27,7 +27,7 @@ namespace SettingsRecall
         {
             InitializeComponent();
             PathListBox.ItemsSource = PathList;
-            DataTable programTable = Globals.sqlite_api.GetProgramList("String"); 
+            DataTable programTable = Globals.sqlite_api.GetProgramList("String");
         }
 
         // click add files button

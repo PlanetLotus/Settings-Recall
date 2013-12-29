@@ -73,6 +73,12 @@
       <DependentUpon>AddProgramWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="APITest.cs" />
+    <Compile Include="ChooseEditProgramWindow.xaml.cs">
+      <DependentUpon>ChooseEditProgramWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditProgramWindow.xaml.cs">
+      <DependentUpon>EditProgramWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ErrorMessageBox.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="SQLiteAPI.cs" />
@@ -88,6 +94,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BackupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChooseEditProgramWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditProgramWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
