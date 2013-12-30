@@ -27,26 +27,71 @@ namespace SettingsRecall {
         }
 
         /// <summary>
-        /// Add a new program to the database.
+        /// Add a new Program to the database.
         /// </summary>
-        /// <param name="programName">The name of the program to be added.</param>
-        /// <param name="paths">A series of paths to program settings files.</param>
-        /// <param name="description">An optional description of the program.</param>
-        /// <returns>Boolean success or failure.</returns>
-        public bool AddProgram(string programName, Dictionary<string, Dictionary<string, string>> paths, string description) {
+        /// <param name="programName">Name of the program being added</param>
+        /// <returns>Boolean success of failure</returns>
+        public bool AddProgram(string programName)
+        {
+            // Prepare data for db
+            Dictionary<string, string> insert = new Dictionary<string, string>();
+            insert.Add("ProgramName", programName);
+
+            // Insert into db
+            try
+            {
+                db.Insert("Program", insert);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        // NEEDS TO CHECK FOR DUPES in name/version/os
+        /// <summary>
+        /// Add a program entry to the database.
+        /// The program entry list contains information about every version
+        /// of a program whereas the program list is simply a list of supported programs.
+        /// </summary>
+        /// <param name="programName">Name of the program being added.</param>
+        /// <param name="programVersion">Program version name.</param>
+        /// <param name="OS">Entry's intended OS.</param>
+        /// <param name="isPermanent">Will this entry be editable?</param>
+        /// <param name="description">Optional description of entry.</param>
+        /// <param name="paths">A list of all paths to preference files.</param>
+        /// <returns>Bool success or failure</returns>
+        public bool AddProgramEntry(
+            string programName, 
+            string programVersion, 
+            string OS, 
+            bool isPermanent, 
+            string description, 
+            Dictionary<string, string> paths) {
+
             // Convert paths to a JSON string
             string json_paths = JsonConvert.SerializeObject(paths);
             Console.WriteLine(json_paths);
 
+            // convert isPermanent to an int
+            int isPermInt = 0;
+            if (isPermanent) isPermInt = 1;
+
             // Prepare the data for db
             Dictionary<string, string> insert = new Dictionary<string, string>();
             insert.Add("Name", programName);
-            insert.Add("Paths", json_paths);
+            insert.Add("Version", programVersion);
+            insert.Add("OS", OS);
+            insert.Add("IsPermanent", isPermInt.ToString());
             insert.Add("Description", description);
+            insert.Add("Paths", json_paths);
 
             // Insert into db
             try {
-                db.Insert("Program", insert);
+                db.Insert("ProgramEntry", insert);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -55,22 +100,50 @@ namespace SettingsRecall {
             return true;
         }
 
+        // STILL WORK IN PROGRESS....
         /// <summary>
         /// Edit a program already in the database.
+        /// IsPermanent is not an editable field
         /// </summary>
         /// <param name="programName">The name of the program to be edited.</param>
         /// <param name="paths">A list of paths to program settings files.</param>
         /// <param name="description">An optional description of the program.</param>
         /// <returns>Boolean success or failure.</returns>
-        public bool EditProgram(string programName, Dictionary<string, Dictionary<string, string>> paths=null, string description=null) {
+        public bool EditProgramEntry(
+            string programName, 
+            string programVersion = null, 
+            string OS = null, 
+            string description=null,
+            Dictionary<string, string> paths=null) {
+
             // Make sure there's something to update
-            if (paths == null && description == null) {
+            if (programVersion == null &&
+                OS == null &&
+                paths == null &&
+                description == null) {
                 Console.WriteLine("Nothing to update! Returning...");
                 return false;
             }
 
             // Prepare the data for db
             Dictionary<string, string> update = new Dictionary<string, string>();
+
+            // Optional parameter: Add Version
+            if (programVersion != null)
+            {
+                update.Add("Version", programVersion);
+            }
+
+            // Optional parameter: Add OS
+            if (OS != null)
+            {
+                update.Add("OS", OS);
+            }
+
+            // Optional parameter: Add description
+            if (description != null) {
+                update.Add("Description", description);
+            }
 
             // Optional parameter: Convert paths to a JSON string
             if (paths != null) {
@@ -79,14 +152,9 @@ namespace SettingsRecall {
                 Console.WriteLine(json_paths);
             }
 
-            // Optional parameter: Add description
-            if (description != null) {
-                update.Add("Description", description);
-            }
-
             // Insert into db
             try {
-                db.Update("Program", update, String.Format("Name = '{0}'", programName));
+                db.Update("ProgramEntry", update, String.Format("Name = '{0}'", programName));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
