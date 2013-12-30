@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data;
+using System.Collections.ObjectModel;
 
 namespace SettingsRecall
 {
@@ -19,9 +21,22 @@ namespace SettingsRecall
     /// </summary>
     public partial class ChooseEditProgramWindow : Window
     {
+        private List<string> programList;
+
         public ChooseEditProgramWindow()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Populates the program ListBox with a list of programs available to edit.
+        /// </summary>
+        private void PopulateList()
+        {
+            programList = Globals.sqlite_api.GetProgramNameList("String");
+            ObservableCollection<string> observableList = new ObservableCollection<string>(programList);
+            programListBox.ItemsSource = observableList;
+        }
+
     }
 }

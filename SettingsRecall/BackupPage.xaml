@@ -12,8 +12,9 @@
         <Button Content="Remove" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,249,0,0"/>
         <Button Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,214,0,0"/>
         <Button Content="Create Backup" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86" Margin="645,466,0,0"/>
-        <Button Content="Choose Save Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="19,13,0,0" Click="Button_Click_1"/>
+        <Button Content="Choose Save Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="19,13,0,0" Click="chooseFolderButton_Click"/>
         <Label x:Name="folder_label" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,10,0,0" Width="301"/>
-        <Button Content="Add Other Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Margin="634,13,0,0" Click="Button_Click_2"/>
+        <Button Content="Add Other Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Margin="513,16,0,0" Click="addProgramButton_Click"/>
+        <Button x:Name="editProgramButton" Content="Edit Existing Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Margin="645,16,0,0" Click="editProgramButton_Click"/>
     </Grid>
 </UserControl>

@@ -43,16 +43,7 @@ namespace SettingsRecall
 
         }
 
-        // click 'choose folder' button
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            SetLoadSaveLocation();
-            // display directory in label
-            folder_label.Content = Globals.load_save_location;
-        }
-
-        // click 'Add Other Program' button
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void addProgramButton_Click(object sender, RoutedEventArgs e)
         {
             // instantiate dialog box
             AddProgramWindow APWindow = new AddProgramWindow();
@@ -60,7 +51,23 @@ namespace SettingsRecall
             // configure dialog box and open modally
             APWindow.Owner = App.mainWindow;
             APWindow.ShowDialog();
+        }
 
+        private void editProgramButton_Click(object sender, RoutedEventArgs e)
+        {
+            // instantiate 'choose program' dialog box
+            ChooseEditProgramWindow chooseWindow = new ChooseEditProgramWindow();
+
+            // configure dialog box and open modally
+            chooseWindow.Owner = App.mainWindow;
+            chooseWindow.ShowDialog();
+        }
+
+        private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetLoadSaveLocation();
+            // display directory in label
+            folder_label.Content = Globals.load_save_location;
         }
 
     }
