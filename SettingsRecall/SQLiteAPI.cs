@@ -30,7 +30,7 @@ namespace SettingsRecall {
         /// Add a new Program to the database.
         /// </summary>
         /// <param name="programName">Name of the program being added</param>
-        /// <returns>Boolean success of failure</returns>
+        /// <returns>Boolean success or failure</returns>
         public bool AddProgram(string programName)
         {
             // Prepare data for db
@@ -51,7 +51,6 @@ namespace SettingsRecall {
             return true;
         }
 
-        // NEEDS TO CHECK FOR DUPES in name/version/os
         /// <summary>
         /// Add a program entry to the database.
         /// The program entry list contains information about every version
@@ -61,22 +60,22 @@ namespace SettingsRecall {
         /// <param name="programVersion">Program version name.</param>
         /// <param name="OS">Entry's intended OS.</param>
         /// <param name="isPermanent">Will this entry be editable?</param>
-        /// <param name="description">Optional description of entry.</param>
         /// <param name="paths">A list of all paths to preference files.</param>
+        /// <param name="description">Optional description of entry.</param>
         /// <returns>Bool success or failure</returns>
         public bool AddProgramEntry(
             string programName, 
             string programVersion, 
             string OS, 
             bool isPermanent, 
-            string description, 
-            Dictionary<string, string> paths) {
+            List<string> paths,
+            string description="") { 
 
             // Convert paths to a JSON string
             string json_paths = JsonConvert.SerializeObject(paths);
             Console.WriteLine(json_paths);
 
-            // convert isPermanent to an int
+            // convert isPermanent to an int for the db
             int isPermInt = 0;
             if (isPermanent) isPermInt = 1;
 
@@ -90,6 +89,7 @@ namespace SettingsRecall {
             insert.Add("Paths", json_paths);
 
             // Insert into db
+            // If there's a problem, the exception is output to console. If we need to output to GUI, we need to pass that info back from SQLiteDatabase.cs
             try {
                 db.Insert("ProgramEntry", insert);
             } catch (Exception e) {
