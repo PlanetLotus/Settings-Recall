@@ -100,24 +100,26 @@ namespace SettingsRecall {
             return true;
         }
 
-        // STILL WORK IN PROGRESS....
         /// <summary>
         /// Edit a program already in the database.
         /// IsPermanent is not an editable field
         /// </summary>
-        /// <param name="programName">The name of the program to be edited.</param>
-        /// <param name="paths">A list of paths to program settings files.</param>
-        /// <param name="description">An optional description of the program.</param>
+        /// <param name="program_ID">The ID # of the program - not editable.</param>
+        /// <param name="programName">The new name of the program to be edited.</param>
+        /// <param name="paths">A new list of paths to program settings files.</param>
+        /// <param name="description">A new optional description of the program.</param>
         /// <returns>Boolean success or failure.</returns>
         public bool EditProgramEntry(
-            string programName, 
+            int program_ID,
+            string programName = null, 
             string programVersion = null, 
             string OS = null, 
             string description=null,
             Dictionary<string, string> paths=null) {
 
             // Make sure there's something to update
-            if (programVersion == null &&
+            if (programName == null &&
+                programVersion == null &&
                 OS == null &&
                 paths == null &&
                 description == null) {
@@ -125,8 +127,25 @@ namespace SettingsRecall {
                 return false;
             }
 
+            // Make sure not IsPermanent
+            ProgramEntry old_entry = GetProgramEntry(program_ID);
+            if (old_entry.IsPermanent)
+            {
+                return false;
+            }
+
+            // TODO
+            // Add new 'program' if new program name doesn't exist
+            
+
             // Prepare the data for db
             Dictionary<string, string> update = new Dictionary<string, string>();
+
+            // Optional parameter: Add Name
+            if (programName != null)
+            {
+                update.Add("Name", programName);
+            }
 
             // Optional parameter: Add Version
             if (programVersion != null)
@@ -154,7 +173,7 @@ namespace SettingsRecall {
 
             // Insert into db
             try {
-                db.Update("ProgramEntry", update, String.Format("Name = '{0}'", programName));
+                db.Update("ProgramEntry", update, String.Format("Program_ID = '{0}'", program_ID));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -188,7 +207,7 @@ namespace SettingsRecall {
             // Not currently sure whether there will be more than one list in the db. Might just be the global list.
 
             // Fetch the global list..not using this function's parameter at the moment
-            String query = "SELECT Name, Paths, Description FROM Program;";
+            String query = "SELECT ProgramName FROM Program;";
             DataTable dt;
             try {
                 dt = db.GetDataTable(query);
@@ -209,7 +228,7 @@ namespace SettingsRecall {
             // Not currently sure whether there will be more than one list in the db. Might just be the global list.
 
             // Fetch the global list..not using this function's parameter at the moment
-            String query = "SELECT Name FROM Program;";
+            String query = "SELECT ProgramName FROM Program;";
             DataTable dt;
             try {
                 dt = db.GetDataTable(query);
@@ -221,10 +240,77 @@ namespace SettingsRecall {
             // Convert datatable to list
             List<string> names = new List<string>();
             foreach (DataRow row in dt.Rows) {
-                names.Add(row["Name"].ToString());
+                names.Add(row["ProgramName"].ToString());
             }
 
             return names;
+        }
+
+        /// <summary>
+        /// Get one entry from the ProgramEntry table in the db.
+        /// </summary>
+        /// <param name="program_ID">The unique program ID number.</param>
+        /// <returns>A ProgramEntry
+        /// Program_ID, Name, Version, OS, IsPermanent, Description, Paths, Foreign Key</returns>
+        public ProgramEntry GetProgramEntry(int program_ID)
+        {
+            // query the database for row containing program_ID
+            String query = string.Format("SELECT * FROM ProgramEntry WHERE Program_ID={0};", program_ID);
+            DataTable dt;
+            try
+            {
+                dt = db.GetDataTable(query);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+            // create a ProgramEntry object from the DataTable
+            ProgramEntry entry = new ProgramEntry();
+            DataRow row = dt.NewRow();
+            row = dt.Rows[0];
+            entry.Program_ID = (int)row["Program_ID"];
+            entry.Name = row["Name"].ToString();
+            entry.Version = row["Version"].ToString();
+            entry.OS = row["OS"].ToString();
+            bool isPermanent = false; // convert int to bool
+            if ((int)row["IsPermanent"] == 1) isPermanent = true;
+            entry.IsPermanent = isPermanent;
+            entry.Description = row["Description"].ToString();
+            entry.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
+            
+            return entry;
+        }
+
+        /// <summary>
+        /// Search the db for a specific Name,Version,OS and return its Program_ID
+        /// </summary>
+        /// <param name="Name">Program name in search</param>
+        /// <param name="Version">Program version</param>
+        /// <param name="OS">Program OS</param>
+        /// <returns>The unique Program ID</returns>
+        public Nullable<int> GetProgram_ID(string Name, string Version, string OS)
+        {
+            // Query the database for Name, Version, OS
+            String query = string.Format("SELECT Program_ID FROM ProgramEntry WHERE Name={0} AND Version={1} AND OS={2}", Name, Version, OS);
+            DataTable dt;
+            try
+            {
+                dt = db.GetDataTable(query);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+            // get the program ID and return it.
+            DataRow row = dt.NewRow();
+            row = dt.Rows[0];
+
+            return (int)row["Program_ID"];
         }
     }
 }
