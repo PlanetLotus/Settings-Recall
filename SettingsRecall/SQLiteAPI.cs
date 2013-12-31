@@ -255,7 +255,7 @@ namespace SettingsRecall {
         public ProgramEntry GetProgramEntry(int program_ID)
         {
             // query the database for row containing program_ID
-            String query = string.Format("SELECT * FROM ProgramEntry WHERE Program_ID={0};", program_ID);
+            String query = string.Format("SELECT * FROM ProgramEntry WHERE Program_ID='{0}';", program_ID);
             DataTable dt;
             try
             {
@@ -271,12 +271,12 @@ namespace SettingsRecall {
             ProgramEntry entry = new ProgramEntry();
             DataRow row = dt.NewRow();
             row = dt.Rows[0];
-            entry.Program_ID = (int)row["Program_ID"];
+            entry.Program_ID = Globals.convert_string_to_int(row["Program_ID"].ToString());
             entry.Name = row["Name"].ToString();
             entry.Version = row["Version"].ToString();
             entry.OS = row["OS"].ToString();
             bool isPermanent = false; // convert int to bool
-            if ((int)row["IsPermanent"] == 1) isPermanent = true;
+            if (Globals.convert_string_to_int(row["IsPermanent"].ToString()) == 1) isPermanent = true;
             entry.IsPermanent = isPermanent;
             entry.Description = row["Description"].ToString();
             entry.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
@@ -290,11 +290,11 @@ namespace SettingsRecall {
         /// <param name="Name">Program name in search</param>
         /// <param name="Version">Program version</param>
         /// <param name="OS">Program OS</param>
-        /// <returns>The unique Program ID</returns>
-        public Nullable<int> GetProgram_ID(string Name, string Version, string OS)
+        /// <returns>The unique Program ID, -1 on error.</returns>
+        public int GetProgram_ID(string Name, string Version, string OS)
         {
             // Query the database for Name, Version, OS
-            String query = string.Format("SELECT Program_ID FROM ProgramEntry WHERE Name={0} AND Version={1} AND OS={2}", Name, Version, OS);
+            String query = string.Format("SELECT Program_ID FROM ProgramEntry WHERE Name='{0}' AND Version='{1}' AND OS='{2}'", Name, Version, OS);
             DataTable dt;
             try
             {
@@ -303,14 +303,15 @@ namespace SettingsRecall {
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return null;
+                return -1;
             }
 
             // get the program ID and return it.
             DataRow row = dt.NewRow();
             row = dt.Rows[0];
 
-            return (int)row["Program_ID"];
+            string id_str = row["Program_ID"].ToString();
+            return Globals.convert_string_to_int(id_str);
         }
     }
 }

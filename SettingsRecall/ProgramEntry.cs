@@ -26,7 +26,7 @@ namespace SettingsRecall
                 pathString.Append(path);
             }
 
-            str = string.Format("{0},{1},{2},{3},{4},{5},{6},{7}",
+            str = string.Format("{0},{1},{2},{3},{4},{5},{6}",
                 Program_ID.ToString(),
                 Name,
                 Version,

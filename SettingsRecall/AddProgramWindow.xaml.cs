@@ -113,12 +113,15 @@ namespace SettingsRecall
                 ; // other restrictions?
             }
 
+            // NEEDS UPDATING TO NEW API
+            /*
             // Add program to db. GeneratePaths creates the 'paths' dictionary for the db.
             if (!Globals.sqlite_api.AddProgram(name, GeneratePaths(version, PathList), description)) {
                 // Error!
                 // Handle Me!
                 ;
             }
+            */
 
             this.Close();
         }
