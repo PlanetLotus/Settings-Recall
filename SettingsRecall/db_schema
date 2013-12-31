@@ -7,10 +7,11 @@ OS TEXT,
 IsPermanent INTEGER NOT NULL,
 Description TEXT,
 Paths TEXT NOT NULL,
-FOREIGN KEY (Name) REFERENCES Program(ProgramName)
+FOREIGN KEY (Name) REFERENCES Program(ProgramName),
+UNIQUE (Name,Version,OS)
 );
 
 CREATE TABLE Program
 (
-ProgramName Text NOT NULL
+ProgramName Text PRIMARY KEY
 );
