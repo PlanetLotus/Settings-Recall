@@ -14,7 +14,6 @@ namespace SettingsRecall
         public static SQLiteAPI sqlite_api;
         public static string load_save_location; // Where backup files are saved
 
-
         // Global Helpers
 
         /// <summary>
@@ -22,7 +21,7 @@ namespace SettingsRecall
         /// </summary>
         /// <param name="numStr">String to be converted</param>
         /// <returns>Int representation of string.</returns>
-        public static int convert_string_to_int(string numStr) {
+        public static int StrToInt(string numStr) {
            // This function is simply to keep the error checking out of normal code to reduce clutter
            int numInt;
            try { numInt = Convert.ToInt32(numStr); }

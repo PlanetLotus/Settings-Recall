@@ -271,12 +271,12 @@ namespace SettingsRecall {
             ProgramEntry entry = new ProgramEntry();
             DataRow row = dt.NewRow();
             row = dt.Rows[0];
-            entry.Program_ID = Globals.convert_string_to_int(row["Program_ID"].ToString());
+            entry.Program_ID = Globals.StrToInt(row["Program_ID"].ToString());
             entry.Name = row["Name"].ToString();
             entry.Version = row["Version"].ToString();
             entry.OS = row["OS"].ToString();
             bool isPermanent = false; // convert int to bool
-            if (Globals.convert_string_to_int(row["IsPermanent"].ToString()) == 1) isPermanent = true;
+            if (Globals.StrToInt(row["IsPermanent"].ToString()) == 1) isPermanent = true;
             entry.IsPermanent = isPermanent;
             entry.Description = row["Description"].ToString();
             entry.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
@@ -311,7 +311,7 @@ namespace SettingsRecall {
             row = dt.Rows[0];
 
             string id_str = row["Program_ID"].ToString();
-            return Globals.convert_string_to_int(id_str);
+            return Globals.StrToInt(id_str);
         }
     }
 }
