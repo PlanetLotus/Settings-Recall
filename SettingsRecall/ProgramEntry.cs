@@ -16,6 +16,11 @@ namespace SettingsRecall
         public string Description { get; set; }
         public List<string> Paths { get; set; }
 
+        public ProgramEntry() {
+            // Initialize isPermanent to false
+            this.IsPermanent = false;
+        }
+
         public override string ToString()
         {
             string str;
