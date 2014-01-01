@@ -186,6 +186,7 @@ namespace SettingsRecall {
         /// </summary>
         /// <param name="programName">The name of the program to be deleted.</param>
         /// <returns>Boolean success or failure.</returns>
+        // DEPRECATED; PLEASE UPDATE FOR NEW SCHEMA
         public bool DeleteProgram(string programName) {
             // This functionality could be extended to delete a program given a path or description, too...
             try {
@@ -198,15 +199,11 @@ namespace SettingsRecall {
         }
 
         /// <summary>
-        /// Retrieve a list of programs from the database.
+        /// Retrieve a list of program entries from the database.
         /// </summary>
-        /// <param name="list">Which list to retrieve.</param>
         /// <returns>The DataTable retrieved from the db.</returns>
-        public DataTable GetProgramList(string list) {
-            // Not currently sure whether there will be more than one list in the db. Might just be the global list.
-
-            // Fetch the global list..not using this function's parameter at the moment
-            String query = "SELECT ProgramName FROM Program;";
+        public DataTable GetProgramEntryList() {
+            String query = "SELECT Program_ID,Name,Version,OS,IsPermanent,Description,Paths FROM ProgramEntry;";
             DataTable dt;
             try {
                 dt = db.GetDataTable(query);
