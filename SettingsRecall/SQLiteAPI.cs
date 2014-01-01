@@ -97,6 +97,12 @@ namespace SettingsRecall {
                 return false;
             }
 
+            // If this program name doesn't exist in Program table, add to that too
+            List<string> names = GetProgramNameList();
+            if (names == null || !names.Contains(programName)) {
+                AddProgram(programName);
+            }
+
             return true;
         }
 
@@ -134,10 +140,6 @@ namespace SettingsRecall {
                 return false;
             }
 
-            // TODO
-            // Add new 'program' if new program name doesn't exist
-            
-
             // Prepare the data for db
             Dictionary<string, string> update = new Dictionary<string, string>();
 
@@ -166,6 +168,14 @@ namespace SettingsRecall {
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
+            }
+
+            // If this program name doesn't exist in Program table, add to that too
+            if (programName != null) {
+                List<string> names = GetProgramNameList();
+                if (names == null || !names.Contains(programName)) {
+                    AddProgram(programName);
+                }
             }
 
             return true;
