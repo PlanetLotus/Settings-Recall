@@ -142,27 +142,16 @@ namespace SettingsRecall {
             Dictionary<string, string> update = new Dictionary<string, string>();
 
             // Optional parameter: Add Name
-            if (programName != null)
-            {
-                update.Add("Name", programName);
-            }
+            if (programName != null) { update.Add("Name", programName); }
 
             // Optional parameter: Add Version
-            if (programVersion != null)
-            {
-                update.Add("Version", programVersion);
-            }
+            if (programVersion != null) { update.Add("Version", programVersion); }
 
             // Optional parameter: Add OS
-            if (OS != null)
-            {
-                update.Add("OS", OS);
-            }
+            if (OS != null) { update.Add("OS", OS); }
 
             // Optional parameter: Add description
-            if (description != null) {
-                update.Add("Description", description);
-            }
+            if (description != null) { update.Add("Description", description); }
 
             // Optional parameter: Convert paths to a JSON string
             if (paths != null) {
@@ -277,15 +266,15 @@ namespace SettingsRecall {
             ProgramEntry entry = new ProgramEntry();
             DataRow row = dt.NewRow();
             row = dt.Rows[0];
+
+            // Assign each ProgramEntry field
             entry.Program_ID = Globals.StrToInt(row["Program_ID"].ToString());
             entry.Name = row["Name"].ToString();
             entry.Version = row["Version"].ToString();
             entry.OS = row["OS"].ToString();
-            bool isPermanent = false; // convert int to bool
-            if (Globals.StrToInt(row["IsPermanent"].ToString()) == 1) isPermanent = true;
-            entry.IsPermanent = isPermanent;
-            entry.Description = row["Description"].ToString();
+            if (Globals.StrToInt(row["IsPermanent"].ToString()) == 1) entry.IsPermanent = true;
             entry.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
+            entry.Description = row["Description"].ToString();
             
             return entry;
         }
