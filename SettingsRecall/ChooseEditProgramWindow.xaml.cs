@@ -33,7 +33,7 @@ namespace SettingsRecall
         /// </summary>
         private void PopulateList()
         {
-            programList = Globals.sqlite_api.GetProgramNameList("String");
+            programList = Globals.sqlite_api.GetProgramNameList();
             ObservableCollection<string> observableList = new ObservableCollection<string>(programList);
             programListBox.ItemsSource = observableList;
         }

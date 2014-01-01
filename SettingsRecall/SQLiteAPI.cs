@@ -211,11 +211,8 @@ namespace SettingsRecall {
         /// <summary>
         /// Retrieve a list of program names from the database.
         /// </summary>
-        /// <param name="list">Which list to retrieve.</param>
         /// <returns>A list of names. One entry per row in the table.</returns>
-        public List<string> GetProgramNameList(string list) {
-            // Not currently sure whether there will be more than one list in the db. Might just be the global list.
-
+        public List<string> GetProgramNameList() {
             // Fetch the global list..not using this function's parameter at the moment
             String query = "SELECT ProgramName FROM Program;";
             DataTable dt;
