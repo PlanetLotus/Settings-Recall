@@ -19,21 +19,24 @@ namespace SettingsRecall
         public override string ToString()
         {
             string str;
-            StringBuilder pathString = new StringBuilder();
+            string paths = "";
+            StringBuilder pathBuilder = new StringBuilder();
 
             foreach (string path in Paths)
             {
-                pathString.Append(path);
+                pathBuilder.Append(path + ", ");
             }
+            // Cut off extra comma
+            if (pathBuilder.Length > 1) paths = pathBuilder.ToString().Substring(0, pathBuilder.Length-2);
 
-            str = string.Format("{0},{1},{2},{3},{4},{5},{6}",
+            str = string.Format("*****\nProgram_ID: {0}\nName: {1}\nVersion: {2}\nOS: {3}\nIsPermanent: {4}\nDescription: {5}\nPaths: {6}\n*****",
                 Program_ID.ToString(),
                 Name,
                 Version,
                 OS,
                 IsPermanent.ToString(),
                 Description,
-                pathString);
+                paths);
 
             return str;
         }
