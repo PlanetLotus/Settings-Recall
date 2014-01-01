@@ -129,7 +129,7 @@ namespace SettingsRecall {
 
             // Make sure not IsPermanent
             ProgramEntry old_entry = GetProgramEntry(program_ID);
-            if (old_entry.IsPermanent)
+            if (old_entry == null || old_entry.IsPermanent)
             {
                 return false;
             }
@@ -267,6 +267,12 @@ namespace SettingsRecall {
                 return null;
             }
 
+            // Make sure rows were returned
+            if (dt.Rows.Count < 1) {
+                Console.WriteLine("No rows returned for Program_ID == {0}", program_ID);
+                return null;
+            }
+
             // create a ProgramEntry object from the DataTable
             ProgramEntry entry = new ProgramEntry();
             DataRow row = dt.NewRow();
@@ -303,6 +309,12 @@ namespace SettingsRecall {
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return -1;
+            }
+
+            // Make sure rows were returned
+            if (dt.Rows.Count < 1) {
+                Console.WriteLine("No rows returned for {0}, {1}, {2}", Name, Version, OS);
                 return -1;
             }
 
