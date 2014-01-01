@@ -212,6 +212,12 @@ namespace SettingsRecall {
                 return null;
             }
 
+            // Make sure rows were returned
+            if (dt.Rows.Count < 1) {
+                Console.WriteLine("No rows returned for GetProgramEntryList.");
+                return null;
+            }
+
             return dt;
         }
 
@@ -227,6 +233,12 @@ namespace SettingsRecall {
                 dt = db.GetDataTable(query);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
+                return null;
+            }
+
+            // Make sure rows were returned
+            if (dt.Rows.Count < 1) {
+                Console.WriteLine("No rows returned for GetProgramNameList.");
                 return null;
             }
 
