@@ -27,11 +27,43 @@ namespace SettingsRecall {
         }
 
         /// <summary>
+        /// Helper function that checks if a name is present in ProgramEntry.
+        /// </summary>
+        /// <param name="programName">The name to be checked.</param>
+        /// <returns>True if name is in use, false if not.</returns>
+        private bool IsNameInUse(string programName) {
+            DataTable entries = GetProgramEntryList();
+            if (entries != null) {
+                foreach (DataRow entry in entries.Rows) {
+                    if (entry["Name"].ToString() == programName) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Delete a program from the Program table.
+        /// </summary>
+        /// <param name="programName">The name of the program to be deleted.</param>
+        /// <returns>Boolean success or failure.</returns>
+        private bool DeleteProgram(string programName) {
+            try {
+                db.Delete("Program", String.Format("ProgramName = '{0}'", programName));
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Add a new Program to the database.
         /// </summary>
         /// <param name="programName">Name of the program being added</param>
         /// <returns>Boolean success or failure</returns>
-        public bool AddProgram(string programName)
+        private bool AddProgram(string programName)
         {
             // Prepare data for db
             Dictionary<string, string> insert = new Dictionary<string, string>();
