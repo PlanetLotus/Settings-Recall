@@ -32,6 +32,9 @@ namespace SettingsRecall
         /// <param name="row">DataRow extracted from programEntry table.</param>
         public ProgramEntry(DataRow row)
         {
+            // Initialize isPermanent to false
+            this.IsPermanent = false;
+
             // Assign each ProgramEntry field
             this.Program_ID = Globals.StrToInt(row["Program_ID"].ToString());
             this.Name = row["Name"].ToString();
