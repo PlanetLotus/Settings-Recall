@@ -323,18 +323,7 @@ namespace SettingsRecall {
             }
 
             // create a ProgramEntry object from the DataTable
-            ProgramEntry entry = new ProgramEntry();
-            DataRow row = dt.NewRow();
-            row = dt.Rows[0];
-
-            // Assign each ProgramEntry field
-            entry.Program_ID = Globals.StrToInt(row["Program_ID"].ToString());
-            entry.Name = row["Name"].ToString();
-            entry.Version = row["Version"].ToString();
-            entry.OS = row["OS"].ToString();
-            if (Globals.StrToInt(row["IsPermanent"].ToString()) == 1) entry.IsPermanent = true;
-            entry.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
-            entry.Description = row["Description"].ToString();
+            ProgramEntry entry = new ProgramEntry(dt.Rows[0]);
             
             return entry;
         }
