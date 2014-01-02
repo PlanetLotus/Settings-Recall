@@ -208,25 +208,37 @@ namespace SettingsRecall {
                 if (names == null || !names.Contains(programName)) {
                     AddProgram(programName);
                 }
+
+                // If old name doesn't exist anymore, delete it!
+                if (!IsNameInUse(old_entry.Name)) {
+                    DeleteProgram(old_entry.Name);
+                }
             }
 
             return true;
         }
 
         /// <summary>
-        /// Delete a program from the database.
+        /// Delete a ProgramEntry from the ProgramEntry table.
         /// </summary>
-        /// <param name="programName">The name of the program to be deleted.</param>
+        /// <param name="program_ID">The unique ID referencing a ProgramEntry.</param>
         /// <returns>Boolean success or failure.</returns>
-        // DEPRECATED; PLEASE UPDATE FOR NEW SCHEMA
-        public bool DeleteProgram(string programName) {
-            // This functionality could be extended to delete a program given a path or description, too...
+        public bool DeleteProgramEntry(int program_ID) {
+            // Retrieve the entry
+            ProgramEntry old_entry = GetProgramEntry(program_ID);
+
             try {
-                db.Delete("Program", String.Format("Name = '{0}'", programName));
+                db.Delete("ProgramEntry", String.Format("Program_ID = '{0}'", program_ID));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
             }
+
+            // If old name doesn't exist anymore, delete it!
+            if (!IsNameInUse(old_entry.Name)) {
+                DeleteProgram(old_entry.Name);
+            }
+
             return true;
         }
 
