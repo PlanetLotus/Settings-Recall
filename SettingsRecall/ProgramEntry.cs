@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace SettingsRecall
 {
@@ -15,11 +17,32 @@ namespace SettingsRecall
         public bool IsPermanent {get; set;}
         public string Description { get; set; }
         public List<string> Paths { get; set; }
-
+        
+        /// <summary>
+        /// Default constructor for ProgramEntry
+        /// </summary>
         public ProgramEntry() {
             // Initialize isPermanent to false
             this.IsPermanent = false;
         }
+
+        /// <summary>
+        /// Constructor which converts a DataRow extracted from the DB into a ProgramEntry.
+        /// </summary>
+        /// <param name="row">DataRow extracted from programEntry table.</param>
+        public ProgramEntry(DataRow row)
+        {
+            // Assign each ProgramEntry field
+            this.Program_ID = Globals.StrToInt(row["Program_ID"].ToString());
+            this.Name = row["Name"].ToString();
+            this.Version = row["Version"].ToString();
+            this.OS = row["OS"].ToString();
+            if (Globals.StrToInt(row["IsPermanent"].ToString()) == 1) this.IsPermanent = true;
+            this.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
+            this.Description = row["Description"].ToString();
+        }
+
+
 
         public override string ToString()
         {
