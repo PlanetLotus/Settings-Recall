@@ -19,6 +19,11 @@ namespace SettingsRecall
     /// </summary>
     public partial class EditProgramWindow : Window
     {
+
+        // Window global variables
+        private string currentName;
+        private ProgramEntry currentEntry;
+        
         public EditProgramWindow()
         {
             InitializeComponent();
