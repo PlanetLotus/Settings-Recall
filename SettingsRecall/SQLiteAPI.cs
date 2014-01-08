@@ -88,6 +88,49 @@ namespace SettingsRecall {
         /// The program entry list contains information about every version
         /// of a program whereas the program list is simply a list of supported programs.
         /// </summary>
+        /// <param name="entry">ProgramEntry object.</param>
+        /// <returns>Bool, success or failure</returns>
+        public bool AddProgramEntry(ProgramEntry entry) {
+            // Convert paths to a JSON string
+            string json_paths = JsonConvert.SerializeObject(entry.Paths);
+            Console.WriteLine(json_paths);
+
+            // convert isPermanent to an int for the db
+            int isPermInt = 0;
+            if (entry.IsPermanent) isPermInt = 1;
+
+            // Prepare the data for db
+            Dictionary<string, string> insert = new Dictionary<string, string>();
+            insert.Add("Name", entry.Name);
+            insert.Add("Version", entry.Version);
+            insert.Add("OS", entry.OS);
+            insert.Add("IsPermanent", isPermInt.ToString());
+            insert.Add("Description", entry.Description);
+            insert.Add("Paths", json_paths);
+
+            // Insert into db
+            // If there's a problem, the exception is output to console. If we need to output to GUI, we need to pass that info back from SQLiteDatabase.cs
+            try {
+                db.Insert("ProgramEntry", insert);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+            // If this program name doesn't exist in Program table, add to that too
+            List<string> names = GetProgramNameList();
+            if (names == null || !names.Contains(entry.Name)) {
+                AddProgram(entry.Name);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Add a program entry to the database.
+        /// The program entry list contains information about every version
+        /// of a program whereas the program list is simply a list of supported programs.
+        /// </summary>
         /// <param name="programName">Name of the program being added.</param>
         /// <param name="programVersion">Program version name.</param>
         /// <param name="OS">Entry's intended OS.</param>
@@ -142,6 +185,77 @@ namespace SettingsRecall {
         /// Edit a program already in the database.
         /// IsPermanent is not an editable field
         /// </summary>
+        /// <param name="entry">The ProgramEntry object.</param>
+        /// <returns>Boolean success or failure.</returns>
+        public bool EditProgramEntry(ProgramEntry entry) 
+        {
+            // Make sure there's something to update
+            if (entry.Name == null &&
+                entry.Version == null &&
+                entry.OS == null &&
+                entry.Paths == null &&
+                entry.Description == null) {
+                Console.WriteLine("Nothing to update! Returning...");
+                return false;
+            }
+
+            // Make sure not IsPermanent
+            ProgramEntry old_entry = GetProgramEntry(entry.Program_ID);
+            if (old_entry == null || old_entry.IsPermanent)
+            {
+                return false;
+            }
+
+            // Prepare the data for db
+            Dictionary<string, string> update = new Dictionary<string, string>();
+
+            // Optional parameter: Add Name
+            if (entry.Name != null) { update.Add("Name", entry.Name); }
+
+            // Optional parameter: Add Version
+            if (entry.Version != null) { update.Add("Version", entry.Version); }
+
+            // Optional parameter: Add OS
+            if (entry.OS != null) { update.Add("OS", entry.OS); }
+
+            // Optional parameter: Add description
+            if (entry.Description != null) { update.Add("Description", entry.Description); }
+
+            // Optional parameter: Convert paths to a JSON string
+            if (entry.Paths != null) {
+                string json_paths = JsonConvert.SerializeObject(entry.Paths);
+                update.Add("Paths", json_paths);
+                Console.WriteLine(json_paths);
+            }
+
+            // Insert into db
+            try {
+                db.Update("ProgramEntry", update, String.Format("Program_ID = '{0}'", entry.Program_ID));
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+            // If this program name doesn't exist in Program table, add to that too
+            if (entry.Name != null) {
+                List<string> names = GetProgramNameList();
+                if (names == null || !names.Contains(entry.Name)) {
+                    AddProgram(entry.Name);
+                }
+
+                // If old name doesn't exist anymore, delete it!
+                if (!IsNameInUse(old_entry.Name)) {
+                    DeleteProgram(old_entry.Name);
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Edit a program already in the database.
+        /// IsPermanent is not an editable field
+        /// </summary>
         /// <param name="program_ID">The ID # of the program - not editable.</param>
         /// <param name="programName">The new name of the program to be edited.</param>
         /// <param name="paths">A new list of paths to program settings files.</param>
@@ -153,7 +267,7 @@ namespace SettingsRecall {
             string programVersion = null, 
             string OS = null, 
             string description=null,
-            Dictionary<string, string> paths=null) {
+            List<string> paths=null) {
 
             // Make sure there's something to update
             if (programName == null &&
