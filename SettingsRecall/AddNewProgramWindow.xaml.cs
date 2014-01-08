@@ -36,6 +36,14 @@ namespace SettingsRecall
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            // Make sure a name was entered
+            if (nameText.Text == "")
+            {
+                ErrorMessageBox nullErrorBox = new ErrorMessageBox("Please enter a name!");
+                nullErrorBox.show();
+                return;
+            }
+
             // Make sure program name isn't already in the DB
             List<string> programList = new List<string>();
             programList = Globals.sqlite_api.GetProgramNameList();
@@ -45,7 +53,6 @@ namespace SettingsRecall
             {
                 ErrorMessageBox errorBox = new ErrorMessageBox("This program already exists");
                 errorBox.show();
-                this.DialogResult = false;
                 return;
             }
 
