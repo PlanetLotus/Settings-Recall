@@ -109,3 +109,4 @@ UpgradeLog*.XML
 
 # Other files
 sqlite3.exe
+packages.config

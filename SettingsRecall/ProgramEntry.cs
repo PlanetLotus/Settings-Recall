@@ -45,8 +45,6 @@ namespace SettingsRecall
             this.Description = row["Description"].ToString();
         }
 
-
-
         public override string ToString()
         {
             string str;
