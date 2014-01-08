@@ -46,11 +46,27 @@ namespace SettingsRecall
         private void addProgramButton_Click(object sender, RoutedEventArgs e)
         {
             // instantiate dialog box
-            AddProgramWindow APWindow = new AddProgramWindow();
+            AddNewProgramWindow ANPWindow = new AddNewProgramWindow();
 
             // configure dialog box and open modally
-            APWindow.Owner = App.mainWindow;
-            APWindow.ShowDialog();
+            ANPWindow.Owner = App.mainWindow;
+            ANPWindow.ShowDialog();
+
+            if (ANPWindow.DialogResult == false)
+            {
+                // do not continue
+                return;
+            }
+
+            // get the name entered into the add dialog
+            string programName = ANPWindow.GetProgramName();
+
+            // instantiate edit window
+            EditProgramWindow editWindow = new EditProgramWindow(programName);
+
+            // open the edit window dialog
+            editWindow.Owner = App.mainWindow;
+            editWindow.ShowDialog();
         }
 
         private void editProgramButton_Click(object sender, RoutedEventArgs e)

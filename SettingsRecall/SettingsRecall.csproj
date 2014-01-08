@@ -69,6 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddNewProgramWindow.xaml.cs">
+      <DependentUpon>AddNewProgramWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AddProgramWindow.xaml.cs">
       <DependentUpon>AddProgramWindow.xaml</DependentUpon>
     </Compile>
@@ -91,6 +94,10 @@
     <Compile Include="StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddNewProgramWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddProgramWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

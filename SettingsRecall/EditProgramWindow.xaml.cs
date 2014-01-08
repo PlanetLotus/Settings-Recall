@@ -24,9 +24,10 @@ namespace SettingsRecall
         private string currentName;
         private ProgramEntry selectedEntry;
         
-        public EditProgramWindow()
+        public EditProgramWindow(string name)
         {
             InitializeComponent();
+            this.currentName = name;
         }
     }
 }
