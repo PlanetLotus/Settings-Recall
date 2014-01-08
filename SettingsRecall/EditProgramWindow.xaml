@@ -4,22 +4,26 @@
         Title="Edit Existing Program" Height="449" Width="642">
     <Grid>
         <ListBox x:Name="versionListBox" HorizontalAlignment="Left" Height="263" Margin="27,89,0,0" VerticalAlignment="Top" Width="278"/>
-        <ListBox x:Name="fileListBox" HorizontalAlignment="Left" Height="263" Margin="332,89,0,0" VerticalAlignment="Top" Width="278"/>
-        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="470,388,0,0"/>
+        <ListBox x:Name="fileListBox" HorizontalAlignment="Left" Height="263" Margin="332,89,0,0" VerticalAlignment="Top" Width="278" IsEnabled="False"/>
+        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="470,388,0,0" IsCancel="True"/>
         <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="550,388,0,0"/>
-        <Button x:Name="deleteFilesButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="412,357,0,0"/>
-        <Button x:Name="addFilesButton" Content="Add Files" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="332,357,0,0"/>
+        <Button x:Name="deleteFilesButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="412,357,0,0" IsEnabled="False"/>
+        <Button x:Name="addFilesButton" Content="Add Files" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="332,357,0,0" IsEnabled="False"/>
         <Button x:Name="deleteVersionButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="187,357,0,0"/>
         <Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="27,357,0,0"/>
-        <TextBox x:Name="descriptionText" HorizontalAlignment="Left" Height="48" Margin="378,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232"/>
+        <TextBox x:Name="descriptionText" HorizontalAlignment="Left" Height="48" Margin="378,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" IsEnabled="False"/>
         <Label Content="Program Name:&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="11,6,0,0" Height="27"/>
         <Label Content="Description&#xD;&#xA;" HorizontalAlignment="Left" Margin="308,30,0,0" VerticalAlignment="Top" Height="39"/>
         <Label Content="Versions&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="27,63,0,0"/>
         <Label Content="Files" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="332,63,0,0"/>
-        <Button x:Name="changeNameButton" Content="Change" HorizontalAlignment="Left" Margin="11,33,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="changeNameButton" Content="Change" HorizontalAlignment="Left" Margin="22,30,0,0" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="programNameLabel" Content="Label" HorizontalAlignment="Left" Margin="102,7,0,0" VerticalAlignment="Top" Width="148"/>
         <Button x:Name="editButton" Content="Edit" HorizontalAlignment="Left" Margin="107,357,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="doneButton" Content="Done" HorizontalAlignment="Left" Margin="492,357,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="doneButton" Content="Done" HorizontalAlignment="Left" Margin="492,357,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <TextBox x:Name="versionText" HorizontalAlignment="Left" Height="23" Margin="378,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Label Content="Version" HorizontalAlignment="Left" Margin="328,2,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="osText" HorizontalAlignment="Left" Height="23" Margin="496,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Label Content="OS" HorizontalAlignment="Left" Margin="471,2,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

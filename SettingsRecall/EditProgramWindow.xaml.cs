@@ -22,7 +22,7 @@ namespace SettingsRecall
 
         // Window global variables
         private string currentName;
-        private ProgramEntry currentEntry;
+        private ProgramEntry selectedEntry;
         
         public EditProgramWindow()
         {
