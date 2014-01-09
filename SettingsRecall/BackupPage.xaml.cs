@@ -77,6 +77,22 @@ namespace SettingsRecall
             // configure dialog box and open modally
             chooseWindow.Owner = App.mainWindow;
             chooseWindow.ShowDialog();
+
+            if (chooseWindow.DialogResult == false)
+            {
+                // do not continue
+                return;
+            }
+
+            // get the name entered into the add dialog
+            string programName = chooseWindow.GetProgramName();
+
+            // instantiate edit window
+            EditProgramWindow editWindow = new EditProgramWindow(programName);
+
+            // open the edit window dialog
+            editWindow.Owner = App.mainWindow;
+            editWindow.ShowDialog();
         }
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)

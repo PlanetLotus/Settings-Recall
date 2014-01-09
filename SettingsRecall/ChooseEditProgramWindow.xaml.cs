@@ -22,10 +22,12 @@ namespace SettingsRecall
     public partial class ChooseEditProgramWindow : Window
     {
         private List<string> programList;
+        private string selectedName { get; set; }
 
         public ChooseEditProgramWindow()
         {
             InitializeComponent();
+            PopulateList();
         }
 
         /// <summary>
@@ -37,6 +39,35 @@ namespace SettingsRecall
             ObservableCollection<string> observableList = new ObservableCollection<string>(programList);
             programListBox.ItemsSource = observableList;
         }
+
+        private void programListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedName = programListBox.SelectedValue.ToString();
+        }
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (programListBox.SelectedIndex != -1) {
+                this.DialogResult = true;
+                Close();
+            }
+
+            // nothing selected
+            ErrorMessageBox noSelectErrorBox = new ErrorMessageBox("Please choose a program to edit.");
+            return;
+        }
+
+        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+        }
+
+        public string GetProgramName()
+        {
+            return this.selectedName;
+        }
+
+
 
     }
 }

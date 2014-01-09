@@ -448,7 +448,7 @@ namespace SettingsRecall {
             foreach (DataRow row in dt.Rows) {
                 names.Add(row["ProgramName"].ToString());
             }
-
+            
             return names;
         }
 

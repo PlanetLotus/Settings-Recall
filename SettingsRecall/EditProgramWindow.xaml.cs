@@ -103,6 +103,7 @@ namespace SettingsRecall
                         break;
                 }
             }
+            this.Close();
         }
 
         // get the program entry list and convert it into an observable collection of VersionListEntry
