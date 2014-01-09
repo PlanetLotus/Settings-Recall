@@ -32,10 +32,10 @@ namespace SettingsRecall {
         /// <param name="programName">The name to be checked.</param>
         /// <returns>True if name is in use, false if not.</returns>
         private bool IsNameInUse(string programName) {
-            DataTable entries = GetProgramEntryList();
+            List<ProgramEntry> entries = GetProgramEntryList();
             if (entries != null) {
-                foreach (DataRow entry in entries.Rows) {
-                    if (entry["Name"].ToString() == programName) {
+                foreach (ProgramEntry entry in entries) {
+                    if (entry.Name == programName) {
                         return true;
                     }
                 }
@@ -359,10 +359,12 @@ namespace SettingsRecall {
         /// <summary>
         /// Retrieve a list of program entries from the database.
         /// </summary>
-        /// <returns>The DataTable retrieved from the db.</returns>
-        public DataTable GetProgramEntryList() {
+        /// <returns>A list of ProgramEntry retrieved from the db.</returns>
+        public List<ProgramEntry> GetProgramEntryList() {
             String query = "SELECT Program_ID,Name,Version,OS,IsPermanent,Description,Paths FROM ProgramEntry;";
             DataTable dt;
+            List<ProgramEntry> entryList = new List<ProgramEntry>();
+
             try {
                 dt = db.GetDataTable(query);
             } catch (Exception e) {
@@ -375,8 +377,49 @@ namespace SettingsRecall {
                 Console.WriteLine("No rows returned for GetProgramEntryList.");
                 return null;
             }
+            
+            // create a ProgramEntry object for each row in the DataTable
+            foreach (DataRow row in dt.Rows)
+            {
+                ProgramEntry entry = new ProgramEntry(row);
+                entryList.Add(entry); // add to list
+            }
 
-            return dt;
+            return entryList;
+        }
+
+
+        /// <summary>
+        /// Retrieve a list of program entries from the database.
+        /// </summary>
+        /// <param name="name">A specific name to search for.</param>
+        /// <returns>A list of ProgramEntry retrieved from the db.</returns>
+        public List<ProgramEntry> GetProgramEntryList(string name) {
+            String query = string.Format("SELECT Program_ID,Name,Version,OS,IsPermanent,Description,Paths FROM ProgramEntry WHERE Name='{0}';", name);
+            DataTable dt;
+            List<ProgramEntry> entryList = new List<ProgramEntry>();
+
+            try {
+                dt = db.GetDataTable(query);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+            // Make sure rows were returned
+            if (dt.Rows.Count < 1) {
+                Console.WriteLine("No rows returned for GetProgramEntryList.");
+                return null;
+            }
+            
+            // create a ProgramEntry object for each row in the DataTable
+            foreach (DataRow row in dt.Rows)
+            {
+                ProgramEntry entry = new ProgramEntry(row);
+                entryList.Add(entry); // add to list
+            }
+
+            return entryList;
         }
 
         /// <summary>

@@ -73,10 +73,9 @@ namespace SettingsRecall {
 
             // Make sure it was added by calling GetProgramEntryList
             // There should be two entries now
-            DataTable dt = testAPI.GetProgramEntryList();
-            Assert.IsNotNull(dt);
-            Assert.IsNotNull(dt.Rows);
-            Assert.AreEqual(dt.Rows.Count, 2);
+            List<ProgramEntry> list = testAPI.GetProgramEntryList();
+            Assert.IsNotNull(list);
+            Assert.AreEqual(list.Count, 2);
 
             // Make sure the name exists once in the Program table
             List<string> names = testAPI.GetProgramNameList();
