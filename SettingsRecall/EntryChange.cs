@@ -11,7 +11,7 @@ namespace SettingsRecall
     /// </summary>
     class EntryChange
     {
-        public string entry_type { get; set; } // The type of modification. Add, Edit, or Delete
+        public string entry_type { get; set; } // The type of modification. add, edit, or delete
         public ProgramEntry entry { get; set; } // the ProgramEntry data to be used in the modification.
     }
 }
