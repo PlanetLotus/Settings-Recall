@@ -24,6 +24,13 @@ namespace SettingsRecall
         public ProgramEntry() {
             // Initialize isPermanent to false
             this.IsPermanent = false;
+
+            // Initialize everything else to null (except Program_ID)
+            this.Name = "";
+            this.Version = "";
+            this.OS = "";
+            this.Description = "";
+            this.Paths = null;
         }
 
         /// <summary>
