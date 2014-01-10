@@ -127,61 +127,6 @@ namespace SettingsRecall {
         }
 
         /// <summary>
-        /// Add a program entry to the database.
-        /// The program entry list contains information about every version
-        /// of a program whereas the program list is simply a list of supported programs.
-        /// </summary>
-        /// <param name="programName">Name of the program being added.</param>
-        /// <param name="programVersion">Program version name.</param>
-        /// <param name="OS">Entry's intended OS.</param>
-        /// <param name="isPermanent">Will this entry be editable?</param>
-        /// <param name="paths">A list of all paths to preference files.</param>
-        /// <param name="description">Optional description of entry.</param>
-        /// <returns>Bool success or failure</returns>
-        public bool AddProgramEntry(
-            string programName, 
-            string programVersion, 
-            string OS, 
-            bool isPermanent, 
-            List<string> paths,
-            string description="") { 
-
-            // Convert paths to a JSON string
-            string json_paths = JsonConvert.SerializeObject(paths);
-            Console.WriteLine(json_paths);
-
-            // convert isPermanent to an int for the db
-            int isPermInt = 0;
-            if (isPermanent) isPermInt = 1;
-
-            // Prepare the data for db
-            Dictionary<string, string> insert = new Dictionary<string, string>();
-            insert.Add("Name", programName);
-            insert.Add("Version", programVersion);
-            insert.Add("OS", OS);
-            insert.Add("IsPermanent", isPermInt.ToString());
-            insert.Add("Description", description);
-            insert.Add("Paths", json_paths);
-
-            // Insert into db
-            // If there's a problem, the exception is output to console. If we need to output to GUI, we need to pass that info back from SQLiteDatabase.cs
-            try {
-                db.Insert("ProgramEntry", insert);
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-
-            // If this program name doesn't exist in Program table, add to that too
-            List<string> names = GetProgramNameList();
-            if (names == null || !names.Contains(programName)) {
-                AddProgram(programName);
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Edit a program already in the database.
         /// IsPermanent is not an editable field
         /// </summary>
