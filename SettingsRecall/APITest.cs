@@ -35,7 +35,7 @@ namespace SettingsRecall {
             insert.Add("IsPermanent", "0");
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
-            db.Insert("ProgramEntry", insert);   // Should we wrap this in try/catch?
+            db.Insert("ProgramEntry", insert);
 
             // Link the API to the testing database
             testAPI = new SQLiteAPI(db_file);
@@ -48,6 +48,25 @@ namespace SettingsRecall {
         }
 
         [Test]
+        // This test depends on assuming GetProgramEntryList works properly
+        public void Test_AddDuplicateProgramEntry() {
+            // Get initial count
+            int programEntryCount = testAPI.GetProgramEntryList().Count;
+            Console.WriteLine(programEntryCount);
+
+            // Build new object
+            List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
+            ProgramEntry programEntry = new ProgramEntry("testprogram1", "1.0", "XP", paths, "Really useful test description", false);
+            testAPI.AddProgramEntry(programEntry);
+
+            // Verify the number of program entries didn't change
+            Assert.AreEqual(programEntryCount, testAPI.GetProgramEntryList().Count);
+            Console.WriteLine(testAPI.GetProgramEntryList().Count);
+        }
+
+        [Test]
+        // This test depends on assuming GetProgramEntryList works properly
+        // This test depends on assuming GetProgramNameList works properly
         public void Test_AddProgramEntry() {
             // This test depends on assuming GetProgramEntryList works properly
             // This test depends on assuming GetProgramNameList works properly
