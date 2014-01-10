@@ -69,15 +69,18 @@ namespace SettingsRecall
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
             // Make sure a version is selected
-            if (versionListBox.SelectedIndex >= 0)
-            {
-                EnableFieldsForEdit(true);
-            }
-            else
+            if (versionListBox.SelectedIndex < 0)
             {
                 ErrorMessageBox selectVersionErrorBox = new ErrorMessageBox("Please select a version to edit");
                 selectVersionErrorBox.show();
             }
+            
+            // a version IS selected!
+            EnableFieldsForEdit(true);
+
+
+
+
         }
 
         private void deleteVersionButton_Click(object sender, RoutedEventArgs e)
@@ -88,11 +91,35 @@ namespace SettingsRecall
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
             // create a new ProgramEntry
-            ProgramEntry entry_edit = new ProgramEntry();
-            entry_edit = selectedEntry;
+            ProgramEntry entry = new ProgramEntry();
+            entry = selectedEntry;
 
             // add edits
-            //if (versionText.Text)
+            if (!String.IsNullOrWhiteSpace(versionText.Text))
+                entry.Version = versionText.Text;
+
+            if (!String.IsNullOrWhiteSpace(osText.Text))
+                entry.OS = osText.Text;
+
+            if (!String.IsNullOrWhiteSpace(descriptionText.Text))
+                entry.Description = descriptionText.Text;
+
+            // TODO
+            // ADD LIST EDITS
+
+            // add edits to change list
+            // instantiate new change
+            EntryChange change = new EntryChange();
+
+            // add entry to change
+            change.entry_type = "edit";
+            change.entry = entry;
+
+            // add change to changeList
+            changeList.Add(change);
+
+            // update entryList
+            entryList[versionListBox.SelectedIndex].entry = entry;
 
             // disable the edit fields
             EnableFieldsForEdit(false);    
@@ -167,8 +194,18 @@ namespace SettingsRecall
         // update the selectedEntry when the entry selection is changed
         private void versionListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-                // set selectedEntry
-                selectedEntry = entryList[versionListBox.SelectedIndex].entry;
+            // set selectedEntry
+            selectedEntry = entryList[versionListBox.SelectedIndex].entry;
+
+            // update edit fields
+            if (!String.IsNullOrEmpty(selectedEntry.Version))
+                versionText.Text = selectedEntry.Version;
+
+            if (!String.IsNullOrEmpty(selectedEntry.OS))
+                osText.Text = selectedEntry.OS;
+
+            if (!String.IsNullOrEmpty(selectedEntry.Description))
+                descriptionText.Text = selectedEntry.Description;
         }
 
     }
