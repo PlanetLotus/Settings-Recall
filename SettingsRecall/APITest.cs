@@ -55,7 +55,7 @@ namespace SettingsRecall {
             // Test: Add a duplicate entry -- SHOULD NOT ADD ANYTHING
             List<string> paths = new List<string>();
             paths.Add("");
-            testAPI.AddProgramEntry("testprogram1", "1.0", "XP", false, paths);
+            //testAPI.AddProgramEntry("testprogram1", "1.0", "XP", false, paths);
             paths.Clear();
 
             // Test: Add another, legitimate entry

@@ -51,15 +51,19 @@ namespace SettingsRecall
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            if (programListBox.SelectedIndex != -1) {
+            System.Console.WriteLine(programListBox.SelectedIndex);
+            if (programListBox.SelectedIndex > -1)
+            {
                 this.DialogResult = true;
                 Close();
             }
-
-            // nothing selected
-            ErrorMessageBox noSelectErrorBox = new ErrorMessageBox("Please choose a program to edit.");
-            noSelectErrorBox.show();
-            return;
+            else
+            {
+                // nothing selected
+                ErrorMessageBox noSelectErrorBox = new ErrorMessageBox("Please choose a program to edit.");
+                noSelectErrorBox.show();
+                return;
+            }
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
