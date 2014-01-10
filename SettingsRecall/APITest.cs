@@ -68,27 +68,17 @@ namespace SettingsRecall {
         // This test depends on assuming GetProgramEntryList works properly
         // This test depends on assuming GetProgramNameList works properly
         public void Test_AddProgramEntry() {
-            // This test depends on assuming GetProgramEntryList works properly
-            // This test depends on assuming GetProgramNameList works properly
+            int programEntryCount = testAPI.GetProgramEntryList().Count;
 
-            // Test: Add a duplicate entry -- SHOULD NOT ADD ANYTHING
-            List<string> paths = new List<string>();
-            paths.Add("");
-            testAPI.AddProgramEntry("testprogram1", "1.0", "XP", false, paths);
-            paths.Clear();
+            // Create object
+            List<string> paths = new List<string>() { "vista/path/to/file4.txt" };
+            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.0", "Vista", paths, "Really useful test description", false);
 
-            // Test: Add another, legitimate entry
-            paths.Add("vista/path/to/file4.txt");
-            string json_paths = JsonConvert.SerializeObject(paths);
-            Dictionary<string, string> insert = new Dictionary<string, string>() {
-                {"Name", "testprogram1"},
-                {"Version", "1.1"},
-                {"OS", "Vista"},
-                {"IsPermanent", "0"},
-                {"Paths", json_paths},
-                {"Description", ""}
-            };
-            db.Insert("ProgramEntry", insert);
+            // Add with programEntry overload
+            testAPI.AddProgramEntry(programEntry);
+
+            // Verify it was added
+            Assert.AreEqual(programEntryCount + 1, testAPI.GetProgramEntryList().Count);
 
             // Make sure it was added by calling GetProgramEntryList
             // There should be two entries now
@@ -99,7 +89,7 @@ namespace SettingsRecall {
             // Make sure the name exists once in the Program table
             List<string> names = testAPI.GetProgramNameList();
             Assert.AreEqual(names.Count, 1);
-            Assert.AreEqual(names[0], "testprogram1");
+            Assert.AreEqual(names[0], "apiTestEntry");
         }
     }
 }
