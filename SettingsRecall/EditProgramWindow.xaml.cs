@@ -68,12 +68,34 @@ namespace SettingsRecall
 
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
-
+            // Make sure a version is selected
+            if (versionListBox.SelectedIndex >= 0)
+            {
+                EnableFieldsForEdit(true);
+            }
+            else
+            {
+                ErrorMessageBox selectVersionErrorBox = new ErrorMessageBox("Please select a version to edit");
+                selectVersionErrorBox.show();
+            }
         }
 
         private void deleteVersionButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void doneButton_Click(object sender, RoutedEventArgs e)
+        {
+            // create a new ProgramEntry
+            ProgramEntry entry_edit = new ProgramEntry();
+            entry_edit = selectedEntry;
+
+            // add edits
+            //entry_edit
+
+            // disable the edit fields
+            EnableFieldsForEdit(false);    
         }
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
@@ -121,5 +143,33 @@ namespace SettingsRecall
             }
             return oc;
         }
+
+        private void EnableFieldsForEdit(bool editing)
+        {
+            // Enable edit fields
+            versionText.IsEnabled = editing;
+            osText.IsEnabled = editing;
+            descriptionText.IsEnabled = editing;
+            fileListBox.IsEnabled = editing;
+            addFilesButton.IsEnabled = editing;
+            deleteFilesButton.IsEnabled = editing;
+            doneButton.IsEnabled = editing;
+
+            // Disable other fields
+            changeNameButton.IsEnabled = !editing;
+            addButton.IsEnabled = !editing;
+            editButton.IsEnabled = !editing;
+            deleteVersionButton.IsEnabled = !editing;
+            versionListBox.IsEnabled = !editing;
+            saveButton.IsEnabled = !editing;
+        }
+
+        // update the selectedEntry when the entry selection is changed
+        private void versionListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+                // set selectedEntry
+                selectedEntry = entryList[versionListBox.SelectedIndex].entry;
+        }
+
     }
 }

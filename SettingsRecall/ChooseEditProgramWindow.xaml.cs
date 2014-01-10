@@ -54,6 +54,7 @@ namespace SettingsRecall
 
             // nothing selected
             ErrorMessageBox noSelectErrorBox = new ErrorMessageBox("Please choose a program to edit.");
+            noSelectErrorBox.show();
             return;
         }
 

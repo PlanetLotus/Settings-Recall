@@ -7,7 +7,7 @@
             <ColumnDefinition Width="49*"/>
             <ColumnDefinition Width="268*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="versionListBox" HorizontalAlignment="Left" Height="263" Margin="27,89,0,0" VerticalAlignment="Top" Width="278" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="versionListBox" HorizontalAlignment="Left" Height="263" Margin="27,89,0,0" VerticalAlignment="Top" Width="278" Grid.ColumnSpan="2" SelectionChanged="versionListBox_SelectionChanged"/>
         <ListBox x:Name="fileListBox" HorizontalAlignment="Left" Height="263" Margin="234,89,0,0" VerticalAlignment="Top" Width="278" IsEnabled="False" Grid.Column="1"/>
         <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="372,388,0,0" IsCancel="True" Grid.Column="1"/>
         <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="452,388,0,0" Click="saveButton_Click" Grid.Column="1"/>
@@ -23,7 +23,7 @@
         <Button x:Name="changeNameButton" Content="Change" HorizontalAlignment="Left" Margin="22,30,0,0" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="programNameLabel" Content="Label" HorizontalAlignment="Left" Margin="4,7,0,0" VerticalAlignment="Top" Width="148" Grid.Column="1"/>
         <Button x:Name="editButton" Content="Edit" HorizontalAlignment="Left" Margin="9,357,0,0" VerticalAlignment="Top" Width="75" Click="editButton_Click" Grid.Column="1"/>
-        <Button x:Name="doneButton" Content="Done" HorizontalAlignment="Left" Margin="394,357,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Grid.Column="1"/>
+        <Button x:Name="doneButton" Content="Done" HorizontalAlignment="Left" Margin="394,357,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Grid.Column="1" Click="doneButton_Click"/>
         <TextBox x:Name="versionText" HorizontalAlignment="Left" Height="23" Margin="280,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" IsEnabled="False" Grid.Column="1"/>
         <Label Content="Version" HorizontalAlignment="Left" Margin="230,2,0,0" VerticalAlignment="Top" Grid.Column="1"/>
         <TextBox x:Name="osText" HorizontalAlignment="Left" Height="23" Margin="398,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" IsEnabled="False" Grid.Column="1"/>
