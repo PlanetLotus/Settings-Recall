@@ -34,6 +34,23 @@ namespace SettingsRecall
         }
 
         /// <summary>
+        /// Constructor that takes all members as parameters.
+        /// </summary>
+        public ProgramEntry(string name, 
+                            string version, 
+                            string os, 
+                            List<string> paths, 
+                            string description="", 
+                            bool isPermanent=false) {
+            this.Name = name;
+            this.Version = version;
+            this.OS = os;
+            this.Paths = paths;
+            this.Description = description;
+            this.IsPermanent = isPermanent;
+        }
+
+        /// <summary>
         /// Constructor which converts a DataRow extracted from the DB into a ProgramEntry.
         /// </summary>
         /// <param name="row">DataRow extracted from programEntry table.</param>
