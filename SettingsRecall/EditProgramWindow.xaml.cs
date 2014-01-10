@@ -92,7 +92,7 @@ namespace SettingsRecall
             entry_edit = selectedEntry;
 
             // add edits
-            //entry_edit
+            //if (versionText.Text)
 
             // disable the edit fields
             EnableFieldsForEdit(false);    
