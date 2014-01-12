@@ -335,7 +335,7 @@ namespace SettingsRecall {
 
 
         /// <summary>
-        /// Retrieve a list of program entries from the database.
+        /// Retrieve a list of program entries from the database, filtered by program name.
         /// </summary>
         /// <param name="name">A specific name to search for.</param>
         /// <returns>A list of ProgramEntry retrieved from the db.</returns>
