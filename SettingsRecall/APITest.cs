@@ -145,7 +145,10 @@ namespace SettingsRecall {
 
         [Test]
         public void Test_DeleteProgramEntry() {
+            Assert.IsTrue(testAPI.DeleteProgramEntry(1));
 
+            // Re-initialize so that we don't lose the data
+            this.Init();
         }
     }
 }
