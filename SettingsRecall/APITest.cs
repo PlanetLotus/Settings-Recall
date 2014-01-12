@@ -47,12 +47,22 @@ namespace SettingsRecall {
             db.ClearDB();
         }
 
+        [TestCase(1000)]
+        [TestCase(-1)]
+        public void Test_GetNonExistentProgramEntry(int program_ID) {
+            Assert.IsNull(testAPI.GetProgramEntry(program_ID));
+        }
+
+        [TestCase(1)]
+        public void Test_GetProgramEntry(int program_ID) {
+            Assert.IsNotNull(testAPI.GetProgramEntry(program_ID));
+        }
+
         [Test]
         // This test depends on assuming GetProgramEntryList works properly
         public void Test_AddDuplicateProgramEntry() {
             // Get initial count
             int programEntryCount = testAPI.GetProgramEntryList().Count;
-            Console.WriteLine(programEntryCount);
 
             // Build new object
             List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
@@ -61,7 +71,6 @@ namespace SettingsRecall {
 
             // Verify the number of program entries didn't change
             Assert.AreEqual(programEntryCount, testAPI.GetProgramEntryList().Count);
-            Console.WriteLine(testAPI.GetProgramEntryList().Count);
         }
 
         [Test]
