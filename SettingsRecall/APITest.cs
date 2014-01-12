@@ -64,9 +64,15 @@ namespace SettingsRecall {
             Assert.IsNotNull(testAPI.GetProgramEntry(program_ID));
         }
 
+        [TestCase("", "", "")]
+        [TestCase("Aptitude", "9001", "Debian")]
+        public void Test_GetNonExistentProgramId(string name, string version, string os) {
+            Assert.AreEqual(-1, testAPI.GetProgram_ID(name, version, os));
+        }
+
         [Test]
         public void Test_GetProgramId() {
-
+            Assert.AreEqual(1, testAPI.GetProgram_ID("testprogram1", "1.0", "XP"));
         }
 
         [TestCase(null)]
