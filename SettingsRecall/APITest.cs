@@ -18,6 +18,7 @@ namespace SettingsRecall {
         [TestFixtureSetUp]
         public void Init() {
             // Create a testing database
+            Console.WriteLine("Initializing tests...");
             db = new SQLiteDatabase(db_file);
             db.ClearDB();
 
@@ -37,6 +38,10 @@ namespace SettingsRecall {
             insert.Add("Description", "testdescription1");
             db.Insert("ProgramEntry", insert);
 
+            Dictionary<string, string> name_insert = new Dictionary<string, string>();
+            name_insert.Add("ProgramName", "testprogram1");
+            db.Insert("Program", name_insert);
+
             // Link the API to the testing database
             testAPI = new SQLiteAPI(db_file);
         }
@@ -44,6 +49,7 @@ namespace SettingsRecall {
         [TestFixtureTearDown]
         public void Cleanup() {
             // Delete all data in the db
+            Console.WriteLine("Cleaning up tests...");
             db.ClearDB();
         }
 
