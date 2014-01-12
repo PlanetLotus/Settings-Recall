@@ -65,6 +65,34 @@ namespace SettingsRecall {
         }
 
         [Test]
+        public void Test_GetProgramId() {
+
+        }
+
+        [TestCase(null)]
+        [TestCase("testprogram1")]
+        public void Test_GetProgramEntryList(string name) {
+            List<ProgramEntry> entryList;
+
+            if (name == null) {
+                entryList = testAPI.GetProgramEntryList(); 
+                Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with no parameters returned null");
+            } else {
+                entryList = testAPI.GetProgramEntryList(name); 
+                Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with name parameter returned null");
+            }
+
+            Assert.GreaterOrEqual(entryList.Count, 1, "Test failed: GetProgramEntryList returned less than 1 entry.");
+        }
+
+        [Test]
+        public void Test_GetProgramNameList() {
+            List<string> names = testAPI.GetProgramNameList();
+            Assert.IsNotNull(names, "Test failed: GetProgramNameList returned null");
+            Assert.GreaterOrEqual(names.Count, 1, "Test failed: GetProgramNameList returned less than 1 entry.");
+        }
+
+        [Test]
         // This test depends on assuming GetProgramEntryList works properly
         public void Test_AddDuplicateProgramEntry() {
             // Get initial count
@@ -102,6 +130,16 @@ namespace SettingsRecall {
             List<string> names = testAPI.GetProgramNameList();
             Assert.IsNotNull(names);
             Assert.Contains("apiTestEntry", names);
+        }
+
+        [Test]
+        public void Test_EditProgramEntry() {
+
+        }
+
+        [Test]
+        public void Test_DeleteProgramEntry() {
+
         }
     }
 }
