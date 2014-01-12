@@ -140,7 +140,23 @@ namespace SettingsRecall {
 
         [Test]
         public void Test_EditProgramEntry() {
+            // Create object
+            List<string> paths = new List<string>() { "vista/path/to/file9.txt" };
+            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.1", "Vista", paths, "Really useful edited test description", false, 1);
 
+            // Edit entry
+            testAPI.EditProgramEntry(programEntry);
+
+            // Find entry in list
+            ProgramEntry editedEntry = testAPI.GetProgramEntry(1);
+
+            // Check if edited object is equal to test object
+            Assert.AreEqual(programEntry.ToString(), editedEntry.ToString());
+
+            // Re-initialize so we don't lose the data
+            this.Init();
+
+            // TODO: Test EditProgramEntry with individual parameters too
         }
 
         [Test]
