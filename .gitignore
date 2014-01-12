@@ -110,3 +110,4 @@ UpgradeLog*.XML
 # Other files
 sqlite3.exe
 SettingsRecall/packages.config
+SettingsRecall/unittest.db
