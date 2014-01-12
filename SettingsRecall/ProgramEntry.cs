@@ -41,13 +41,15 @@ namespace SettingsRecall
                             string os, 
                             List<string> paths, 
                             string description="", 
-                            bool isPermanent=false) {
+                            bool isPermanent=false,
+                            int program_ID=-1) {
             this.Name = name;
             this.Version = version;
             this.OS = os;
             this.Paths = paths;
             this.Description = description;
             this.IsPermanent = isPermanent;
+            if (program_ID != -1) this.Program_ID = program_ID;
         }
 
         /// <summary>
