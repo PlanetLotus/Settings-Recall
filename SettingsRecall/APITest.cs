@@ -74,22 +74,19 @@ namespace SettingsRecall {
             List<string> paths = new List<string>() { "vista/path/to/file4.txt" };
             ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.0", "Vista", paths, "Really useful test description", false);
 
-            // Add with programEntry overload
+            // Add program
             testAPI.AddProgramEntry(programEntry);
-
-            // Verify it was added
-            Assert.AreEqual(programEntryCount + 1, testAPI.GetProgramEntryList().Count);
 
             // Make sure it was added by calling GetProgramEntryList
             // There should be two entries now
             List<ProgramEntry> list = testAPI.GetProgramEntryList();
             Assert.IsNotNull(list);
-            Assert.AreEqual(list.Count, 2);
+            Assert.AreEqual(programEntryCount + 1, list.Count);
 
             // Make sure the name exists once in the Program table
             List<string> names = testAPI.GetProgramNameList();
-            Assert.AreEqual(names.Count, 1);
-            Assert.AreEqual(names[0], "apiTestEntry");
+            Assert.IsNotNull(names);
+            Assert.Contains("apiTestEntry", names);
         }
     }
 }
