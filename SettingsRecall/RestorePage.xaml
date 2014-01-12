@@ -12,7 +12,7 @@
         <Button Content="Remove" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,249,0,0"/>
         <Button Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,214,0,0"/>
         <Button Content="Restore Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="632,466,0,0"/>
-        <Button Content="Choose Load Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="19,13,0,0" Click="Button_Click_2"/>
+        <Button Content="Choose Load Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="19,13,0,0" Click="chooseFolderButton_Click"/>
         <Label x:Name="folder_label" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,10,0,0" Width="301"/>
     </Grid>
 </UserControl>

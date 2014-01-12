@@ -46,7 +46,7 @@ namespace SettingsRecall
         }
 
         // click 'choose folder' button
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
             SetLoadSaveLocation();
             // display directory in label
