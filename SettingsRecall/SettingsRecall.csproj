@@ -88,7 +88,7 @@
     <Compile Include="AddNewProgramWindow.xaml.cs">
       <DependentUpon>AddNewProgramWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="APITest.cs" />
+    <Compile Include="Tests\APITest.cs" />
     <Compile Include="ChooseEditProgramWindow.xaml.cs">
       <DependentUpon>ChooseEditProgramWindow.xaml</DependentUpon>
     </Compile>
