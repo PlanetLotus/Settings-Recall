@@ -7,8 +7,24 @@
       d:DesignHeight="510" d:DesignWidth="770">
 
     <Grid>
-        <ListBox HorizontalAlignment="Left" Height="395" Margin="10,50,0,0" VerticalAlignment="Top" Width="320"/>
-        <ListBox HorizontalAlignment="Left" Height="395" Margin="440,50,0,0" VerticalAlignment="Top" Width="320"/>
+        <ListView HorizontalAlignment="Left" Height="395" Margin="10,50,0,0" VerticalAlignment="Top" Width="320">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="100" Header="Name"/>
+                    <GridViewColumn Width="100" Header="Version"/>
+                    <GridViewColumn Width="100" Header="OS"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView HorizontalAlignment="Left" Height="395" Margin="440,50,0,0" VerticalAlignment="Top" Width="320">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="100" Header="Name"/>
+                    <GridViewColumn Width="100" Header="Version"/>
+                    <GridViewColumn Width="100" Header="OS"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
         <Button Content="Remove" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,249,0,0"/>
         <Button Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,214,0,0"/>
         <Button Content="Create Backup" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86" Margin="645,466,0,0"/>
