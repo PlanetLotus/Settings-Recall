@@ -32,7 +32,7 @@ namespace SettingsRecall {
             Dictionary<string, string> insert = new Dictionary<string, string>();
             insert.Add("Name", "testprogram1");
             insert.Add("Version", "1.0");
-            insert.Add("OS", "XP");
+            insert.Add("OS", "Windows XP 32-bit");
             insert.Add("IsPermanent", "0");
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
@@ -72,7 +72,7 @@ namespace SettingsRecall {
 
         [Test]
         public void Test_GetProgramId() {
-            Assert.AreEqual(1, testAPI.GetProgram_ID("testprogram1", "1.0", "XP"));
+            Assert.AreEqual(1, testAPI.GetProgram_ID("testprogram1", "1.0", "Windows XP 32-bit"));
         }
 
         [TestCase(null)]
@@ -106,7 +106,7 @@ namespace SettingsRecall {
 
             // Build new object
             List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
-            ProgramEntry programEntry = new ProgramEntry("testprogram1", "1.0", "XP", paths, "Really useful test description", false);
+            ProgramEntry programEntry = new ProgramEntry("testprogram1", "1.0", "Windows XP 32-bit", paths, "Really useful test description", false);
             testAPI.AddProgramEntry(programEntry);
 
             // Verify the number of program entries didn't change
@@ -121,7 +121,7 @@ namespace SettingsRecall {
 
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file4.txt" };
-            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.0", "Vista", paths, "Really useful test description", false);
+            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.0", "Windows Vista 64-bit", paths, "Really useful test description", false);
 
             // Add program
             testAPI.AddProgramEntry(programEntry);
@@ -138,11 +138,48 @@ namespace SettingsRecall {
             Assert.Contains("apiTestEntry", names);
         }
 
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("    ")]
+        public void Test_EditProgramEntryBadName(string name) {
+            ProgramEntry programEntry = new ProgramEntry(name, null, null, null, null, false, 1);
+
+            // Verify failure
+            Assert.IsFalse(testAPI.EditProgramEntry(programEntry));
+        }
+
+        [TestCase(null)]
+        [TestCase("    ")]
+        [TestCase("Mac OSX 8-bit")]
+        public void Test_EditProgramEntryBadOs(string os) {
+            ProgramEntry programEntry = new ProgramEntry(null, null, os, null, null, false, 1);
+
+            // Verify failure
+            Assert.IsFalse(testAPI.AddProgramEntry(programEntry));
+        }
+
+        [Test]
+        public void Test_EditProgramEntryBadPaths() {
+            List<string> paths1 = new List<string>() { null, "path2" };
+            List<string> paths2 = new List<string>() { "path1", "" };
+            List<string> paths3 = new List<string>() { "path1", "   "};
+
+            // Verify failure
+            ProgramEntry programEntry1 = new ProgramEntry(null, null, null, paths1, "", false, 1);
+            Assert.IsFalse(testAPI.AddProgramEntry(programEntry1));
+
+            ProgramEntry programEntry2 = new ProgramEntry(null, null, null, paths2, "", false, 1);
+            Assert.IsFalse(testAPI.AddProgramEntry(programEntry2));
+
+            ProgramEntry programEntry3 = new ProgramEntry(null, null, null, paths3, "", false, 1);
+            Assert.IsFalse(testAPI.AddProgramEntry(programEntry3));
+        }
+
         [Test]
         public void Test_EditProgramEntry() {
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file9.txt" };
-            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.1", "Vista", paths, "Really useful edited test description", false, 1);
+            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.1", "Windows Vista 64-bit", paths, "Really useful edited test description", false, 1);
 
             // Edit entry
             testAPI.EditProgramEntry(programEntry);
