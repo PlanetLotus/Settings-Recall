@@ -136,6 +136,13 @@ namespace SettingsRecall {
         /// <param name="entry">ProgramEntry object.</param>
         /// <returns>Bool, success or failure</returns>
         public bool AddProgramEntry(ProgramEntry entry) {
+            // Validate entry
+            string validation = ValidateProgramEntry(entry);
+            if (validation != "") {
+                Console.WriteLine(validation);
+                return false;
+            }
+
             // Convert paths to a JSON string
             string json_paths = JsonConvert.SerializeObject(entry.Paths);
             Console.WriteLine(json_paths);
@@ -180,7 +187,7 @@ namespace SettingsRecall {
         public bool EditProgramEntry(ProgramEntry entry) 
         {
             // Make sure there's something to update
-            if (entry.Name == null &&
+            if ((entry.Name == null || entry.Name.Trim() == "") &&
                 entry.Version == null &&
                 entry.OS == null &&
                 entry.Paths == null &&
@@ -200,7 +207,8 @@ namespace SettingsRecall {
             Dictionary<string, string> update = new Dictionary<string, string>();
 
             // Optional parameter: Add Name
-            if (entry.Name != null) { update.Add("Name", entry.Name); }
+            if (entry.Name != null && entry.Name.Trim() != "") 
+                update.Add("Name", entry.Name);
 
             // Optional parameter: Add Version
             if (entry.Version != null) { update.Add("Version", entry.Version); }
@@ -213,9 +221,22 @@ namespace SettingsRecall {
 
             // Optional parameter: Convert paths to a JSON string
             if (entry.Paths != null) {
+                foreach (string path in entry.Paths) {
+                    if (path == null || path.Trim() == "") {
+                        Console.WriteLine("Entry path must not be empty.");
+                        return false;
+                    }
+                }
+
                 string json_paths = JsonConvert.SerializeObject(entry.Paths);
                 update.Add("Paths", json_paths);
                 Console.WriteLine(json_paths);
+            }
+
+            // Make sure something is being updated
+            if (update.Count < 1) {
+                Console.WriteLine("Nothing valid to update! Returning...");
+                return false;
             }
 
             // Insert into db
