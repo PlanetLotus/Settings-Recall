@@ -10,11 +10,14 @@ namespace SettingsRecall {
     public class SQLiteAPI {
         SQLiteDatabase db;
 
+        public List<string> supportedOses;
+
         /// <summary>
         /// Default constructor for SQLiteAPI Class.
         /// Creates a new SQLiteDatabase object.
         /// </summary>
         public SQLiteAPI() {
+            InitSupportedOses();
             db = new SQLiteDatabase();
         }
 
@@ -23,7 +26,49 @@ namespace SettingsRecall {
         /// </summary>
         /// <param name="dbInputFile"></param>
         public SQLiteAPI(string dbInputFile) {
+            InitSupportedOses();
             db = new SQLiteDatabase(dbInputFile);
+        }
+
+        private void InitSupportedOses() {
+            supportedOses = new List<string>() {
+                "",                     // No specified OS is also acceptable
+                "Windows XP 32-bit",
+                "Windows XP 64-bit",
+                "Windows Vista 32-bit",
+                "Windows Vista 64-bit",
+                "Windows 7 32-bit",
+                "Windows 7 64-bit",
+                "Windows 8 32-bit",
+                "Windows 8 64-bit"
+            };
+        }
+
+        private string ValidateProgramEntry(ProgramEntry entry) {
+            // Validate entry object: Not null
+            if (entry == null)
+                return "Entry cannot be null.";
+
+            // Validate name: Not null, not empty
+            if (entry.Name == null || entry.Name.Trim() == "")
+                return "Entry name cannot be empty.";
+
+            // Validate OS: In supported OSes list
+            if (entry.OS == null || !supportedOses.Contains(entry.OS))
+                return "Entry OS must be in the list of supported OSes.";
+
+            // Validate paths: Cannot be null, must be at least length 1
+            if (entry.Paths == null || entry.Paths.Count < 1)
+                return "Entry paths must contain at least one path.";
+
+            // Validate paths: Contents cannot be null
+            foreach (string path in entry.Paths) {
+                if (path == null || path.Trim() == "")
+                    return "Entry path must not be empty.";
+            }
+
+            // No errors
+            return "";
         }
 
         /// <summary>
