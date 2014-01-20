@@ -153,11 +153,11 @@ namespace SettingsRecall {
 
             // Prepare the data for db
             Dictionary<string, string> insert = new Dictionary<string, string>();
-            insert.Add("Name", entry.Name);
-            insert.Add("Version", entry.Version);
-            insert.Add("OS", entry.OS);
+            insert.Add("Name", entry.Name.Trim());
+            insert.Add("Version", entry.Version.Trim());
+            insert.Add("OS", entry.OS.Trim());
             insert.Add("IsPermanent", isPermInt.ToString());
-            insert.Add("Description", entry.Description);
+            insert.Add("Description", entry.Description.Trim());
             insert.Add("Paths", json_paths);
 
             // Insert into db
