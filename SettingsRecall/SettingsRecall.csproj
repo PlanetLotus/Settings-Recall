@@ -108,7 +108,6 @@
     <Compile Include="StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tests\OSTest.cs" />
     <Compile Include="VersionListEntry.cs" />
     <Page Include="AddNewProgramWindow.xaml">
       <SubType>Designer</SubType>

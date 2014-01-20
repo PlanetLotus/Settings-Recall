@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +25,69 @@ namespace SettingsRecall
         public BackupPage()
         {
             InitializeComponent();
+
+            // Initialize the left list with the names of the supported programs whose paths exist on the machine
+            backupPageLeftList.ItemsSource = GetUserPrograms();
+        }
+
+        private List<string> GetUserPrograms() {
+            List<string> programs = new List<string>();
+
+            // Get supported programs
+            List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramEntryList();
+
+            // Get OS of machine we're on
+            string this_os = GetOSFriendlyName();
+
+            // Filter list down to programs where at least one path for that program exists on the machine
+            // Filter program entries by:
+            // - User's operating system
+            // - At least one path in the entry exists on user's computer
+            foreach (ProgramEntry entry in programEntries) {
+                Console.WriteLine(entry.Name);
+                if (entry.OS == this_os) {
+                    foreach (string path in entry.Paths) {
+                        if (File.Exists(path) || Directory.Exists(path)) {
+                            programs.Add(entry.Name);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return programs;
+        }
+        
+        public static string GetOSFriendlyName() {
+            string result = string.Empty;
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem");
+            foreach (ManagementObject os in searcher.Get())
+            {
+                result = os["Caption"].ToString();
+                break;
+            }
+
+            // Convert result to either XP, Vista, 7, or 8 for our standards
+            if (result.Contains("XP"))
+                result = "Windows XP";
+            else if (result.Contains("Vista"))
+                result = "Windows Vista";
+            else if (result.Contains("Windows 7"))
+                result = "Windows 7";
+            else if (result.Contains("Windows 8"))
+                result = "Windows 8";
+            else {
+                Console.WriteLine("Unexpected OS name: " + result);
+                return null;
+            }
+
+            // Append 32-bit or 64-bit
+            if (Environment.Is64BitOperatingSystem == true)
+                result += " 64-bit";
+            else
+                result += " 32-bit";
+
+            return result;
         }
         
         // Set the global save/load location with a dialog
