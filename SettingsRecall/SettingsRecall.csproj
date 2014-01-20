@@ -67,6 +67,7 @@
     <Reference Include="System.Data.SQLite.Linq">
       <HintPath>..\packages\System.Data.SQLite.1.0.90.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -107,6 +108,7 @@
     <Compile Include="StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tests\OSTest.cs" />
     <Compile Include="VersionListEntry.cs" />
     <Page Include="AddNewProgramWindow.xaml">
       <SubType>Designer</SubType>
