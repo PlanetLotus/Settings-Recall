@@ -234,8 +234,6 @@ namespace SettingsRecall {
 
             // Re-initialize so we don't lose the data
             this.Init();
-
-            // TODO: Test EditProgramEntry with individual parameters too
         }
 
         [Test]
