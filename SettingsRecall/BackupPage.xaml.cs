@@ -22,20 +22,26 @@ namespace SettingsRecall
     /// </summary>
     public partial class BackupPage : UserControl
     {
+        List<ProgramEntry> supportedPrograms;
+        List<string> supportedProgramNames;
+        List<ProgramEntry> selectedPrograms;
+
         public BackupPage()
         {
             InitializeComponent();
 
+            supportedPrograms = new List<ProgramEntry>();
+            supportedProgramNames = new List<string>();
+            selectedPrograms = new List<ProgramEntry>();
+
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
             // Not using ItemsSource here because we don't want the list to be read-only
-            List<string> programs = GetUserPrograms();
-            foreach (string program in programs)
-                backupPageLeftList.Items.Add(program);
+            GetUserPrograms();
+            foreach (string name in supportedProgramNames)
+                backupPageLeftList.Items.Add(name);
         }
 
-        private List<string> GetUserPrograms() {
-            List<string> programs = new List<string>();
-
+        private void GetUserPrograms() {
             // Get supported programs
             List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramEntryList();
 
@@ -51,14 +57,13 @@ namespace SettingsRecall
                 if (entry.OS == this_os) {
                     foreach (string path in entry.Paths) {
                         if (File.Exists(path) || Directory.Exists(path)) {
-                            programs.Add(entry.Name);
+                            supportedPrograms.Add(entry);
+                            supportedProgramNames.Add(entry.Name);
                             break;
                         }
                     }
                 }
             }
-
-            return programs;
         }
         
         public static string GetOSFriendlyName() {
@@ -182,6 +187,15 @@ namespace SettingsRecall
             object selected = backupPageRightList.SelectedItem;
             backupPageLeftList.Items.Add(selected);
             backupPageRightList.Items.Remove(selected);
+        }
+
+        private void createBackupButton_Click(object sender, RoutedEventArgs e) {
+            selectedPrograms.Clear();
+
+            foreach (ProgramEntry program in supportedPrograms) {
+                if (backupPageRightList.Items.Contains(program.Name))
+                    selectedPrograms.Add(program);
+            }
         }
     }
 }
