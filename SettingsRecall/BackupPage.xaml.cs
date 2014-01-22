@@ -27,7 +27,10 @@ namespace SettingsRecall
             InitializeComponent();
 
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
-            backupPageLeftList.ItemsSource = GetUserPrograms();
+            // Not using ItemsSource here because we don't want the list to be read-only
+            List<string> programs = GetUserPrograms();
+            foreach (string program in programs)
+                backupPageLeftList.Items.Add(program);
         }
 
         private List<string> GetUserPrograms() {
@@ -167,5 +170,18 @@ namespace SettingsRecall
             folder_label.Content = Globals.load_save_location;
         }
 
+        private void addToBackupButton_Click(object sender, RoutedEventArgs e) {
+            // Remove from left list, add to right list
+            object selected = backupPageLeftList.SelectedItem;
+            backupPageRightList.Items.Add(selected);
+            backupPageLeftList.Items.Remove(selected);
+        }
+
+        private void removeFromBackupButton_Click(object sender, RoutedEventArgs e) {
+            // Remove from right list, add to left list
+            object selected = backupPageRightList.SelectedItem;
+            backupPageLeftList.Items.Add(selected);
+            backupPageRightList.Items.Remove(selected);
+        }
     }
 }
