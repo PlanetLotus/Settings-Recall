@@ -22,9 +22,10 @@ namespace SettingsRecall
     /// </summary>
     public partial class BackupPage : UserControl
     {
-        List<ProgramEntry> supportedPrograms;
-        List<string> supportedProgramNames;
-        List<ProgramEntry> selectedPrograms;
+        // TODO: Keep these private. They're marked public now so that TestBackup.cs can use them.
+        public List<ProgramEntry> supportedPrograms;
+        public List<string> supportedProgramNames;
+        public List<ProgramEntry> selectedPrograms;
 
         public BackupPage()
         {
@@ -44,6 +45,7 @@ namespace SettingsRecall
         private void GetUserPrograms() {
             // Get supported programs
             List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramEntryList();
+            if (programEntries == null) return;
 
             // Get OS of machine we're on
             string this_os = GetOSFriendlyName();
@@ -189,13 +191,54 @@ namespace SettingsRecall
             backupPageRightList.Items.Remove(selected);
         }
 
-        private void createBackupButton_Click(object sender, RoutedEventArgs e) {
-            selectedPrograms.Clear();
+        // TODO: Keep this private. It's marked public now so that TestBackup.cs can use it.
+        public void createBackupButton_Click(object sender, RoutedEventArgs e) {
+            // Make sure save directory has been selected
+            string backupDir = Globals.load_save_location;
+            if (backupDir == null || backupDir.Trim() == "") {
+                Console.WriteLine("Must set save location before creating backup.");
+                return;
+            }
 
+            // Make sure save directory has a trailing slash (so we can append to it)
+            if (!backupDir[backupDir.Length-1].Equals('\\'))
+                backupDir = backupDir + "\\";
+
+            // Determine which programs are selected
+            selectedPrograms.Clear();
             foreach (ProgramEntry program in supportedPrograms) {
                 if (backupPageRightList.Items.Contains(program.Name))
                     selectedPrograms.Add(program);
             }
+
+            // Create folder at save location if it doesn't exist already
+            Directory.CreateDirectory(backupDir);
+
+            // Loop through selectedPrograms, copying files to save location
+            foreach (ProgramEntry program in selectedPrograms) {
+                // Create folder for program in save location
+                string programDir = backupDir + program.Name;
+                Directory.CreateDirectory(programDir);
+
+                // Check edge case: Multiple files of same name
+                // Implement later...
+                // Get number of versions in each program, x
+                // Get strings that have multiple versions, strList
+                // Create x subdirs in program dir
+                // When copying, if filename in strList, copy to a subdir that doesn't contain filename
+
+                foreach (string path in program.Paths) {
+                    // Copy files at path to programDir
+                    string filename = path.Split('\\').Last();
+                    if (File.Exists(path)) {
+                        File.Copy(path, programDir + filename);
+                    } else {
+                        Console.WriteLine("File not found: " + path);
+                    }
+                }
+            }
+
+            // Save log file
         }
     }
 }
