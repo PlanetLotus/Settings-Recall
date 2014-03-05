@@ -1,17 +1,6 @@
-CREATE TABLE ProgramEntry
-(
-Program_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-Name TEXT NOT NULL,
-Version TEXT,
-OS TEXT,
-IsPermanent INTEGER NOT NULL,
-Description TEXT,
-Paths TEXT NOT NULL,
-FOREIGN KEY (Name) REFERENCES Program(ProgramName),
-UNIQUE (Name,Version,OS)
-);
-
 CREATE TABLE Program
 (
-ProgramName Text PRIMARY KEY
+Name TEXT PRIMARY KEY NOT NULL,
+Description TEXT,
+Paths TEXT NOT NULL,
 );
