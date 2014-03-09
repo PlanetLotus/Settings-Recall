@@ -1,6 +1,6 @@
 CREATE TABLE Program
 (
-Name TEXT PRIMARY KEY NOT NULL,
+Name TEXT PRIMARY KEY,
 Paths TEXT NOT NULL,
-Description TEXT,
+Description TEXT
 );
