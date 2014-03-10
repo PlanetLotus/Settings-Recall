@@ -31,9 +31,6 @@ namespace SettingsRecall {
 
             Dictionary<string, string> insert = new Dictionary<string, string>();
             insert.Add("Name", "testprogram1");
-            insert.Add("Version", "1.0");
-            insert.Add("OS", "Windows XP 32-bit");
-            insert.Add("IsPermanent", "0");
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
             db.Insert("ProgramEntry", insert);
@@ -74,6 +71,7 @@ namespace SettingsRecall {
         [Test]
         public void Test_GetProgramNameList() {
             List<string> names = testAPI.GetProgramNameList();
+
             Assert.IsNotNull(names, "Test failed: GetProgramNameList returned null");
             Assert.GreaterOrEqual(names.Count, 1, "Test failed: GetProgramNameList returned less than 1 entry.");
         }
