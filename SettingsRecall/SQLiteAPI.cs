@@ -17,7 +17,6 @@ namespace SettingsRecall {
         /// Creates a new SQLiteDatabase object.
         /// </summary>
         public SQLiteAPI() {
-            InitSupportedOses();
             db = new SQLiteDatabase();
         }
 
@@ -26,22 +25,7 @@ namespace SettingsRecall {
         /// </summary>
         /// <param name="dbInputFile"></param>
         public SQLiteAPI(string dbInputFile) {
-            InitSupportedOses();
             db = new SQLiteDatabase(dbInputFile);
-        }
-
-        private void InitSupportedOses() {
-            supportedOses = new List<string>() {
-                "",                     // No specified OS is also acceptable
-                "Windows XP 32-bit",
-                "Windows XP 64-bit",
-                "Windows Vista 32-bit",
-                "Windows Vista 64-bit",
-                "Windows 7 32-bit",
-                "Windows 7 64-bit",
-                "Windows 8 32-bit",
-                "Windows 8 64-bit"
-            };
         }
 
         private string ValidateProgramEntry(ProgramEntry entry) {
@@ -225,7 +209,7 @@ namespace SettingsRecall {
         /// <param name="program_ID">The unique program ID number.</param>
         /// <returns>A ProgramEntry
         /// Program_ID, Name, Version, OS, IsPermanent, Description, Paths, Foreign Key</returns>
-        public ProgramEntry GetProgramEntry(string name)
+        public ProgramEntry GetProgram(string name)
         {
             // query the database for row containing program_ID
             String query = string.Format("SELECT Name,Paths,Description FROM Program WHERE Name = '{0}';", name);

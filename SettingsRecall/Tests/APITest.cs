@@ -53,41 +53,21 @@ namespace SettingsRecall {
             db.ClearDB();
         }
 
-        [TestCase(1000)]
-        [TestCase(-1)]
-        public void Test_GetNonExistentProgramEntry(int program_ID) {
-            Assert.IsNull(testAPI.GetProgramEntry(program_ID));
+        [TestCase("asdfasdfasdf")]
+        [TestCase("")]
+        public void Test_GetNonExistentProgramEntry(string name) {
+            Assert.IsNull(testAPI.GetProgram(name));
         }
 
-        [TestCase(1)]
-        public void Test_GetProgramEntry(int program_ID) {
-            Assert.IsNotNull(testAPI.GetProgramEntry(program_ID));
-        }
-
-        [TestCase("", "", "")]
-        [TestCase("Aptitude", "9001", "Debian")]
-        public void Test_GetNonExistentProgramId(string name, string version, string os) {
-            Assert.AreEqual(-1, testAPI.GetProgram_ID(name, version, os));
-        }
-
-        [Test]
-        public void Test_GetProgramId() {
-            Assert.AreEqual(1, testAPI.GetProgram_ID("testprogram1", "1.0", "Windows XP 32-bit"));
-        }
-
-        [TestCase(null)]
         [TestCase("testprogram1")]
-        public void Test_GetProgramEntryList(string name) {
-            List<ProgramEntry> entryList;
+        public void Test_GetProgramEntry(string name) {
+            Assert.IsNotNull(testAPI.GetProgram(name));
+        }
 
-            if (name == null) {
-                entryList = testAPI.GetProgramEntryList(); 
-                Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with no parameters returned null");
-            } else {
-                entryList = testAPI.GetProgramEntryList(name); 
-                Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with name parameter returned null");
-            }
+        public void Test_GetProgramList() {
+            List<ProgramEntry> entryList = testAPI.GetProgramList(); 
 
+            Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with no parameters returned null");
             Assert.GreaterOrEqual(entryList.Count, 1, "Test failed: GetProgramEntryList returned less than 1 entry.");
         }
 
@@ -101,76 +81,65 @@ namespace SettingsRecall {
         [TestCase(null)]
         [TestCase("")]
         [TestCase("    ")]
-        public void Test_AddProgramEntryBadName(string name) {
+        public void Test_AddProgramBadName(string name) {
             List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
-            ProgramEntry programEntry = new ProgramEntry(name, "1.0", "Windows XP 32-bit", paths, "Really useful test description", false);
+            ProgramEntry programEntry = new ProgramEntry(name, paths, "Really useful test description");
 
             // Verify failure
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry));
-        }
-
-        [TestCase(null)]
-        [TestCase("    ")]
-        [TestCase("Mac OSX 8-bit")]
-        public void Test_AddProgramEntryBadOs(string os) {
-            List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
-            ProgramEntry programEntry = new ProgramEntry("badtestprogram", "1.0", os, paths, "Really useful test description", false);
-
-            // Verify failure
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry));
+            Assert.IsFalse(testAPI.AddProgram(programEntry));
         }
 
         [Test]
-        public void Test_AddProgramEntryBadPaths() {
+        public void Test_AddProgramBadPaths() {
             List<string> paths1 = new List<string>() { null, "path2" };
             List<string> paths2 = new List<string>() { "path1", "" };
             List<string> paths3 = new List<string>() { "path1", "   "};
 
             // Verify failure
-            ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", "1.0", "Windows XP 32-bit", null, "Really useful test description", false);
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry1));
+            ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", null, "Really useful test description");
+            Assert.IsFalse(testAPI.AddProgram(programEntry1));
 
-            ProgramEntry programEntry2 = new ProgramEntry("badtestprogram", "1.0", "Windows XP 32-bit", paths1, "Really useful test description", false);
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry2));
+            ProgramEntry programEntry2 = new ProgramEntry("badtestprogram", paths1, "Really useful test description");
+            Assert.IsFalse(testAPI.AddProgram(programEntry2));
 
-            ProgramEntry programEntry3 = new ProgramEntry("badtestprogram", "1.0", "Windows XP 32-bit", paths2, "Really useful test description", false);
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry3));
+            ProgramEntry programEntry3 = new ProgramEntry("badtestprogram", paths2, "Really useful test description");
+            Assert.IsFalse(testAPI.AddProgram(programEntry3));
 
-            ProgramEntry programEntry4 = new ProgramEntry("badtestprogram", "1.0", "Windows XP 32-bit", paths3, "Really useful test description", false);
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry4));
+            ProgramEntry programEntry4 = new ProgramEntry("badtestprogram", paths3, "Really useful test description");
+            Assert.IsFalse(testAPI.AddProgram(programEntry4));
         }
 
         [Test]
         // This test depends on assuming GetProgramEntryList works properly
-        public void Test_AddDuplicateProgramEntry() {
+        public void Test_AddDuplicateProgram() {
             // Get initial count
-            int programEntryCount = testAPI.GetProgramEntryList().Count;
+            int programEntryCount = testAPI.GetProgramList().Count;
 
             // Build new object
             List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
-            ProgramEntry programEntry = new ProgramEntry("testprogram1", "1.0", "Windows XP 32-bit", paths, "Really useful test description", false);
-            testAPI.AddProgramEntry(programEntry);
+            ProgramEntry programEntry = new ProgramEntry("testprogram1", paths, "Really useful test description");
+            testAPI.AddProgram(programEntry);
 
             // Verify the number of program entries didn't change
-            Assert.AreEqual(programEntryCount, testAPI.GetProgramEntryList().Count);
+            Assert.AreEqual(programEntryCount, testAPI.GetProgramList().Count);
         }
 
         [Test]
         // This test depends on assuming GetProgramEntryList works properly
         // This test depends on assuming GetProgramNameList works properly
-        public void Test_AddProgramEntry() {
-            int programEntryCount = testAPI.GetProgramEntryList().Count;
+        public void Test_AddProgram() {
+            int programEntryCount = testAPI.GetProgramList().Count;
 
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file4.txt" };
-            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.0", "Windows Vista 64-bit", paths, "Really useful test description", false);
+            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", paths, "Really useful test description");
 
             // Add program
-            testAPI.AddProgramEntry(programEntry);
+            testAPI.AddProgram(programEntry);
 
             // Make sure it was added by calling GetProgramEntryList
             // There should be two entries now
-            List<ProgramEntry> list = testAPI.GetProgramEntryList();
+            List<ProgramEntry> list = testAPI.GetProgramList();
             Assert.IsNotNull(list);
             Assert.AreEqual(programEntryCount + 1, list.Count);
 
@@ -183,51 +152,42 @@ namespace SettingsRecall {
         [TestCase(null)]
         [TestCase("")]
         [TestCase("    ")]
-        public void Test_EditProgramEntryBadName(string name) {
-            ProgramEntry programEntry = new ProgramEntry(name, null, null, null, null, false, 1);
+        public void Test_EditProgramBadName(string name) {
+            ProgramEntry programEntry = new ProgramEntry(name, null, null);
 
             // Verify failure
-            Assert.IsFalse(testAPI.EditProgramEntry(programEntry));
-        }
-
-        [TestCase(null)]
-        [TestCase("    ")]
-        [TestCase("Mac OSX 8-bit")]
-        public void Test_EditProgramEntryBadOs(string os) {
-            ProgramEntry programEntry = new ProgramEntry(null, null, os, null, null, false, 1);
-
-            // Verify failure
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry));
+            Assert.IsFalse(testAPI.EditProgram(programEntry));
         }
 
         [Test]
-        public void Test_EditProgramEntryBadPaths() {
+        public void Test_EditProgramBadPaths() {
+            string name = "testprogram1";
             List<string> paths1 = new List<string>() { null, "path2" };
             List<string> paths2 = new List<string>() { "path1", "" };
             List<string> paths3 = new List<string>() { "path1", "   "};
 
             // Verify failure
-            ProgramEntry programEntry1 = new ProgramEntry(null, null, null, paths1, "", false, 1);
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry1));
+            ProgramEntry programEntry1 = new ProgramEntry(name, paths1, "");
+            Assert.IsFalse(testAPI.AddProgram(programEntry1));
 
-            ProgramEntry programEntry2 = new ProgramEntry(null, null, null, paths2, "", false, 1);
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry2));
+            ProgramEntry programEntry2 = new ProgramEntry(name, paths2, "");
+            Assert.IsFalse(testAPI.AddProgram(programEntry2));
 
-            ProgramEntry programEntry3 = new ProgramEntry(null, null, null, paths3, "", false, 1);
-            Assert.IsFalse(testAPI.AddProgramEntry(programEntry3));
+            ProgramEntry programEntry3 = new ProgramEntry(name, paths3, "");
+            Assert.IsFalse(testAPI.AddProgram(programEntry3));
         }
 
         [Test]
-        public void Test_EditProgramEntry() {
+        public void Test_EditProgram() {
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file9.txt" };
-            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", "1.1", "Windows Vista 64-bit", paths, "Really useful edited test description", false, 1);
+            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", paths, "Really useful edited test description");
 
             // Edit entry
-            testAPI.EditProgramEntry(programEntry);
+            testAPI.EditProgram(programEntry);
 
             // Find entry in list
-            ProgramEntry editedEntry = testAPI.GetProgramEntry(1);
+            ProgramEntry editedEntry = testAPI.GetProgram("testprogram1");
 
             // Check if edited object is equal to test object
             Assert.AreEqual(programEntry.ToString(), editedEntry.ToString());
@@ -237,8 +197,8 @@ namespace SettingsRecall {
         }
 
         [Test]
-        public void Test_DeleteProgramEntry() {
-            Assert.IsTrue(testAPI.DeleteProgramEntry(1));
+        public void Test_DeleteProgram() {
+            Assert.IsTrue(testAPI.DeleteProgram("testprogram1"));
 
             // Re-initialize so that we don't lose the data
             this.Init();
