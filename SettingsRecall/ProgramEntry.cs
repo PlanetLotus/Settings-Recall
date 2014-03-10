@@ -10,46 +10,20 @@ namespace SettingsRecall
 {
     public class ProgramEntry
     {
-        public int Program_ID {get; set;}
         public string Name {get; set;}
-        public string Version {get; set;}
-        public string OS {get; set;}
-        public bool IsPermanent {get; set;}
-        public string Description { get; set; }
         public List<string> Paths { get; set; }
+        public string Description { get; set; }
         
-        /// <summary>
-        /// Default constructor for ProgramEntry
-        /// </summary>
         public ProgramEntry() {
-            // Initialize isPermanent to false
-            this.IsPermanent = false;
-
-            // Initialize everything else to null (except Program_ID)
             this.Name = "";
-            this.Version = "";
-            this.OS = "";
             this.Description = "";
             this.Paths = null;
         }
 
-        /// <summary>
-        /// Constructor that takes all members as parameters.
-        /// </summary>
-        public ProgramEntry(string name, 
-                            string version, 
-                            string os, 
-                            List<string> paths, 
-                            string description="", 
-                            bool isPermanent=false,
-                            int program_ID=-1) {
+        public ProgramEntry(string name, List<string> paths, string description="") {
             this.Name = name;
-            this.Version = version;
-            this.OS = os;
             this.Paths = paths;
             this.Description = description;
-            this.IsPermanent = isPermanent;
-            if (program_ID != -1) this.Program_ID = program_ID;
         }
 
         /// <summary>
@@ -58,15 +32,8 @@ namespace SettingsRecall
         /// <param name="row">DataRow extracted from programEntry table.</param>
         public ProgramEntry(DataRow row)
         {
-            // Initialize isPermanent to false
-            this.IsPermanent = false;
-
             // Assign each ProgramEntry field
-            this.Program_ID = Globals.StrToInt(row["Program_ID"].ToString());
             this.Name = row["Name"].ToString();
-            this.Version = row["Version"].ToString();
-            this.OS = row["OS"].ToString();
-            if (Globals.StrToInt(row["IsPermanent"].ToString()) == 1) this.IsPermanent = true;
             this.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
             this.Description = row["Description"].ToString();
         }
@@ -84,12 +51,8 @@ namespace SettingsRecall
             // Cut off extra comma
             if (pathBuilder.Length > 1) paths = pathBuilder.ToString().Substring(0, pathBuilder.Length-2);
 
-            str = string.Format("*****\nProgram_ID: {0}\nName: {1}\nVersion: {2}\nOS: {3}\nIsPermanent: {4}\nDescription: {5}\nPaths: {6}\n*****",
-                Program_ID.ToString(),
+            str = string.Format("*****\r\nName: {0}\r\nPaths: {1}\r\nDescription: {2}\r\n*****",
                 Name,
-                Version,
-                OS,
-                IsPermanent.ToString(),
                 Description,
                 paths);
 
