@@ -94,13 +94,6 @@ namespace SettingsRecall
             ProgramEntry entry = new ProgramEntry();
             entry = selectedEntry;
 
-            // add edits
-            if (!String.IsNullOrWhiteSpace(versionText.Text))
-                entry.Version = versionText.Text;
-
-            if (!String.IsNullOrWhiteSpace(osText.Text))
-                entry.OS = osText.Text;
-
             if (!String.IsNullOrWhiteSpace(descriptionText.Text))
                 entry.Description = descriptionText.Text;
 
@@ -133,19 +126,19 @@ namespace SettingsRecall
                 switch (change.entry_type)
                 {
                     case "add":
-                        if (!Globals.sqlite_api.AddProgramEntry(change.entry))
+                        if (!Globals.sqlite_api.AddProgram(change.entry))
                         {
                             // handle the error
                         }
                         break;
                     case "edit":
-                        if (!Globals.sqlite_api.EditProgramEntry(change.entry))
+                        if (!Globals.sqlite_api.EditProgram(change.entry))
                         {
                             // handle the error
                         }
                         break;
                     case "delete":
-                        if (!Globals.sqlite_api.DeleteProgramEntry(change.entry.Program_ID))
+                        if (!Globals.sqlite_api.DeleteProgram(change.entry.Name))
                         {
                             // handle the error
                         }
@@ -159,7 +152,7 @@ namespace SettingsRecall
         private ObservableCollection<VersionListEntry> generateProgramList()
         {
             ObservableCollection<VersionListEntry> oc = new ObservableCollection<VersionListEntry>();
-            List<ProgramEntry> list = Globals.sqlite_api.GetProgramEntryList(currentName);
+            List<ProgramEntry> list = Globals.sqlite_api.GetProgramList();
             
             if (list == null) return oc;
 
@@ -196,13 +189,6 @@ namespace SettingsRecall
         {
             // set selectedEntry
             selectedEntry = entryList[versionListBox.SelectedIndex].entry;
-
-            // update edit fields
-            if (!String.IsNullOrEmpty(selectedEntry.Version))
-                versionText.Text = selectedEntry.Version;
-
-            if (!String.IsNullOrEmpty(selectedEntry.OS))
-                osText.Text = selectedEntry.OS;
 
             if (!String.IsNullOrEmpty(selectedEntry.Description))
                 descriptionText.Text = selectedEntry.Description;

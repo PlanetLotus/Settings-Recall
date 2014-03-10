@@ -43,7 +43,7 @@ namespace SettingsRecall
 
         private void GetUserPrograms() {
             // Get supported programs
-            List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramEntryList();
+            List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramList();
             if (programEntries == null) return;
 
             // Get OS of machine we're on
@@ -51,17 +51,14 @@ namespace SettingsRecall
 
             // Filter list down to programs where at least one path for that program exists on the machine
             // Filter program entries by:
-            // - User's operating system
             // - At least one path in the entry exists on user's computer
             foreach (ProgramEntry entry in programEntries) {
                 Console.WriteLine(entry.Name);
-                if (entry.OS == this_os) {
-                    foreach (string path in entry.Paths) {
-                        if (File.Exists(path) || Directory.Exists(path)) {
-                            supportedPrograms.Add(entry);
-                            supportedProgramNames.Add(entry.Name);
-                            break;
-                        }
+                foreach (string path in entry.Paths) {
+                    if (File.Exists(path) || Directory.Exists(path)) {
+                        supportedPrograms.Add(entry);
+                        supportedProgramNames.Add(entry.Name);
+                        break;
                     }
                 }
             }
