@@ -33,11 +33,7 @@ namespace SettingsRecall {
             insert.Add("Name", "testprogram1");
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
-            db.Insert("ProgramEntry", insert);
-
-            Dictionary<string, string> name_insert = new Dictionary<string, string>();
-            name_insert.Add("ProgramName", "testprogram1");
-            db.Insert("Program", name_insert);
+            db.Insert("Program", insert);
 
             // Link the API to the testing database
             testAPI = new SQLiteAPI(db_file);
@@ -179,7 +175,7 @@ namespace SettingsRecall {
         public void Test_EditProgram() {
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file9.txt" };
-            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", paths, "Really useful edited test description");
+            ProgramEntry programEntry = new ProgramEntry("testprogram1", paths, "Really useful edited test description");
 
             // Edit entry
             testAPI.EditProgram(programEntry);

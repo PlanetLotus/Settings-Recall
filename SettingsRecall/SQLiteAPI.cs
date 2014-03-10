@@ -97,10 +97,6 @@ namespace SettingsRecall {
             // Prepare the data for db
             Dictionary<string, string> update = new Dictionary<string, string>();
 
-            // Optional parameter: Add Name
-            if (entry.Name != null && entry.Name.Trim() != "") 
-                update.Add("Name", entry.Name);
-
             // Optional parameter: Add description
             if (entry.Description != null) { update.Add("Description", entry.Description); }
 
