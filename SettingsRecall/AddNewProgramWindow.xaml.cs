@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,7 +48,7 @@ namespace SettingsRecall
             // Make sure program name isn't already in the DB
             List<string> programList = new List<string>();
             programList = Globals.sqlite_api.GetProgramNameList();
-
+            
 
             if (programList != null && programList.Contains(nameText.Text))
             {
@@ -55,6 +56,7 @@ namespace SettingsRecall
                 errorBox.show();
                 return;
             }
+
 
             // Everything is OK
             this.programName = nameText.Text;

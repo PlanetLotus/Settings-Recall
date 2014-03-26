@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SettingsRecall.AddNewProgramWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Choose New Program Name" Height="102" Width="300">
+        Title="Choose New Program Name" Height="102" Width="300" WindowStartupLocation="CenterOwner">
     <Grid Height="72" VerticalAlignment="Top">
         <Label Content="Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="44"/>
         <TextBox x:Name="nameText" HorizontalAlignment="Left" Height="23" Margin="54,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="228"/>
