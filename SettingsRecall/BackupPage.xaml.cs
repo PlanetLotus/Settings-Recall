@@ -166,6 +166,11 @@ namespace SettingsRecall
             // Create folder at save location if it doesn't exist already
             Directory.CreateDirectory(backupDir);
 
+            // Create log file
+            StreamWriter log = new StreamWriter(backupDir + "log.txt");
+            log.WriteLine("--- SettingsRecall backup initiated " + DateTime.Now + ". ---");
+
+            log.WriteLine("Copying Files...");
             // Loop through selectedPrograms, copying files to save location
             foreach (ProgramEntry program in selectedPrograms) {
                 // Create folder for program in save location
@@ -179,18 +184,24 @@ namespace SettingsRecall
                 // Create x subdirs in program dir
                 // When copying, if filename in strList, copy to a subdir that doesn't contain filename
 
+
                 foreach (string path in program.Paths) {
                     // Copy files at path to programDir
                     string filename = path.Split('\\').Last();
                     if (File.Exists(path)) {
+                        log.WriteLine("Found " + path);
                         File.Copy(path, programDir + filename);
                     } else {
+                        log.WriteLine("Couldn't find " + path);
                         Console.WriteLine("File not found: " + path);
                     }
                 }
             }
+            log.WriteLine("Copying complete.");
 
-            // Save log file
+            // End log file
+            log.WriteLine("--- SettingsRecall backup completed " + DateTime.Now + " ---");
+            log.Close();
         }
     }
 }
