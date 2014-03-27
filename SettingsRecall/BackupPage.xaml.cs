@@ -190,7 +190,7 @@ namespace SettingsRecall
                     string filename = path.Split('\\').Last();
                     if (File.Exists(path)) {
                         log.WriteLine("Found " + path);
-                        File.Copy(path, programDir + filename);
+                        File.Copy(path, programDir + "\\" + filename);
                     } else {
                         log.WriteLine("Couldn't find " + path);
                         Console.WriteLine("File not found: " + path);
