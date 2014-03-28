@@ -10,7 +10,7 @@ namespace SettingsRecall.Tests {
     [TestFixture, RequiresSTA]
     class TestBackup {
         BackupPage page;
-        string db_file = "../../unittest.db";
+        string db_file = "../../integrationtest.db";
 
         [TestFixtureSetUp]
         public void Init() {

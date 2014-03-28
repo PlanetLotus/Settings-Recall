@@ -11,7 +11,7 @@ namespace SettingsRecall {
 
     [TestFixture]
     public class APITest {
-        string db_file = "../../unittest.db";
+        string db_file = "../../integrationtest.db";
         SQLiteDatabase db;
         SQLiteAPI testAPI;
 
