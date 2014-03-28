@@ -184,7 +184,6 @@ namespace SettingsRecall
                 // Create x subdirs in program dir
                 // When copying, if filename in strList, copy to a subdir that doesn't contain filename
 
-
                 foreach (string path in program.Paths) {
                     // Copy files at path to programDir
                     string filename = path.Split('\\').Last();

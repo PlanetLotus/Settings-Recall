@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using System.Collections.ObjectModel;
 
 namespace SettingsRecall
 {
@@ -20,9 +22,14 @@ namespace SettingsRecall
     /// </summary>
     public partial class RestorePage : UserControl
     {
+        private ObservableCollection<string> restorablePrograms;
+
         public RestorePage()
         {
             InitializeComponent();
+            restorablePrograms = new ObservableCollection<string>();
+            this.leftListBox.ItemsSource = restorablePrograms;
+
         }
 
         /// <summary>
@@ -49,10 +56,21 @@ namespace SettingsRecall
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
             SetLoadSaveLocation();
-            // display directory in label
-            folder_label.Content = Globals.load_save_location;
+            string restoreDir = Globals.load_save_location;
+
+            // Display directory in label
+            folderLabel.Content = Globals.load_save_location;
+
+            // Generate list of restorable programs
+            // Currently this list is just the directories in the load location path
+            Array dirs = Directory.GetDirectories(restoreDir);
+            restorablePrograms.Clear();
+            foreach (string progName in dirs)
+            {
+                restorablePrograms.Add(progName.Split('\\').Last());
+            }
+
         }
 
-        
     }
 }
