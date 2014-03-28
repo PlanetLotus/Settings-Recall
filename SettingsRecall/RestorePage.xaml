@@ -7,10 +7,10 @@
       d:DesignHeight="510" d:DesignWidth="770">
 
     <Grid>
-        <ListBox x:Name="leftListBox" HorizontalAlignment="Left" Height="395" Margin="10,50,0,0" VerticalAlignment="Top" Width="320"/>
-        <ListBox x:Name="rightListBox" HorizontalAlignment="Left" Height="395" Margin="440,50,0,0" VerticalAlignment="Top" Width="320"/>
-        <Button x:Name="addButton1" Content="Remove" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,249,0,0"/>
-        <Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,214,0,0"/>
+        <ListBox x:Name="restorePageLeftList" HorizontalAlignment="Left" Height="395" Margin="10,50,0,0" VerticalAlignment="Top" Width="320"/>
+        <ListBox x:Name="restorePageRightList" HorizontalAlignment="Left" Height="395" Margin="440,50,0,0" VerticalAlignment="Top" Width="320"/>
+        <Button x:Name="removeButton" Content="Remove" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,249,0,0" Click="removeButton_Click"/>
+        <Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,214,0,0" Click="addButton_Click"/>
         <Button x:Name="restoreButton" Content="Restore Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="632,466,0,0" Click="restoreButton_Click"/>
         <Button x:Name="chooseLoadFolderButton" Content="Choose Load Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="19,13,0,0" Click="chooseFolderButton_Click"/>
         <Label x:Name="folderLabel" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,10,0,0" Width="301"/>

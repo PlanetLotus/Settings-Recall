@@ -167,7 +167,7 @@ namespace SettingsRecall
             Directory.CreateDirectory(backupDir);
 
             // Create log file
-            StreamWriter log = new StreamWriter(backupDir + "log.txt");
+            StreamWriter log = new StreamWriter(backupDir + "backup_log.txt");
             log.WriteLine("--- SettingsRecall backup initiated " + DateTime.Now + ". ---");
 
             log.WriteLine("Copying Files...");

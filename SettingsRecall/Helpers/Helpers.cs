@@ -38,5 +38,15 @@ namespace SettingsRecall {
 
             return result;
         }
+
+        /// <summary>
+        /// Trim everything but the filename from a full path
+        /// </summary>
+        /// <param name="path">A full path</param>
+        /// <returns>Filename</returns>
+        public static string TrimFilename(string path)
+        {
+            return path.Trim().Split('\\').Last();
+        }
     }
 }
