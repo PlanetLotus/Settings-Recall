@@ -32,10 +32,9 @@ namespace SettingsRecall
 
         }
 
-        /// <summary>
-        /// Set the global save/load location with a dialog
-        /// </summary>
-        public void SetLoadSaveLocation()
+
+        // click 'choose folder' button
+        private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.DialogResult result; // return value of dialog box
 
@@ -50,13 +49,21 @@ namespace SettingsRecall
                 Globals.load_save_location = open_dialog.SelectedPath;
             }
 
-        }
-
-        // click 'choose folder' button
-        private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetLoadSaveLocation();
             string restoreDir = Globals.load_save_location;
+
+            // Connect to local database
+            string dbPath = restoreDir + @"\" + "test.db"; // or whatever it will be called
+            if (File.Exists(dbPath)) 
+            {
+                Globals.sqlite_db = new SQLiteDatabase(dbPath);
+            }
+            else
+            {
+                // Display an error message - db file not found
+                ErrorMessageBox err = new ErrorMessageBox("Restore info not found.");
+                err.show();
+                return;
+            }
 
             // Display directory in label
             folderLabel.Content = Globals.load_save_location;
@@ -69,6 +76,17 @@ namespace SettingsRecall
             {
                 restorablePrograms.Add(progName.Split('\\').Last());
             }
+
+        }
+
+        private void restoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            string restoreDir = Globals.load_save_location;
+            // Create a mapping for each file to be restored to its new location
+            // TODO: Account for multiple occurrences of a file in the db
+
+            Array files = Directory.GetFiles(restoreDir);
+            List<Tuple<string, string>> fileMap = new List<Tuple<string, string>>();
 
         }
 
