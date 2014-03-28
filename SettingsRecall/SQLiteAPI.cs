@@ -10,6 +10,8 @@ namespace SettingsRecall {
     public class SQLiteAPI {
         SQLiteDatabase db;
 
+        public string dbLocation;
+
         public List<string> supportedOses;
 
         /// <summary>
@@ -18,6 +20,9 @@ namespace SettingsRecall {
         /// </summary>
         public SQLiteAPI() {
             db = new SQLiteDatabase();
+
+            // Default value
+            dbLocation = "../../test.db";
         }
 
         /// <summary>
@@ -26,6 +31,7 @@ namespace SettingsRecall {
         /// <param name="dbInputFile"></param>
         public SQLiteAPI(string dbInputFile) {
             db = new SQLiteDatabase(dbInputFile);
+            dbLocation = dbInputFile;
         }
 
         private string ValidateProgramEntry(ProgramEntry entry) {
@@ -122,7 +128,7 @@ namespace SettingsRecall {
 
             // Insert into db
             try {
-                db.Update("Program", update, String.Format("Name = '{0}'", entry.Name));
+                db.Update("Program", update, string.Format("Name = '{0}'", entry.Name));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -133,7 +139,7 @@ namespace SettingsRecall {
 
         public bool DeleteProgram(string name) {
             try {
-                db.Delete("Program", String.Format("Name = '{0}'", name));
+                db.Delete("Program", string.Format("Name = '{0}'", name));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -147,7 +153,7 @@ namespace SettingsRecall {
         /// </summary>
         /// <returns>A list of ProgramEntry retrieved from the db.</returns>
         public List<ProgramEntry> GetProgramList() {
-            String query = "SELECT Name,Paths,Description FROM Program;";
+            string query = "SELECT Name,Paths,Description FROM Program;";
             DataTable dt;
             List<ProgramEntry> entryList = new List<ProgramEntry>();
 
@@ -176,7 +182,7 @@ namespace SettingsRecall {
 
         public List<string> GetProgramNameList() {
             // Fetch the global list..not using this function's parameter at the moment
-            String query = "SELECT Name FROM Program;";
+            string query = "SELECT Name FROM Program;";
             DataTable dt;
             try {
                 dt = db.GetDataTable(query);
@@ -208,7 +214,7 @@ namespace SettingsRecall {
         public ProgramEntry GetProgram(string name)
         {
             // query the database for row containing program_ID
-            String query = string.Format("SELECT Name,Paths,Description FROM Program WHERE Name = '{0}';", name);
+            string query = string.Format("SELECT Name,Paths,Description FROM Program WHERE Name = '{0}';", name);
             DataTable dt;
             try
             {
@@ -228,6 +234,10 @@ namespace SettingsRecall {
 
             // create a ProgramEntry object from the DataTable
             return new ProgramEntry(dt.Rows[0]);
+        }
+
+        public void ClearDB() {
+            db.ClearDB();
         }
     }
 }

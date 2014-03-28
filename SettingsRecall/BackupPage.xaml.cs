@@ -12,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SettingsRecall
 {
@@ -169,8 +168,14 @@ namespace SettingsRecall
             // Create log file
             StreamWriter log = new StreamWriter(backupDir + "backup_log.txt");
             log.WriteLine("--- SettingsRecall backup initiated " + DateTime.Now + ". ---");
-
             log.WriteLine("Copying Files...");
+
+            // Copy database file...this will be needed during restore
+            if (File.Exists(Globals.dbLocation))
+                File.Copy(Globals.dbLocation, backupDir + Globals.dbLocation.Split(new char [] {'\\', '/'}).Last());
+            else
+                Console.WriteLine(Globals.dbLocation + " does not exist.");
+
             // Loop through selectedPrograms, copying files to save location
             foreach (ProgramEntry program in selectedPrograms) {
                 // Create folder for program in save location
