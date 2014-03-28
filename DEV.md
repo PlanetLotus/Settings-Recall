@@ -4,14 +4,14 @@ Here we detail what's left to develop.
 
 <h2>Main Functionality</h2>
 
-<ol>
+<ul>
     <li>Restore Backup</li>
-</ol>
+</ul>
 
 <h2>Additional Features</h2>
 
-<ol>
+<ul>
     <li>Backup Page: Toggle showing unsupported programs (currently NOT shown)</li>
     <li>Choose Program to Edit: Toggle showing unsupported programs (currently IS shown)</li>
     <li>Edit Program: Allow name change (just delete current entry and create a new one)</li>
-</ol>
+</ul>
