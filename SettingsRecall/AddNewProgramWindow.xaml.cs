@@ -38,7 +38,7 @@ namespace SettingsRecall
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             // Make sure a name was entered
-            if (String.IsNullOrEmpty(nameText.Text))
+            if (string.IsNullOrEmpty(nameText.Text))
             {
                 ErrorMessageBox nullErrorBox = new ErrorMessageBox("Please enter a name!");
                 nullErrorBox.show();

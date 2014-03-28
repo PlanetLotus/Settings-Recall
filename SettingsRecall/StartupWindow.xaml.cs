@@ -19,7 +19,7 @@ namespace SettingsRecall
     /// </summary>
     public partial class StartupWindow : Window
     {
-        public String main_page;
+        public string main_page;
 
         public StartupWindow()
         {
