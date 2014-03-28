@@ -25,6 +25,9 @@ namespace SettingsRecall.Tests {
             ProgramEntry program1 = new ProgramEntry("backupTestProgram1", programPaths1);
             ProgramEntry program2 = new ProgramEntry("backupTestProgram2", programPaths2);
 
+            Globals.sqlite_api.AddProgram(program1);
+            Globals.sqlite_api.AddProgram(program2);
+
             page = new BackupPage();
             page.supportedPrograms.Clear();
             page.supportedPrograms.Add(program1);
@@ -49,7 +52,7 @@ namespace SettingsRecall.Tests {
 
             DirectoryInfo di = new DirectoryInfo(Globals.load_save_location);
             Assert.AreEqual(2, di.GetDirectories().Length);
-            Assert.AreEqual(4, di.GetFiles().Length);
+            Assert.AreEqual(5, di.GetFiles("*.*", SearchOption.AllDirectories).Length);
         }
     }
 }
