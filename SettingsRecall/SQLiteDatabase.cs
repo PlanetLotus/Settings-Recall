@@ -15,7 +15,7 @@ namespace SettingsRecall
         /// </summary>
         public SQLiteDatabase() {
             // This path will need updated when in production...should simply remove the ../../
-            dbConnection = "Data Source=../../test.db";
+            dbConnection = string.Format("Data Source={0}", Globals.dbLocation);
         }
 
         /// <summary>
@@ -24,6 +24,7 @@ namespace SettingsRecall
         /// <param name="inputFile">The File containing the DB</param>
         public SQLiteDatabase(String inputFile) {
             dbConnection = String.Format("Data Source={0}", inputFile);
+            Globals.dbLocation = inputFile;
         }
 
         /// <summary>

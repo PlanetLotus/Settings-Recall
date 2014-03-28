@@ -10,14 +10,16 @@ namespace SettingsRecall.Tests {
     [TestFixture, RequiresSTA]
     class TestBackup {
         BackupPage page;
+        string db_file = "../../unittest.db";
 
         [TestFixtureSetUp]
         public void Init() {
             // Create test directories and files
-            Cleanup();
+            Globals.sqlite_api = new SQLiteAPI(db_file);
             Globals.load_save_location = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\BackupTests";
-            Globals.sqlite_api = new SQLiteAPI("../../unittest.db");
             string testDataDir = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\TestData\";
+
+            Cleanup();
 
             List<string> programPaths1 = new List<string>() { testDataDir + @"program1\a.txt", testDataDir + @"program1\b.txt", testDataDir + @"program1\c.txt" };
             List<string> programPaths2 = new List<string>() { testDataDir + @"program2\d.txt" };
@@ -39,6 +41,7 @@ namespace SettingsRecall.Tests {
         [TestFixtureTearDown]
         public void Cleanup() {
             // Delete test data
+            Globals.sqlite_api.ClearDB();
             Globals.load_save_location = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\BackupTests";
             if (Directory.Exists(Globals.load_save_location)) {
                 DirectoryInfo di = new DirectoryInfo(Globals.load_save_location);
@@ -52,7 +55,7 @@ namespace SettingsRecall.Tests {
 
             DirectoryInfo di = new DirectoryInfo(Globals.load_save_location);
             Assert.AreEqual(2, di.GetDirectories().Length);
-            Assert.AreEqual(5, di.GetFiles("*.*", SearchOption.AllDirectories).Length);
+            Assert.AreEqual(6, di.GetFiles("*.*", SearchOption.AllDirectories).Length);
         }
     }
 }

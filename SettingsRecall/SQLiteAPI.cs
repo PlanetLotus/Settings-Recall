@@ -10,6 +10,8 @@ namespace SettingsRecall {
     public class SQLiteAPI {
         SQLiteDatabase db;
 
+        public string dbLocation;
+
         public List<string> supportedOses;
 
         /// <summary>
@@ -18,6 +20,9 @@ namespace SettingsRecall {
         /// </summary>
         public SQLiteAPI() {
             db = new SQLiteDatabase();
+
+            // Default value
+            dbLocation = "../../test.db";
         }
 
         /// <summary>
@@ -26,6 +31,7 @@ namespace SettingsRecall {
         /// <param name="dbInputFile"></param>
         public SQLiteAPI(string dbInputFile) {
             db = new SQLiteDatabase(dbInputFile);
+            dbLocation = dbInputFile;
         }
 
         private string ValidateProgramEntry(ProgramEntry entry) {
@@ -228,6 +234,10 @@ namespace SettingsRecall {
 
             // create a ProgramEntry object from the DataTable
             return new ProgramEntry(dt.Rows[0]);
+        }
+
+        public void ClearDB() {
+            db.ClearDB();
         }
     }
 }
