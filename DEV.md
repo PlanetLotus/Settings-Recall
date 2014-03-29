@@ -6,7 +6,6 @@ Here we detail what's left to develop.
 
 <ul>
     <li>Restore Backup</li>
-    <li>Delete Program</li>
 </ul>
 
 <h2>Additional Features</h2>
