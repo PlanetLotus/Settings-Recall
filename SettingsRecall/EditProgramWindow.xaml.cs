@@ -44,7 +44,7 @@ namespace SettingsRecall
             currentEntry = Globals.sqlite_api.GetProgram(name);
             if (currentEntry == null)
             {
-                currentEntry = new ProgramEntry(name, false, null);
+                currentEntry = new ProgramEntry(name, false, new List<string>());
                 newEntry = true;
             }
 
@@ -52,7 +52,7 @@ namespace SettingsRecall
             this.descriptionText.Text = currentEntry.Description;
 
             // populate the list of files
-            if (currentEntry.Paths != null)
+            if (currentEntry.Paths.Count > 0)
             {
                 fileCollection = new ObservableCollection<string>(currentEntry.Paths);
                 this.deleteFilesButton.IsEnabled = true;
