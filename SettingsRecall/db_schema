@@ -1,6 +1,7 @@
 CREATE TABLE Program
 (
 Name TEXT PRIMARY KEY,
+IsPermanent INTEGER NOT NULL,
 Paths TEXT NOT NULL,
 Description TEXT
 );
