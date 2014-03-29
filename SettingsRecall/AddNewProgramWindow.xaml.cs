@@ -36,7 +36,7 @@ namespace SettingsRecall
         /// </summary>
         /// <returns></returns>
         public string GetProgramName() {
-            return this.programName;
+            return programName;
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
@@ -53,7 +53,6 @@ namespace SettingsRecall
             List<string> programList = new List<string>();
             programList = Globals.sqlite_api.GetProgramNameList();
             
-
             if (programList != null && programList.Contains(nameText.Text))
             {
                 ErrorMessageBox errorBox = new ErrorMessageBox("This program already exists");
@@ -61,16 +60,15 @@ namespace SettingsRecall
                 return;
             }
 
-
             // Everything is OK
-            this.programName = nameText.Text;
-            this.DialogResult = true;
+            programName = nameText.Text;
+            DialogResult = true;
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {
             // cancelled
-            this.DialogResult = false;
+            DialogResult = false;
         }
 
         private void nameText_KeyUp(object sender, KeyEventArgs e)
