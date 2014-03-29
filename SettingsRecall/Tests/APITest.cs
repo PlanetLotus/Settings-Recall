@@ -73,7 +73,6 @@ namespace SettingsRecall {
             Assert.GreaterOrEqual(names.Count, 1, "Test failed: GetProgramNameList returned less than 1 entry.");
         }
 
-        [TestCase(null)]
         [TestCase("")]
         [TestCase("    ")]
         public void Test_AddProgramBadName(string name) {
@@ -91,7 +90,7 @@ namespace SettingsRecall {
             List<string> paths3 = new List<string>() { "path1", "   "};
 
             // Verify failure
-            ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", false, null, "Really useful test description");
+            ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", false, new List<string>(), "Really useful test description");
             Assert.IsFalse(testAPI.AddProgram(programEntry1));
 
             ProgramEntry programEntry2 = new ProgramEntry("badtestprogram", false, paths1, "Really useful test description");
@@ -144,11 +143,10 @@ namespace SettingsRecall {
             Assert.Contains("apiTestEntry", names);
         }
 
-        [TestCase(null)]
         [TestCase("")]
         [TestCase("    ")]
         public void Test_EditProgramBadName(string name) {
-            ProgramEntry programEntry = new ProgramEntry(name, false, null, null);
+            ProgramEntry programEntry = new ProgramEntry(name, false, new List<string>());
 
             // Verify failure
             Assert.IsFalse(testAPI.EditProgram(programEntry));

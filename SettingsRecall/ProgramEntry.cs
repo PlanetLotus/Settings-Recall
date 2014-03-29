@@ -19,10 +19,13 @@ namespace SettingsRecall
             Name = "";
             IsPermanent = false;
             Description = "";
-            Paths = null;
+            Paths = new List<string>();
         }
 
         public ProgramEntry(string name, bool isPermanent, List<string> paths, string description="") {
+            if (name == null || paths == null || description == null)
+                throw new ArgumentNullException("Null values are not acceptable for ProgramEntry members.");
+
             Name = name;
             IsPermanent = isPermanent;
             Paths = paths;
