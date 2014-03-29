@@ -27,7 +27,6 @@ namespace SettingsRecall
         private ProgramEntry currentEntry;
         private bool newEntry = false;
         private ObservableCollection<string> fileCollection;
-        private List<EntryChange> changeList;                   // list of changes made
         
         public EditProgramWindow(string name)
         {
@@ -36,9 +35,6 @@ namespace SettingsRecall
             // Give window focus to the first control in tab order
             Loaded += (sender, e) =>
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-
-            // instantiate global changeList for edit session
-            changeList = new List<EntryChange>();
 
             // Get the data for the current programEntry object
             currentEntry = Globals.sqlite_api.GetProgram(name);
