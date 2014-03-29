@@ -28,8 +28,7 @@ namespace SettingsRecall
         /// Constructor which converts a DataRow extracted from the DB into a ProgramEntry.
         /// </summary>
         /// <param name="row">DataRow extracted from programEntry table.</param>
-        public ProgramEntry(DataRow row)
-        {
+        public ProgramEntry(DataRow row) {
             // Assign each ProgramEntry field
             Name = row["Name"].ToString();
             IsPermanent = row["IsPermanent"].ToString() == "1" ? true : false;
@@ -37,8 +36,7 @@ namespace SettingsRecall
             Description = row["Description"].ToString();
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             string str;
             string paths = "";
             StringBuilder pathBuilder = new StringBuilder();
