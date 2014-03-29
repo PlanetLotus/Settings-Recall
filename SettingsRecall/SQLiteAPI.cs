@@ -39,19 +39,9 @@ namespace SettingsRecall {
             if (entry == null)
                 return "Entry cannot be null.";
 
-            // Validate name: Not null, not empty
-            if (entry.Name == null || entry.Name.Trim() == "")
-                return "Entry name cannot be empty.";
-
-            // Validate paths: Cannot be null, must be at least length 1
-            if (entry.Paths == null || entry.Paths.Count < 1)
+            // Validate paths: Must be at least length 1
+            if (entry.Paths.Count == 0)
                 return "Entry paths must contain at least one path.";
-
-            // Validate paths: Contents cannot be null
-            foreach (string path in entry.Paths) {
-                if (path == null || path.Trim() == "")
-                    return "Entry path must not be empty.";
-            }
 
             // No errors
             return "";

@@ -26,6 +26,12 @@ namespace SettingsRecall
             if (name == null || paths == null || description == null)
                 throw new ArgumentNullException("Null values are not acceptable for ProgramEntry members.");
 
+            if (name.Trim() == "")
+                throw new ArgumentException("Name cannot be empty.");
+
+            if (paths.Any(path => path == null || path.Trim() == ""))
+                throw new ArgumentException("No path can be null or empty.");
+
             Name = name;
             IsPermanent = isPermanent;
             Paths = paths;
