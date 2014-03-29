@@ -17,8 +17,10 @@ These are intended to be a part of the program before calling it "done".
     <li>Backup Page: Toggle showing unsupported programs (currently NOT shown)</li>
     <li>Choose Program to Edit: Toggle showing unsupported programs (currently IS shown)</li>
     <li>Edit Program: Allow name change (just delete current entry and create a new one)</li>
-    <li>Don't allow deletion of built-in (IsPermanent == false) programs. Do
+    <li>Don't allow deletion of built-in (IsPermanent == true) programs. Do
     allow deletion of user-added programs.</li>
+    <li>Catch all exceptions / handle all errors "client-side", producing a friendly 
+    message before blowing up, preferably before going out to the db.</li>
 </ul>
 
 <h2>Desired Features</h2>
