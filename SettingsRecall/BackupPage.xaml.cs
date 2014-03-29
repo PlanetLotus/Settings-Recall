@@ -41,6 +41,12 @@ namespace SettingsRecall
         }
 
         private void GetUserPrograms() {
+            // Clear lists
+            supportedPrograms.Clear();
+            supportedProgramNames.Clear();
+            selectedPrograms.Clear();
+            backupPageLeftList.Items.Clear();
+
             // Get supported programs
             List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramList();
             if (programEntries == null) return;
@@ -108,7 +114,14 @@ namespace SettingsRecall
 
             // open the edit window dialog
             editWindow.Owner = App.mainWindow;
-            editWindow.ShowDialog();
+            bool? programEdited = editWindow.ShowDialog();
+
+            if (programEdited.HasValue && programEdited.Value == true) {
+                Console.WriteLine("programEdited");
+                GetUserPrograms();
+                foreach (string name in supportedProgramNames)
+                    backupPageLeftList.Items.Add(name);
+            }
         }
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)

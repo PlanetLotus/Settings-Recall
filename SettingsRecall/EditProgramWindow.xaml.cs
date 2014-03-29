@@ -48,22 +48,22 @@ namespace SettingsRecall
                 newEntry = true;
             }
 
-            this.programNameText.Text = name;
-            this.descriptionText.Text = currentEntry.Description;
+            programNameText.Text = name;
+            descriptionText.Text = currentEntry.Description;
 
             // populate the list of files
             if (currentEntry.Paths.Count > 0)
             {
                 fileCollection = new ObservableCollection<string>(currentEntry.Paths);
-                this.deleteFilesButton.IsEnabled = true;
+                deleteFilesButton.IsEnabled = true;
             }
             else
             {
                 fileCollection = new ObservableCollection<string>();
-                this.deleteFilesButton.IsEnabled = false;
+                deleteFilesButton.IsEnabled = false;
             }
 
-            this.fileListBox.ItemsSource = fileCollection;
+            fileListBox.ItemsSource = fileCollection;
         }
 
         private void addFilesButton_Click(object sender, RoutedEventArgs e)
@@ -79,44 +79,35 @@ namespace SettingsRecall
 
             // Add paths to list
             foreach (string path in openDlg.FileNames)
-            {
                 fileCollection.Add(path);
-            }
 
-            this.deleteFilesButton.IsEnabled = true;
+            deleteFilesButton.IsEnabled = true;
         }
 
         private void deleteFilesButton_Click(object sender, RoutedEventArgs e)
         {
             List<string> selectedFiles = fileListBox.SelectedItems.Cast<string>().ToList();
             foreach (string item in selectedFiles)
-            {
                 fileCollection.Remove(item);
-            }
 
             if (fileCollection.Count < 1)
-            {
-                this.deleteFilesButton.IsEnabled = false;
-            } 
+                deleteFilesButton.IsEnabled = false;
         }
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
-            currentEntry.Name = this.programNameText.Text;
-            currentEntry.Description = this.descriptionText.Text;
-            currentEntry.Paths = this.fileCollection.ToList();
+            currentEntry.Name = programNameText.Text;
+            currentEntry.Description = descriptionText.Text;
+            currentEntry.Paths = fileCollection.ToList();
 
             // edit (or add) the entry in the database
             if (newEntry)
-            {
                 Globals.sqlite_api.AddProgram(currentEntry);
-            }
             else
-            {
                 Globals.sqlite_api.EditProgram(currentEntry);
-            }
 
-            this.Close();
+            DialogResult = true;
+            Close();
         }
 
 
