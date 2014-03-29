@@ -10,11 +10,6 @@ namespace SettingsRecall
 {
     public class ProgramEntry
     {
-        public string Name {get; set;}
-        public bool IsPermanent { get; set; }
-        public List<string> Paths { get; set; }
-        public string Description { get; set; }
-        
         public ProgramEntry() {
             Name = "";
             IsPermanent = false;
@@ -23,19 +18,10 @@ namespace SettingsRecall
         }
 
         public ProgramEntry(string name, bool isPermanent, List<string> paths, string description="") {
-            if (name == null || paths == null || description == null)
-                throw new ArgumentNullException("Null values are not acceptable for ProgramEntry members.");
-
-            if (name.Trim() == "")
-                throw new ArgumentException("Name cannot be empty.");
-
-            if (paths.Any(path => path == null || path.Trim() == ""))
-                throw new ArgumentException("No path can be null or empty.");
-
-            Name = name.Trim();
+            Name = validateName(name);
             IsPermanent = isPermanent;
-            Paths = paths.Select(path => path.Trim()).ToList();
-            Description = description.Trim();
+            Paths = validatePaths(paths);
+            Description = validateDescription(description);
         }
 
         /// <summary>
@@ -71,6 +57,58 @@ namespace SettingsRecall
                 paths);
 
             return str;
+        }
+
+        private string validateName(string name) {
+            if (name == null)
+                throw new ArgumentNullException("Name cannot be null.");
+
+            if (name.Trim() == "")
+                throw new ArgumentException("Name cannot be empty.");
+
+            return name.Trim();
+        }
+
+        private List<string> validatePaths(List<string> paths) {
+            if (paths == null)
+                throw new ArgumentNullException("Paths cannot be null.");
+
+            if (paths.Any(path => path == null || path.Trim() == ""))
+                throw new ArgumentException("No path can be null or empty.");
+
+            // TODO: Add a unit test for this case
+            HashSet<string> hashset = new HashSet<string>();
+            if (paths.Any(path => !hashset.Add(path)))
+                throw new ArgumentException("Duplicates in paths aren't allowed.");
+
+            return paths.Select(path => path.Trim()).ToList();
+        }
+
+        private string validateDescription(string description) {
+            if (description == null)
+                throw new ArgumentNullException("Description cannot be null.");
+
+            return description.Trim();
+        }
+
+        private string name;
+        private List<string> paths;
+        private string description;
+        public bool IsPermanent { get; set; }
+
+        public string Name {
+            get { return name; }
+            set { name = validateName(value); }
+        }
+
+        public List<string> Paths {
+            get { return paths; }
+            set { paths = validatePaths(value); }
+        }
+
+        public string Description {
+            get { return description; }
+            set { description = validateDescription(value); }
         }
     }
 }
