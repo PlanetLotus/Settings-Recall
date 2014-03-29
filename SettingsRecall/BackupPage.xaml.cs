@@ -30,20 +30,16 @@ namespace SettingsRecall
             InitializeComponent();
 
             supportedPrograms = new List<ProgramEntry>();
-            supportedProgramNames = new List<string>();
             selectedPrograms = new List<ProgramEntry>();
 
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
             // Not using ItemsSource here because we don't want the list to be read-only
             GetUserPrograms();
-            foreach (string name in supportedProgramNames)
-                backupPageLeftList.Items.Add(name);
         }
 
         private void GetUserPrograms() {
             // Clear lists
             supportedPrograms.Clear();
-            supportedProgramNames.Clear();
             selectedPrograms.Clear();
             backupPageLeftList.Items.Clear();
 
@@ -62,7 +58,7 @@ namespace SettingsRecall
                 foreach (string path in entry.Paths) {
                     if (File.Exists(path) || Directory.Exists(path)) {
                         supportedPrograms.Add(entry);
-                        supportedProgramNames.Add(entry.Name);
+                        backupPageLeftList.Items.Add(entry.Name);
                         break;
                     }
                 }
@@ -92,7 +88,10 @@ namespace SettingsRecall
 
             // open the edit window dialog
             editWindow.Owner = App.mainWindow;
-            editWindow.ShowDialog();
+            bool? programEdited = editWindow.ShowDialog();
+
+            if (programEdited.HasValue && programEdited.Value == true)
+                GetUserPrograms();
         }
 
         private void editProgramButton_Click(object sender, RoutedEventArgs e)
@@ -116,12 +115,8 @@ namespace SettingsRecall
             editWindow.Owner = App.mainWindow;
             bool? programEdited = editWindow.ShowDialog();
 
-            if (programEdited.HasValue && programEdited.Value == true) {
-                Console.WriteLine("programEdited");
+            if (programEdited.HasValue && programEdited.Value == true)
                 GetUserPrograms();
-                foreach (string name in supportedProgramNames)
-                    backupPageLeftList.Items.Add(name);
-            }
         }
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)

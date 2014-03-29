@@ -109,8 +109,5 @@ namespace SettingsRecall
             DialogResult = true;
             Close();
         }
-
-
-        
     }
 }
