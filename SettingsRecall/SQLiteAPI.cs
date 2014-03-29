@@ -82,14 +82,11 @@ namespace SettingsRecall {
 
         public bool EditProgram(ProgramEntry entry) 
         {
-            // Require name
-            if (entry.Name == null || entry.Name.Trim() == "") {
-                Console.WriteLine("Program name must not be null or empty.");
-                return false;
-            }
+            // TODO: Use a changeset class so that the properties can be nullable
+            // That will make this a lot less confusing
 
             // Make sure there's something to update
-            if (entry.IsPermanent == null && entry.Paths == null && entry.Description == null) {
+            if (entry.Paths.Count == 0 && entry.Description == "") {
                 Console.WriteLine("Nothing to update! Returning...");
                 return false;
             }
@@ -97,31 +94,22 @@ namespace SettingsRecall {
             // Prepare the data for db
             Dictionary<string, string> update = new Dictionary<string, string>();
 
-            // Optional parameter: Add isPermanent
-            if (entry.IsPermanent != null) {
-                string isPermanent = entry.IsPermanent ? "1" : "0";
-                update.Add("IsPermanent", isPermanent);
-            }
+            // Unnullable parameter: Add isPermanent
+            string isPermanent = entry.IsPermanent ? "1" : "0";
+            update.Add("IsPermanent", isPermanent);
 
             // Optional parameter: Add description
-            if (entry.Description != null) { update.Add("Description", entry.Description); }
+            if (entry.Description != "") update.Add("Description", entry.Description);
 
             // Optional parameter: Convert paths to a JSON string
-            if (entry.Paths != null) {
-                foreach (string path in entry.Paths) {
-                    if (path == null || path.Trim() == "") {
-                        Console.WriteLine("Entry path must not be empty.");
-                        return false;
-                    }
-                }
-
+            if (entry.Paths.Count != 0) {
                 string json_paths = JsonConvert.SerializeObject(entry.Paths);
                 update.Add("Paths", json_paths);
                 Console.WriteLine(json_paths);
             }
 
             // Make sure something is being updated
-            if (update.Count < 1) {
+            if (update.Count == 0) {
                 Console.WriteLine("Nothing valid to update! Returning...");
                 return false;
             }
@@ -161,13 +149,13 @@ namespace SettingsRecall {
                 dt = db.GetDataTable(query);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
-                return null;
+                return entryList;
             }
 
             // Make sure rows were returned
-            if (dt.Rows.Count < 1) {
+            if (dt.Rows.Count == 0) {
                 Console.WriteLine("No rows returned for GetProgramList.");
-                return null;
+                return entryList;
             }
             
             // create a ProgramEntry object for each row in the DataTable
@@ -181,24 +169,24 @@ namespace SettingsRecall {
         }
 
         public List<string> GetProgramNameList() {
-            // Fetch the global list..not using this function's parameter at the moment
+            List<string> names = new List<string>();
+
             string query = "SELECT Name FROM Program;";
             DataTable dt;
             try {
                 dt = db.GetDataTable(query);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
-                return null;
+                return names;
             }
 
             // Make sure rows were returned
             if (dt.Rows.Count < 1) {
                 Console.WriteLine("No rows returned for GetProgramNameList.");
-                return null;
+                return names;
             }
 
             // Convert datatable to list
-            List<string> names = new List<string>();
             foreach (DataRow row in dt.Rows)
                 names.Add(row["Name"].ToString());
             
@@ -208,9 +196,6 @@ namespace SettingsRecall {
         /// <summary>
         /// Get one entry from the ProgramEntry table in the db.
         /// </summary>
-        /// <param name="program_ID">The unique program ID number.</param>
-        /// <returns>A ProgramEntry
-        /// Program_ID, Name, Version, OS, IsPermanent, Description, Paths, Foreign Key</returns>
         public ProgramEntry GetProgram(string name)
         {
             // query the database for row containing program_ID
