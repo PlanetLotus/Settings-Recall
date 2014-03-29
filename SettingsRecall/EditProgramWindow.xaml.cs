@@ -105,5 +105,20 @@ namespace SettingsRecall
             DialogResult = true;
             Close();
         }
+
+        private void deleteProgramButton_Click(object sender, RoutedEventArgs e) {
+            MessageBoxResult messageBoxResult = MessageBox.Show(
+                this,
+                "Are you sure you want to delete this program?",
+                "Confirm Delete Program",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (messageBoxResult == MessageBoxResult.Yes) {
+                Globals.sqlite_api.DeleteProgram(currentEntry.Name);
+                DialogResult = true;
+                Close();
+            }
+        }
     }
 }

@@ -104,7 +104,6 @@
     <Compile Include="ChooseEditProgramWindow.xaml.cs">
       <DependentUpon>ChooseEditProgramWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EntryChange.cs" />
     <Compile Include="ProgramEntry.cs" />
     <Compile Include="EditProgramWindow.xaml.cs">
       <DependentUpon>EditProgramWindow.xaml</DependentUpon>

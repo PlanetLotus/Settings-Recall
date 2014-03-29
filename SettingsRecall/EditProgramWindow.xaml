@@ -7,6 +7,7 @@
             <ColumnDefinition Width="417"/>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="fileListBox" HorizontalAlignment="Left" Height="263" Margin="11,64,0,0" VerticalAlignment="Top" Width="396" SelectionMode="Extended"/>
+        <Button x:Name="deleteProgramButton" Content="Delete Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="10,417,0,0" Height="22" Click="deleteProgramButton_Click" TabIndex="5"/>
         <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="252,417,0,0" IsCancel="True" Height="22" TabIndex="4"/>
         <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="332,417,0,0" Click="saveButton_Click" Height="22" TabIndex="3"/>
         <Button x:Name="deleteFilesButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="91,332,0,0" IsEnabled="False" Height="22" Click="deleteFilesButton_Click" TabIndex="1"/>
