@@ -63,10 +63,10 @@ namespace SettingsRecall {
 
             // Prepare the data for db
             Dictionary<string, string> insert = new Dictionary<string, string>();
-            insert.Add("Name", entry.Name.Trim());
+            insert.Add("Name", entry.Name);
             insert.Add("IsPermanent", isPermanent);
             insert.Add("Paths", json_paths);
-            insert.Add("Description", entry.Description.Trim());
+            insert.Add("Description", entry.Description);
 
             // Insert into db
             // If there's a problem, the exception is output to console. If we need to output to GUI, we need to pass that info back from SQLiteDatabase.cs

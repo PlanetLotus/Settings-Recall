@@ -32,10 +32,10 @@ namespace SettingsRecall
             if (paths.Any(path => path == null || path.Trim() == ""))
                 throw new ArgumentException("No path can be null or empty.");
 
-            Name = name;
+            Name = name.Trim();
             IsPermanent = isPermanent;
-            Paths = paths;
-            Description = description;
+            Paths = paths.Select(path => path.Trim()).ToList();
+            Description = description.Trim();
         }
 
         /// <summary>
