@@ -24,8 +24,8 @@ namespace SettingsRecall.Tests {
             List<string> programPaths1 = new List<string>() { testDataDir + @"program1\a.txt", testDataDir + @"program1\b.txt", testDataDir + @"program1\c.txt" };
             List<string> programPaths2 = new List<string>() { testDataDir + @"program2\d.txt" };
 
-            ProgramEntry program1 = new ProgramEntry("backupTestProgram1", programPaths1);
-            ProgramEntry program2 = new ProgramEntry("backupTestProgram2", programPaths2);
+            ProgramEntry program1 = new ProgramEntry("backupTestProgram1", false, programPaths1);
+            ProgramEntry program2 = new ProgramEntry("backupTestProgram2", false, programPaths2);
 
             Globals.sqlite_api.AddProgram(program1);
             Globals.sqlite_api.AddProgram(program2);

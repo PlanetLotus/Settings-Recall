@@ -44,10 +44,9 @@ namespace SettingsRecall
             currentEntry = Globals.sqlite_api.GetProgram(name);
             if (currentEntry == null)
             {
-                currentEntry = new ProgramEntry(name, null);
+                currentEntry = new ProgramEntry(name, false, null);
                 newEntry = true;
             }
-
 
             this.programNameText.Text = name;
             this.descriptionText.Text = currentEntry.Description;

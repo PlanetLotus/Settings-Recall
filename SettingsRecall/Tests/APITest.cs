@@ -31,6 +31,7 @@ namespace SettingsRecall {
 
             Dictionary<string, string> insert = new Dictionary<string, string>();
             insert.Add("Name", "testprogram1");
+            insert.Add("IsPermanent", "0");
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
             db.Insert("Program", insert);
@@ -77,7 +78,7 @@ namespace SettingsRecall {
         [TestCase("    ")]
         public void Test_AddProgramBadName(string name) {
             List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
-            ProgramEntry programEntry = new ProgramEntry(name, paths, "Really useful test description");
+            ProgramEntry programEntry = new ProgramEntry(name, false, paths, "Really useful test description");
 
             // Verify failure
             Assert.IsFalse(testAPI.AddProgram(programEntry));
@@ -90,16 +91,16 @@ namespace SettingsRecall {
             List<string> paths3 = new List<string>() { "path1", "   "};
 
             // Verify failure
-            ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", null, "Really useful test description");
+            ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", false, null, "Really useful test description");
             Assert.IsFalse(testAPI.AddProgram(programEntry1));
 
-            ProgramEntry programEntry2 = new ProgramEntry("badtestprogram", paths1, "Really useful test description");
+            ProgramEntry programEntry2 = new ProgramEntry("badtestprogram", false, paths1, "Really useful test description");
             Assert.IsFalse(testAPI.AddProgram(programEntry2));
 
-            ProgramEntry programEntry3 = new ProgramEntry("badtestprogram", paths2, "Really useful test description");
+            ProgramEntry programEntry3 = new ProgramEntry("badtestprogram", false, paths2, "Really useful test description");
             Assert.IsFalse(testAPI.AddProgram(programEntry3));
 
-            ProgramEntry programEntry4 = new ProgramEntry("badtestprogram", paths3, "Really useful test description");
+            ProgramEntry programEntry4 = new ProgramEntry("badtestprogram", false, paths3, "Really useful test description");
             Assert.IsFalse(testAPI.AddProgram(programEntry4));
         }
 
@@ -111,7 +112,7 @@ namespace SettingsRecall {
 
             // Build new object
             List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
-            ProgramEntry programEntry = new ProgramEntry("testprogram1", paths, "Really useful test description");
+            ProgramEntry programEntry = new ProgramEntry("testprogram1", false, paths, "Really useful test description");
             testAPI.AddProgram(programEntry);
 
             // Verify the number of program entries didn't change
@@ -126,7 +127,7 @@ namespace SettingsRecall {
 
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file4.txt" };
-            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", paths, "Really useful test description");
+            ProgramEntry programEntry = new ProgramEntry("apiTestEntry", false, paths, "Really useful test description");
 
             // Add program
             testAPI.AddProgram(programEntry);
@@ -147,7 +148,7 @@ namespace SettingsRecall {
         [TestCase("")]
         [TestCase("    ")]
         public void Test_EditProgramBadName(string name) {
-            ProgramEntry programEntry = new ProgramEntry(name, null, null);
+            ProgramEntry programEntry = new ProgramEntry(name, false, null, null);
 
             // Verify failure
             Assert.IsFalse(testAPI.EditProgram(programEntry));
@@ -161,13 +162,13 @@ namespace SettingsRecall {
             List<string> paths3 = new List<string>() { "path1", "   "};
 
             // Verify failure
-            ProgramEntry programEntry1 = new ProgramEntry(name, paths1, "");
+            ProgramEntry programEntry1 = new ProgramEntry(name, false, paths1, "");
             Assert.IsFalse(testAPI.AddProgram(programEntry1));
 
-            ProgramEntry programEntry2 = new ProgramEntry(name, paths2, "");
+            ProgramEntry programEntry2 = new ProgramEntry(name, false, paths2, "");
             Assert.IsFalse(testAPI.AddProgram(programEntry2));
 
-            ProgramEntry programEntry3 = new ProgramEntry(name, paths3, "");
+            ProgramEntry programEntry3 = new ProgramEntry(name, false, paths3, "");
             Assert.IsFalse(testAPI.AddProgram(programEntry3));
         }
 
@@ -175,7 +176,7 @@ namespace SettingsRecall {
         public void Test_EditProgram() {
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file9.txt" };
-            ProgramEntry programEntry = new ProgramEntry("testprogram1", paths, "Really useful edited test description");
+            ProgramEntry programEntry = new ProgramEntry("testprogram1", false, paths, "Really useful edited test description");
 
             // Edit entry
             testAPI.EditProgram(programEntry);

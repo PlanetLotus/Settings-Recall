@@ -65,12 +65,16 @@ namespace SettingsRecall {
                 return false;
             }
 
+            // Convert IsPermanent to string (int representation)
+            string isPermanent = entry.IsPermanent ? "1" : "0";
+
             // Convert paths to a JSON string
             string json_paths = JsonConvert.SerializeObject(entry.Paths);
 
             // Prepare the data for db
             Dictionary<string, string> insert = new Dictionary<string, string>();
             insert.Add("Name", entry.Name.Trim());
+            insert.Add("IsPermanent", isPermanent);
             insert.Add("Paths", json_paths);
             insert.Add("Description", entry.Description.Trim());
 
@@ -95,13 +99,19 @@ namespace SettingsRecall {
             }
 
             // Make sure there's something to update
-            if (entry.Paths == null && entry.Description == null) {
+            if (entry.IsPermanent == null && entry.Paths == null && entry.Description == null) {
                 Console.WriteLine("Nothing to update! Returning...");
                 return false;
             }
 
             // Prepare the data for db
             Dictionary<string, string> update = new Dictionary<string, string>();
+
+            // Optional parameter: Add isPermanent
+            if (entry.IsPermanent != null) {
+                string isPermanent = entry.IsPermanent ? "1" : "0";
+                update.Add("IsPermanent", isPermanent);
+            }
 
             // Optional parameter: Add description
             if (entry.Description != null) { update.Add("Description", entry.Description); }
@@ -153,7 +163,7 @@ namespace SettingsRecall {
         /// </summary>
         /// <returns>A list of ProgramEntry retrieved from the db.</returns>
         public List<ProgramEntry> GetProgramList() {
-            string query = "SELECT Name,Paths,Description FROM Program;";
+            string query = "SELECT Name,IsPermanent,Paths,Description FROM Program;";
             DataTable dt;
             List<ProgramEntry> entryList = new List<ProgramEntry>();
 
@@ -214,7 +224,7 @@ namespace SettingsRecall {
         public ProgramEntry GetProgram(string name)
         {
             // query the database for row containing program_ID
-            string query = string.Format("SELECT Name,Paths,Description FROM Program WHERE Name = '{0}';", name);
+            string query = string.Format("SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';", name);
             DataTable dt;
             try
             {

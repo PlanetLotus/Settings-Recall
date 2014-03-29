@@ -11,19 +11,22 @@ namespace SettingsRecall
     public class ProgramEntry
     {
         public string Name {get; set;}
+        public bool IsPermanent { get; set; }
         public List<string> Paths { get; set; }
         public string Description { get; set; }
         
         public ProgramEntry() {
-            this.Name = "";
-            this.Description = "";
-            this.Paths = null;
+            Name = "";
+            IsPermanent = false;
+            Description = "";
+            Paths = null;
         }
 
-        public ProgramEntry(string name, List<string> paths, string description="") {
-            this.Name = name;
-            this.Paths = paths;
-            this.Description = description;
+        public ProgramEntry(string name, bool isPermanent, List<string> paths, string description="") {
+            Name = name;
+            IsPermanent = isPermanent;
+            Paths = paths;
+            Description = description;
         }
 
         /// <summary>
@@ -33,9 +36,10 @@ namespace SettingsRecall
         public ProgramEntry(DataRow row)
         {
             // Assign each ProgramEntry field
-            this.Name = row["Name"].ToString();
-            this.Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
-            this.Description = row["Description"].ToString();
+            Name = row["Name"].ToString();
+            IsPermanent = row["IsPermanent"].ToString() == "1" ? true : false;
+            Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
+            Description = row["Description"].ToString();
         }
 
         public override string ToString()
@@ -51,8 +55,9 @@ namespace SettingsRecall
             // Cut off extra comma
             if (pathBuilder.Length > 1) paths = pathBuilder.ToString().Substring(0, pathBuilder.Length-2);
 
-            str = string.Format("*****\r\nName: {0}\r\nPaths: {1}\r\nDescription: {2}\r\n*****",
+            str = string.Format("*****\r\nName: {0}\r\nIsPermanent: {1}\r\nPaths: {2}\r\nDescription: {3}\r\n*****",
                 Name,
+                IsPermanent,
                 Description,
                 paths);
 
