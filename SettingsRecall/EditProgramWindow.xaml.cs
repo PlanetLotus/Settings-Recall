@@ -33,6 +33,10 @@ namespace SettingsRecall
         {
             InitializeComponent();
 
+            // Give window focus to the first control in tab order
+            Loaded += (sender, e) =>
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
             // instantiate global changeList for edit session
             changeList = new List<EntryChange>();
 

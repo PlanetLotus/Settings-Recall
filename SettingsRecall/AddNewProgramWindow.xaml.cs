@@ -25,6 +25,10 @@ namespace SettingsRecall
         public AddNewProgramWindow()
         {
             InitializeComponent();
+
+            // Give window focus to the first control in tab order
+            Loaded += (sender, e) =>
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
         /// <summary>
@@ -67,6 +71,14 @@ namespace SettingsRecall
         {
             // cancelled
             this.DialogResult = false;
+        }
+
+        private void nameText_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                OKButton_Click(OKButton, null);
+            }
         }
 
     }
