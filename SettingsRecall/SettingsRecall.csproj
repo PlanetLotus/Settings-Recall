@@ -101,9 +101,6 @@
     </Compile>
     <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Tests\APITest.cs" />
-    <Compile Include="ChooseEditProgramWindow.xaml.cs">
-      <DependentUpon>ChooseEditProgramWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ProgramEntry.cs" />
     <Compile Include="EditProgramWindow.xaml.cs">
       <DependentUpon>EditProgramWindow.xaml</DependentUpon>
@@ -125,10 +122,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BackupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ChooseEditProgramWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

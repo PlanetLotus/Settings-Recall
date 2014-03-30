@@ -26,6 +26,8 @@ namespace SettingsRecall
         public List<string> supportedProgramNames;
         public List<ProgramEntry> selectedPrograms;
 
+        private ListBox activeList;
+
         public BackupPage()
         {
             InitializeComponent();
@@ -93,19 +95,20 @@ namespace SettingsRecall
                 GetUserPrograms();
         }
 
+        private void listSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            activeList = (ListBox) sender;
+        }
+
         private void editProgramButton_Click(object sender, RoutedEventArgs e)
         {
-            // instantiate 'choose program' dialog box
-            ChooseEditProgramWindow chooseWindow = new ChooseEditProgramWindow();
+            string programName = "";
 
-            // configure dialog box and open modally
-            chooseWindow.Owner = App.mainWindow;
-            chooseWindow.ShowDialog();
+            if (activeList == backupPageLeftList)
+                programName = backupPageLeftList.SelectedValue.ToString();
+            else if (activeList == backupPageRightList)
+                programName = backupPageRightList.SelectedValue.ToString();
 
-            if (chooseWindow.DialogResult == false) return;
-
-            // get the name entered into the add dialog
-            string programName = chooseWindow.GetProgramName();
+            if (programName == "") return;
 
             // instantiate edit window
             EditProgramWindow editWindow = new EditProgramWindow(programName);
