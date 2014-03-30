@@ -141,7 +141,7 @@ namespace SettingsRecall {
         /// </summary>
         /// <returns>A list of ProgramEntry retrieved from the db.</returns>
         public List<ProgramEntry> GetProgramList() {
-            string query = "SELECT Name,IsPermanent,Paths,Description FROM Program;";
+            string query = "SELECT Name,IsPermanent,Paths,Description FROM Program ORDER BY Name;";
             DataTable dt;
             List<ProgramEntry> entryList = new List<ProgramEntry>();
 
@@ -171,7 +171,7 @@ namespace SettingsRecall {
         public List<string> GetProgramNameList() {
             List<string> names = new List<string>();
 
-            string query = "SELECT Name FROM Program;";
+            string query = "SELECT Name FROM Program ORDER BY Name;";
             DataTable dt;
             try {
                 dt = db.GetDataTable(query);
