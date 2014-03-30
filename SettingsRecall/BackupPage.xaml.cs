@@ -103,9 +103,9 @@ namespace SettingsRecall
         {
             string programName = "";
 
-            if (activeList == backupPageLeftList)
+            if (activeList == backupPageLeftList && backupPageLeftList.SelectedValue != null)
                 programName = backupPageLeftList.SelectedValue.ToString();
-            else if (activeList == backupPageRightList)
+            else if (activeList == backupPageRightList && backupPageRightList.SelectedValue != null)
                 programName = backupPageRightList.SelectedValue.ToString();
 
             if (programName == "") return;
