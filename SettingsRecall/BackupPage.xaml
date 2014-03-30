@@ -16,5 +16,6 @@
         <Label x:Name="folder_label" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,10,0,0" Width="301"/>
         <Button Content="Add Other Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Margin="513,16,0,0" Click="addProgramButton_Click"/>
         <Button x:Name="editProgramButton" Content="Edit Existing Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Margin="645,16,0,0" Click="editProgramButton_Click"/>
+        <CheckBox x:Name="showAllProgramsCheckbox" Content="Show All Programs" HorizontalAlignment="Left" Margin="19,472,0,0" VerticalAlignment="Top" Click="showAllProgramsCheckbox_Click"/>
     </Grid>
 </UserControl>

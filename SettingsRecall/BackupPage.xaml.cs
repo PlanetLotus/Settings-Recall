@@ -22,6 +22,7 @@ namespace SettingsRecall
     {
         // TODO: Keep these private. They're marked public now so that TestBackup.cs can use them.
         public List<ProgramEntry> supportedPrograms;
+        public List<ProgramEntry> unsupportedPrograms;
         public List<string> supportedProgramNames;
         public List<ProgramEntry> selectedPrograms;
 
@@ -45,10 +46,6 @@ namespace SettingsRecall
 
             // Get supported programs
             List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramList();
-            if (programEntries == null) return;
-
-            // Get OS of machine we're on
-            string this_os = Helpers.GetOSFriendlyName();
 
             // Filter list down to programs where at least one path for that program exists on the machine
             // Filter program entries by:
@@ -63,6 +60,8 @@ namespace SettingsRecall
                     }
                 }
             }
+
+            unsupportedPrograms = programEntries.Where(entry => !supportedPrograms.Contains(entry)).ToList();
         }
         
         private void addProgramButton_Click(object sender, RoutedEventArgs e)
@@ -148,6 +147,20 @@ namespace SettingsRecall
             object selected = backupPageRightList.SelectedItem;
             backupPageLeftList.Items.Add(selected);
             backupPageRightList.Items.Remove(selected);
+        }
+
+        private void showAllProgramsCheckbox_Click(object sender, RoutedEventArgs e) {
+            // Refresh list
+            GetUserPrograms();
+
+            if (showAllProgramsCheckbox.IsChecked.HasValue && showAllProgramsCheckbox.IsChecked.Value == true) {
+                foreach (ProgramEntry entry in unsupportedPrograms) {
+                    ListBoxItem item = new ListBoxItem();
+                    item.Content = entry.Name;
+                    item.IsEnabled = false;
+                    backupPageLeftList.Items.Add(item);
+                }
+            }
         }
 
         // TODO: Keep this private. It's marked public now so that TestBackup.cs can use it.
