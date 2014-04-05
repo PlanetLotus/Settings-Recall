@@ -31,11 +31,11 @@ namespace SettingsRecall
             Globals.load_save_location = null;
             restorablePrograms = new ObservableCollection<string>();
             addedPrograms = new ObservableCollection<string>();
-            this.restorePageLeftList.ItemsSource = restorablePrograms;
-            this.restorePageRightList.ItemsSource = addedPrograms;
-            this.restoreButton.IsEnabled = false;
-        }
 
+            restorePageLeftList.ItemsSource = restorablePrograms;
+            restorePageRightList.ItemsSource = addedPrograms;
+            restoreButton.IsEnabled = false;
+        }
 
         // click 'choose folder' button
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
@@ -49,42 +49,38 @@ namespace SettingsRecall
 
             // set global variable
             if (result == System.Windows.Forms.DialogResult.OK)
-            {
                 Globals.load_save_location = open_dialog.SelectedPath;
-            }
             else
-            {
                 return;
-            }
 
             string restoreDir = Globals.load_save_location;
 
-            // Connect to local database
-            string dbPath = restoreDir + @"\" + "test.db"; // or whatever it will be called
-            if (File.Exists(dbPath)) 
-            {
-                Globals.sqlite_db = new SQLiteDatabase(dbPath);
-            }
-            else
-            {
-                // Display an error message - db file not found
+            // Find database file
+            string[] dbFileMatches = Directory.GetFiles(restoreDir, "*.db");
+
+            if (dbFileMatches.Length == 0) {
                 ErrorMessageBox err = new ErrorMessageBox("Restore info not found.");
                 err.show();
                 return;
+            } else if (dbFileMatches.Length > 1) {
+                ErrorMessageBox err = new ErrorMessageBox("Multiple possible databases found.");
+                err.show();
+                return;
             }
+
+            Globals.sqlite_db = new SQLiteDatabase(dbFileMatches.Single());
 
             // Display directory in label
             folderLabel.Content = Globals.load_save_location;
 
             // Generate list of restorable programs
             // Currently this list is just the directories in the load location path
-            Array dirs = Directory.GetDirectories(restoreDir);
+            string[] dirs = Directory.GetDirectories(restoreDir);
             restorablePrograms.Clear();
             foreach (string progName in dirs)
             {
                 restorablePrograms.Add(progName.Split('\\').Last());
             }
-
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
@@ -134,8 +130,8 @@ namespace SettingsRecall
             StreamWriter log = new StreamWriter(restoreDir + @"\" + "restore_log.txt");
             log.WriteLine("--- SettingsRecall restore initiated " + DateTime.Now + ". ---");
 
-            Array dirs = Directory.GetDirectories(restoreDir);
-            Array files;
+            string[] dirs = Directory.GetDirectories(restoreDir);
+            string[] files;
             List<Tuple<string, string>> fileMap = new List<Tuple<string, string>>();
             ProgramEntry currentEntry;
 
