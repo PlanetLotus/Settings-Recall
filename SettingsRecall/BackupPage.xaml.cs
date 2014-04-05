@@ -57,7 +57,10 @@ namespace SettingsRecall
                 foreach (string path in entry.Paths) {
                     if (File.Exists(path) || Directory.Exists(path)) {
                         supportedPrograms.Add(entry);
-                        backupPageLeftList.Items.Add(entry.Name);
+
+                        ListBoxItem item = new ListBoxItem();
+                        item.Content = entry.Name;
+                        backupPageLeftList.Items.Add(item);
                         break;
                     }
                 }
@@ -104,9 +107,9 @@ namespace SettingsRecall
             string programName = "";
 
             if (activeList == backupPageLeftList && backupPageLeftList.SelectedValue != null)
-                programName = backupPageLeftList.SelectedValue.ToString();
+                programName = ((ListBoxItem)backupPageLeftList.SelectedValue).Content.ToString();
             else if (activeList == backupPageRightList && backupPageRightList.SelectedValue != null)
-                programName = backupPageRightList.SelectedValue.ToString();
+                programName = ((ListBoxItem)backupPageRightList.SelectedValue).Content.ToString();
 
             if (programName == "") return;
 
@@ -140,28 +143,36 @@ namespace SettingsRecall
 
         private void addToBackupButton_Click(object sender, RoutedEventArgs e) {
             // Remove from left list, add to right list
-            object selected = backupPageLeftList.SelectedItem;
-            backupPageRightList.Items.Add(selected);
+            ListBoxItem selected = (ListBoxItem) backupPageLeftList.SelectedItem;
             backupPageLeftList.Items.Remove(selected);
+            backupPageRightList.Items.Add(selected);
+
+            selectedPrograms.Add(supportedPrograms.Where(p => p.Name == selected.Content.ToString()).Single());
         }
 
         private void removeFromBackupButton_Click(object sender, RoutedEventArgs e) {
             // Remove from right list, add to left list
-            object selected = backupPageRightList.SelectedItem;
-            backupPageLeftList.Items.Add(selected);
+            ListBoxItem selected = (ListBoxItem) backupPageRightList.SelectedItem;
             backupPageRightList.Items.Remove(selected);
+            backupPageLeftList.Items.Add(selected);
+
+            selectedPrograms.RemoveAll(p => p.Name == selected.Content.ToString());
         }
 
         private void showAllProgramsCheckbox_Click(object sender, RoutedEventArgs e) {
-            // Refresh list
-            GetUserPrograms();
-
             if (showAllProgramsCheckbox.IsChecked.HasValue && showAllProgramsCheckbox.IsChecked.Value == true) {
                 foreach (ProgramEntry entry in unsupportedPrograms) {
                     ListBoxItem item = new ListBoxItem();
                     item.Content = entry.Name;
                     item.IsEnabled = false;
                     backupPageLeftList.Items.Add(item);
+                }
+            } else {
+                // There's probably a better way to remove from a collection...
+                for (int i = backupPageLeftList.Items.Count-1; i >= 0; i--) {
+                    ListBoxItem item = (ListBoxItem) backupPageLeftList.Items[i];
+                    if (unsupportedPrograms.Any(p => p.Name == item.Content.ToString()))
+                        backupPageLeftList.Items.RemoveAt(i);
                 }
             }
         }
@@ -178,13 +189,6 @@ namespace SettingsRecall
             // Make sure save directory has a trailing slash (so we can append to it)
             if (!backupDir[backupDir.Length-1].Equals('\\'))
                 backupDir = backupDir + "\\";
-
-            // Determine which programs are selected
-            selectedPrograms.Clear();
-            foreach (ProgramEntry program in supportedPrograms) {
-                if (backupPageRightList.Items.Contains(program.Name))
-                    selectedPrograms.Add(program);
-            }
 
             // Create folder at save location if it doesn't exist already
             Directory.CreateDirectory(backupDir);
