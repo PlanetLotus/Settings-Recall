@@ -29,8 +29,4 @@ These are non-essential, non-1.0 features.
     <li>Dry run: For both create and restore backup, create a "dry run" feature
     that shows a list of what would be copied. Great safety feature, and would
     help us test the program.</li>
-    <li>File copying class: This would help us implement the "dry run" feature
-    too. Basically, instead of calling File.Copy directly, have it call a class
-    (which of course calls File.Copy internally) that handles this as well as
-    logging. Pass a param on init to determine whether dry run.</li>
 </ul>

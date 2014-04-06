@@ -190,19 +190,8 @@ namespace SettingsRecall
             if (!backupDir[backupDir.Length-1].Equals('\\'))
                 backupDir = backupDir + "\\";
 
-            // Create folder at save location if it doesn't exist already
-            Directory.CreateDirectory(backupDir);
-
-            // Create log file
-            StreamWriter log = new StreamWriter(backupDir + "backup_log.txt");
-            log.WriteLine("--- SettingsRecall backup initiated " + DateTime.Now + ". ---");
-            log.WriteLine("Copying Files...");
-
-            // Copy database file...this will be needed during restore
-            if (File.Exists(Globals.dbLocation))
-                File.Copy(Globals.dbLocation, backupDir + Globals.dbLocation.Split(new char [] {'\\', '/'}).Last());
-            else
-                Console.WriteLine(Globals.dbLocation + " does not exist.");
+            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt");
+            copyHandler.InitBackup();
 
             // Loop through selectedPrograms, copying files to save location
             foreach (ProgramEntry program in selectedPrograms) {
@@ -219,21 +208,13 @@ namespace SettingsRecall
 
                 foreach (string path in program.Paths) {
                     // Copy files at path to programDir
+                    // It's okay (and expected) for not all paths to exist
                     string filename = path.Split('\\').Last();
-                    if (File.Exists(path)) {
-                        log.WriteLine("Found " + path);
-                        File.Copy(path, programDir + "\\" + filename);
-                    } else {
-                        log.WriteLine("Couldn't find " + path);
-                        Console.WriteLine("File not found: " + path);
-                    }
+                    copyHandler.Copy(path, programDir + "\\" + filename);
                 }
             }
-            log.WriteLine("Copying complete.");
 
-            // End log file
-            log.WriteLine("--- SettingsRecall backup completed " + DateTime.Now + " ---");
-            log.Close();
+            copyHandler.CloseBackup();
         }
     }
 }
