@@ -48,5 +48,16 @@ namespace SettingsRecall {
         {
             return path.Trim().Split('\\').Last();
         }
+
+        public static string GetParentFromFile(string path) {
+            string[] pathSections = path.Trim().Split('\\');
+            string parentDirPath = "";
+
+            for (int i = 0; i < pathSections.Length - 1; i++) {
+                parentDirPath += pathSections[i] + @"\";
+            }
+
+            return parentDirPath;
+        }
     }
 }

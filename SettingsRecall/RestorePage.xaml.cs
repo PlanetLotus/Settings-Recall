@@ -24,6 +24,8 @@ namespace SettingsRecall
     {
         private ObservableCollection<string> restorablePrograms;
         private ObservableCollection<string> addedPrograms;
+        private IEnumerable<ProgramEntry> allDbPrograms;
+        private IEnumerable<string> allDbProgramNames;
 
         public RestorePage()
         {
@@ -53,6 +55,10 @@ namespace SettingsRecall
             else
                 return;
 
+            // Make sure save directory has a trailing slash (so we can append to it)
+            if (!Globals.load_save_location.Last().Equals('\\'))
+                Globals.load_save_location += "\\";
+
             string restoreDir = Globals.load_save_location;
 
             // Find database file
@@ -68,18 +74,22 @@ namespace SettingsRecall
                 return;
             }
 
-            Globals.sqlite_db = new SQLiteDatabase(dbFileMatches.Single());
+            Globals.sqlite_api = new SQLiteAPI(dbFileMatches.Single());
+            allDbPrograms = Globals.sqlite_api.GetProgramList();
+            allDbProgramNames = allDbPrograms.Select(p => p.Name).ToList();
 
             // Display directory in label
             folderLabel.Content = Globals.load_save_location;
 
-            // Generate list of restorable programs
-            // Currently this list is just the directories in the load location path
-            string[] dirs = Directory.GetDirectories(restoreDir);
+            // Generate list of restorable programs, based on db, filtered by directories backed up
+            // TODO: Write unit test for directory backed up that's not in db
             restorablePrograms.Clear();
+            string[] dirs = Directory.GetDirectories(restoreDir);
+
             foreach (string progName in dirs)
             {
-                restorablePrograms.Add(progName.Split('\\').Last());
+                if (allDbProgramNames.Contains(Helpers.TrimFilename(progName)))
+                    restorablePrograms.Add(progName.Split('\\').Last());
             }
         }
 
@@ -119,61 +129,34 @@ namespace SettingsRecall
             }
         }
 
-        private void restoreButton_Click(object sender, RoutedEventArgs e)
-        {
-            string restoreDir = Globals.load_save_location;
-            // Create a mapping for each file to be restored to its new location
-            // WARNING: NAIVE IMPLEMENTATION
-            // TODO: Account for multiple occurrences of a file in the db
+        private void restoreButton_Click(object sender, RoutedEventArgs e) {
+            IEnumerable<ProgramEntry> selectedPrograms = allDbPrograms.Where(p => addedPrograms.Contains(p.Name));
 
-            // Create log file
-            StreamWriter log = new StreamWriter(restoreDir + @"\" + "restore_log.txt");
-            log.WriteLine("--- SettingsRecall restore initiated " + DateTime.Now + ". ---");
+            foreach (ProgramEntry program in selectedPrograms) {
+                string backupProgramDir = Globals.load_save_location + program.Name;
 
-            string[] dirs = Directory.GetDirectories(restoreDir);
-            string[] files;
-            List<Tuple<string, string>> fileMap = new List<Tuple<string, string>>();
-            ProgramEntry currentEntry;
+                if (!Directory.Exists(backupProgramDir)) {
+                    Console.WriteLine(backupProgramDir + " does not exist in the backup folder.");
+                    continue;
+                }
 
-            log.WriteLine("\n*Creating restoration queue*\n");
+                // Copy each file in backup folder
+                foreach (string filePath in Directory.GetFiles(backupProgramDir)) {
+                    // Copy file to each path in ProgramEntry with a matching filename that exists on this machine
+                    // Overwrites files, but does not create directories
+                    string fileName = Helpers.TrimFilename(filePath);
 
-            foreach (string dir in dirs)
-            {
-                files = Directory.GetFiles(dir);
-                currentEntry = Globals.sqlite_api.GetProgram(Helpers.TrimFilename(dir));
-               
-                foreach (string srcPath in files)
-                {
-                    // Find restore path in db for current file
-                    foreach(string dstPath in currentEntry.Paths) {
-                        if (Helpers.TrimFilename(srcPath).Equals(Helpers.TrimFilename(dstPath))) {
-                            // Map the file to it's restore path
-                            fileMap.Add(new Tuple<string,string>(srcPath, dstPath));
-                            log.WriteLine("Queued " + srcPath);
-                            log.WriteLine("  to copy to " + dstPath);
-                        }
-                    }   
+                    foreach (string matchedPath in program.Paths.Where(path => path.EndsWith(fileName))) {
+                        if (!Directory.Exists(Helpers.GetParentFromFile(matchedPath)))
+                            continue;
+
+                        Console.WriteLine("Copying " + fileName + " to " + matchedPath);
+
+                        if (File.Exists(matchedPath))
+                            Console.WriteLine("Overwriting " + matchedPath);
+                    }
                 }
             }
-
-            // Copy files
-            // COPYING CURRENTLY DISABLED FOR SAFETY!!
-            log.WriteLine("\nCopying files...");
-            foreach (Tuple<string, string> map in fileMap)
-            {
-                // TODO: THIS IMPLEMENTATION IS CRAP. ADD COPY "RULES"
-                //File.Copy(map.Item1, map.Item2);
-                log.WriteLine("Copied " + map.Item1);
-                log.WriteLine("  to " + map.Item2);
-            }
-            log.WriteLine("Copying complete.\n");
-
-            // End log file
-            log.WriteLine("--- SettingsRecall restore completed " + DateTime.Now + " ---");
-            log.Close();
-
         }
-
-
     }
 }
