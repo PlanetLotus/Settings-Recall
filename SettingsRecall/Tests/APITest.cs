@@ -12,15 +12,13 @@ namespace SettingsRecall {
     [TestFixture]
     public class APITest {
         string db_file = "../../integrationtest.db";
-        SQLiteDatabase db;
         SQLiteAPI testAPI;
 
         [TestFixtureSetUp]
         public void Init() {
             // Create a testing database
             Console.WriteLine("Initializing tests...");
-            db = new SQLiteDatabase(db_file);
-            db.ClearDB();
+            SQLiteDatabase.ClearDB();
 
             // Create some test data directly in the db, without the API
             List<string> paths = new List<string>();
@@ -34,7 +32,7 @@ namespace SettingsRecall {
             insert.Add("IsPermanent", "0");
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
-            db.Insert("Program", insert);
+            SQLiteDatabase.Insert("Program", insert);
 
             // Link the API to the testing database
             testAPI = new SQLiteAPI(db_file);
@@ -44,7 +42,7 @@ namespace SettingsRecall {
         public void Cleanup() {
             // Delete all data in the db
             Console.WriteLine("Cleaning up tests...");
-            db.ClearDB();
+            SQLiteDatabase.ClearDB();
         }
 
         [TestCase("asdfasdfasdf")]

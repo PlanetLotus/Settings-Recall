@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
+// After making SQLiteDatabase.cs a static class, this shouldn't/doesn't work anymore! 
+// Fat TODO: Make these tests mock tests so that they become unit tests.
 namespace SettingsRecall {
     public class SQLiteAPI {
-        SQLiteDatabase db;
-
         public string dbLocation;
 
         public List<string> supportedOses;
@@ -19,8 +19,6 @@ namespace SettingsRecall {
         /// Creates a new SQLiteDatabase object.
         /// </summary>
         public SQLiteAPI() {
-            db = new SQLiteDatabase();
-
             // Default value
             dbLocation = "../../test.db";
         }
@@ -30,7 +28,6 @@ namespace SettingsRecall {
         /// </summary>
         /// <param name="dbInputFile"></param>
         public SQLiteAPI(string dbInputFile) {
-            db = new SQLiteDatabase(dbInputFile);
             dbLocation = dbInputFile;
         }
 
@@ -71,7 +68,7 @@ namespace SettingsRecall {
             // Insert into db
             // If there's a problem, the exception is output to console. If we need to output to GUI, we need to pass that info back from SQLiteDatabase.cs
             try {
-                db.Insert("Program", insert);
+                SQLiteDatabase.Insert("Program", insert);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -116,7 +113,7 @@ namespace SettingsRecall {
 
             // Insert into db
             try {
-                db.Update("Program", update, string.Format("Name = '{0}'", entry.Name));
+                SQLiteDatabase.Update("Program", update, string.Format("Name = '{0}'", entry.Name));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -127,7 +124,7 @@ namespace SettingsRecall {
 
         public bool DeleteProgram(string name) {
             try {
-                db.Delete("Program", string.Format("Name = '{0}'", name));
+                SQLiteDatabase.Delete("Program", string.Format("Name = '{0}'", name));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -146,7 +143,7 @@ namespace SettingsRecall {
             List<ProgramEntry> entryList = new List<ProgramEntry>();
 
             try {
-                dt = db.GetDataTable(query);
+                dt = SQLiteDatabase.GetDataTable(query);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return entryList;
@@ -174,7 +171,7 @@ namespace SettingsRecall {
             string query = "SELECT Name FROM Program ORDER BY Name;";
             DataTable dt;
             try {
-                dt = db.GetDataTable(query);
+                dt = SQLiteDatabase.GetDataTable(query);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return names;
@@ -203,7 +200,7 @@ namespace SettingsRecall {
             DataTable dt;
             try
             {
-                dt = db.GetDataTable(query);
+                dt = SQLiteDatabase.GetDataTable(query);
             }
             catch (Exception e)
             {
@@ -222,7 +219,7 @@ namespace SettingsRecall {
         }
 
         public void ClearDB() {
-            db.ClearDB();
+            SQLiteDatabase.ClearDB();
         }
     }
 }

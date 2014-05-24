@@ -7,37 +7,15 @@ namespace SettingsRecall
 {
     // This class was borrowed from:
     // http://www.dreamincode.net/forums/topic/157830-using-sqlite-with-c%23/
-    public class SQLiteDatabase {
-        string dbConnection;
+    public static class SQLiteDatabase {
+        static string dbConnection;
 
         /// <summary>
         ///     Default Constructor for SQLiteDatabase Class.
         /// </summary>
-        public SQLiteDatabase() {
+        static SQLiteDatabase() {
             // This path will need updated when in production...should simply remove the ../../
             dbConnection = string.Format("Data Source={0}", Globals.dbLocation);
-        }
-
-        /// <summary>
-        ///     Single Param Constructor for specifying the DB file.
-        /// </summary>
-        /// <param name="inputFile">The File containing the DB</param>
-        public SQLiteDatabase(string inputFile) {
-            dbConnection = string.Format("Data Source={0}", inputFile);
-            Globals.dbLocation = inputFile;
-        }
-
-        /// <summary>
-        ///     Single Param Constructor for specifying advanced connection options.
-        /// </summary>
-        /// <param name="connectionOpts">A dictionary containing all desired options and their values</param>
-        public SQLiteDatabase(Dictionary<string, string> connectionOpts) {
-            string str = "";
-            foreach (KeyValuePair<string, string> row in connectionOpts) {
-                str += string.Format("{0}={1}; ", row.Key, row.Value);
-            }
-            str = str.Trim().Substring(0, str.Length - 1);
-            dbConnection = str;
         }
 
         /// <summary>
@@ -45,7 +23,7 @@ namespace SettingsRecall
         /// </summary>
         /// <param name="sql">The SQL to run</param>
         /// <returns>A DataTable containing the result set.</returns>
-        public DataTable GetDataTable(string sql) {
+        public static DataTable GetDataTable(string sql) {
             DataTable dt = new DataTable();
             try {
                 SQLiteConnection cnn = new SQLiteConnection(dbConnection);
@@ -67,7 +45,7 @@ namespace SettingsRecall
         /// </summary>
         /// <param name="sql">The SQL to be run.</param>
         /// <returns>An Integer containing the number of rows updated.</returns>
-        public int ExecuteNonQuery(string sql) {
+        public static int ExecuteNonQuery(string sql) {
             SQLiteConnection cnn = new SQLiteConnection(dbConnection);
             cnn.Open();
             SQLiteCommand mycommand = new SQLiteCommand(cnn);
@@ -82,7 +60,7 @@ namespace SettingsRecall
         /// </summary>
         /// <param name="sql">The query to run.</param>
         /// <returns>A string.</returns>
-        public string ExecuteScalar(string sql) {
+        public static string ExecuteScalar(string sql) {
             SQLiteConnection cnn = new SQLiteConnection(dbConnection);
             cnn.Open();
             SQLiteCommand mycommand = new SQLiteCommand(cnn);
@@ -102,7 +80,7 @@ namespace SettingsRecall
         /// <param name="data">A dictionary containing Column names and their new values.</param>
         /// <param name="where">The where clause for the update statement.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Update(string tableName, Dictionary<string, string> data, string where) {
+        public static bool Update(string tableName, Dictionary<string, string> data, string where) {
             string vals = "";
             Boolean returnCode = true;
             if (data.Count >= 1) {
@@ -112,7 +90,7 @@ namespace SettingsRecall
                 vals = vals.Substring(0, vals.Length - 1);
             }
             try {
-                this.ExecuteNonQuery(string.Format("update {0} set {1} where {2};", tableName, vals, where));
+                ExecuteNonQuery(string.Format("update {0} set {1} where {2};", tableName, vals, where));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 returnCode = false;
@@ -126,10 +104,10 @@ namespace SettingsRecall
         /// <param name="tableName">The table from which to delete.</param>
         /// <param name="where">The where clause for the delete.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Delete(string tableName, string where) {
+        public static bool Delete(string tableName, string where) {
             Boolean returnCode = true;
             try {
-                this.ExecuteNonQuery(string.Format("delete from {0} where {1};", tableName, where));
+                ExecuteNonQuery(string.Format("delete from {0} where {1};", tableName, where));
             } catch (Exception fail) {
                 Console.WriteLine(fail.Message);
                 returnCode = false;
@@ -143,7 +121,7 @@ namespace SettingsRecall
         /// <param name="tableName">The table into which we insert the data.</param>
         /// <param name="data">A dictionary containing the column names and data for the insert.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Insert(string tableName, Dictionary<string, string> data) {
+        public static bool Insert(string tableName, Dictionary<string, string> data) {
             string columns = "";
             string values = "";
             Boolean returnCode = true;
@@ -154,7 +132,7 @@ namespace SettingsRecall
             columns = columns.Substring(0, columns.Length - 1);
             values = values.Substring(0, values.Length - 1);
             try {
-                this.ExecuteNonQuery(string.Format("insert into {0}({1}) values({2});", tableName, columns, values));
+                ExecuteNonQuery(string.Format("insert into {0}({1}) values({2});", tableName, columns, values));
             } catch (Exception fail) {
                 Console.WriteLine(fail.Message);
                 returnCode = false;
@@ -166,12 +144,12 @@ namespace SettingsRecall
         ///     Allows the programmer to easily delete all data from the DB.
         /// </summary>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool ClearDB() {
+        public static bool ClearDB() {
             DataTable tables;
             try {
-                tables = this.GetDataTable("select NAME from SQLITE_MASTER where type='table' order by NAME;");
+                tables = GetDataTable("select NAME from SQLITE_MASTER where type='table' order by NAME;");
                 foreach (DataRow table in tables.Rows) {
-                    this.ClearTable(table["NAME"].ToString());
+                    ClearTable(table["NAME"].ToString());
                 }
                 return true;
             } catch {
@@ -184,10 +162,9 @@ namespace SettingsRecall
         /// </summary>
         /// <param name="table">The name of the table to clear.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool ClearTable(string table) {
+        public static bool ClearTable(string table) {
             try {
-
-                this.ExecuteNonQuery(string.Format("delete from {0};", table));
+                ExecuteNonQuery(string.Format("delete from {0};", table));
                 return true;
             } catch {
                 return false;
