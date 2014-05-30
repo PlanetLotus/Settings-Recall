@@ -8,19 +8,6 @@ using Newtonsoft.Json;
 
 namespace SettingsRecall {
     public class SQLiteAPI {
-        public string dbLocation;
-
-        public List<string> supportedOses;
-
-        public SQLiteAPI() {
-            // Default value
-            dbLocation = "../../test.db";
-        }
-
-        public SQLiteAPI(string dbInputFile) {
-            dbLocation = dbInputFile;
-        }
-
         private string ValidateProgramEntry(ProgramEntry entry) {
             // Validate entry object: Not null
             if (entry == null)
