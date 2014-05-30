@@ -6,27 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-// After making SQLiteDatabase.cs a static class, this shouldn't/doesn't work anymore! 
-// Fat TODO: Make these tests mock tests so that they become unit tests.
 namespace SettingsRecall {
     public class SQLiteAPI {
         public string dbLocation;
 
         public List<string> supportedOses;
 
-        /// <summary>
-        /// Default constructor for SQLiteAPI Class.
-        /// Creates a new SQLiteDatabase object.
-        /// </summary>
         public SQLiteAPI() {
             // Default value
             dbLocation = "../../test.db";
         }
 
-        /// <summary>
-        /// Creates a new SQLiteDatabase object with specified database file.
-        /// </summary>
-        /// <param name="dbInputFile"></param>
         public SQLiteAPI(string dbInputFile) {
             dbLocation = dbInputFile;
         }
@@ -133,10 +123,6 @@ namespace SettingsRecall {
             return true;
         }
 
-        /// <summary>
-        /// Retrieve a list of program entries from the database.
-        /// </summary>
-        /// <returns>A list of ProgramEntry retrieved from the db.</returns>
         public List<ProgramEntry> GetProgramList() {
             string query = "SELECT Name,IsPermanent,Paths,Description FROM Program ORDER BY Name;";
             DataTable dt;
@@ -190,9 +176,6 @@ namespace SettingsRecall {
             return names;
         }
 
-        /// <summary>
-        /// Get one entry from the ProgramEntry table in the db.
-        /// </summary>
         public ProgramEntry GetProgram(string name)
         {
             // query the database for row containing program_ID
