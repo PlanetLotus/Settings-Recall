@@ -74,8 +74,7 @@ namespace SettingsRecall
                 return;
             }
 
-            Globals.sqlite_api = new SQLiteAPI(dbFileMatches.Single());
-            allDbPrograms = Globals.sqlite_api.GetProgramList();
+            allDbPrograms = SQLiteAPI.GetProgramList();
             allDbProgramNames = allDbPrograms.Select(p => p.Name).ToList();
 
             // Display directory in label

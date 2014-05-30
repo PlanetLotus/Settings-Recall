@@ -14,7 +14,6 @@ namespace SettingsRecall {
     [TestFixture]
     public class APITest {
         string db_file = "../../integrationtest.db";
-        SQLiteAPI testAPI;
 
         [TestFixtureSetUp]
         public void Init() {
@@ -35,9 +34,6 @@ namespace SettingsRecall {
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
             SQLiteDatabase.Insert("Program", insert);
-
-            // Link the API to the testing database
-            testAPI = new SQLiteAPI(db_file);
         }
 
         [TestFixtureTearDown]
@@ -50,16 +46,16 @@ namespace SettingsRecall {
         [TestCase("asdfasdfasdf")]
         [TestCase("")]
         public void Test_GetNonExistentProgramEntry(string name) {
-            Assert.IsNull(testAPI.GetProgram(name));
+            Assert.IsNull(SQLiteAPI.GetProgram(name));
         }
 
         [TestCase("testprogram1")]
         public void Test_GetProgramEntry(string name) {
-            Assert.IsNotNull(testAPI.GetProgram(name));
+            Assert.IsNotNull(SQLiteAPI.GetProgram(name));
         }
 
         public void Test_GetProgramList() {
-            List<ProgramEntry> entryList = testAPI.GetProgramList(); 
+            List<ProgramEntry> entryList = SQLiteAPI.GetProgramList(); 
 
             Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with no parameters returned null");
             Assert.GreaterOrEqual(entryList.Count, 1, "Test failed: GetProgramEntryList returned less than 1 entry.");
@@ -67,7 +63,7 @@ namespace SettingsRecall {
 
         [Test]
         public void Test_GetProgramNameList() {
-            List<string> names = testAPI.GetProgramNameList();
+            List<string> names = SQLiteAPI.GetProgramNameList();
 
             Assert.IsNotNull(names, "Test failed: GetProgramNameList returned null");
             Assert.GreaterOrEqual(names.Count, 1, "Test failed: GetProgramNameList returned less than 1 entry.");
@@ -77,45 +73,45 @@ namespace SettingsRecall {
         public void Test_AddProgramBadPaths() {
             // Verify failure
             ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", false, new List<string>(), "Really useful test description");
-            Assert.IsFalse(testAPI.AddProgram(programEntry1));
+            Assert.IsFalse(SQLiteAPI.AddProgram(programEntry1));
         }
 
         [Test]
         // This test depends on assuming GetProgramEntryList works properly
         public void Test_AddDuplicateProgram() {
             // Get initial count
-            int programEntryCount = testAPI.GetProgramList().Count;
+            int programEntryCount = SQLiteAPI.GetProgramList().Count;
 
             // Build new object
             List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
             ProgramEntry programEntry = new ProgramEntry("testprogram1", false, paths, "Really useful test description");
-            testAPI.AddProgram(programEntry);
+            SQLiteAPI.AddProgram(programEntry);
 
             // Verify the number of program entries didn't change
-            Assert.AreEqual(programEntryCount, testAPI.GetProgramList().Count);
+            Assert.AreEqual(programEntryCount, SQLiteAPI.GetProgramList().Count);
         }
 
         [Test]
         // This test depends on assuming GetProgramEntryList works properly
         // This test depends on assuming GetProgramNameList works properly
         public void Test_AddProgram() {
-            int programEntryCount = testAPI.GetProgramList().Count;
+            int programEntryCount = SQLiteAPI.GetProgramList().Count;
 
             // Create object
             List<string> paths = new List<string>() { "vista/path/to/file4.txt" };
             ProgramEntry programEntry = new ProgramEntry("apiTestEntry", false, paths, "Really useful test description");
 
             // Add program
-            testAPI.AddProgram(programEntry);
+            SQLiteAPI.AddProgram(programEntry);
 
             // Make sure it was added by calling GetProgramEntryList
             // There should be two entries now
-            List<ProgramEntry> list = testAPI.GetProgramList();
+            List<ProgramEntry> list = SQLiteAPI.GetProgramList();
             Assert.IsNotNull(list);
             Assert.AreEqual(programEntryCount + 1, list.Count);
 
             // Make sure the name exists once in the Program table
-            List<string> names = testAPI.GetProgramNameList();
+            List<string> names = SQLiteAPI.GetProgramNameList();
             Assert.IsNotNull(names);
             Assert.Contains("apiTestEntry", names);
         }
@@ -127,10 +123,10 @@ namespace SettingsRecall {
             ProgramEntry programEntry = new ProgramEntry("testprogram1", false, paths, "Really useful edited test description");
 
             // Edit entry
-            testAPI.EditProgram(programEntry);
+            SQLiteAPI.EditProgram(programEntry);
 
             // Find entry in list
-            ProgramEntry editedEntry = testAPI.GetProgram("testprogram1");
+            ProgramEntry editedEntry = SQLiteAPI.GetProgram("testprogram1");
 
             // Check if edited object is equal to test object
             Assert.AreEqual(programEntry.ToString(), editedEntry.ToString());
@@ -141,7 +137,7 @@ namespace SettingsRecall {
 
         [Test]
         public void Test_DeleteProgram() {
-            Assert.IsTrue(testAPI.DeleteProgram("testprogram1"));
+            Assert.IsTrue(SQLiteAPI.DeleteProgram("testprogram1"));
 
             // Re-initialize so that we don't lose the data
             this.Init();

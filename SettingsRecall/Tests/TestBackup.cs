@@ -15,7 +15,6 @@ namespace SettingsRecall.Tests {
         [TestFixtureSetUp]
         public void Init() {
             // Create test directories and files
-            Globals.sqlite_api = new SQLiteAPI(db_file);
             Globals.load_save_location = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\BackupTests";
             string testDataDir = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\TestData\";
 
@@ -27,8 +26,8 @@ namespace SettingsRecall.Tests {
             ProgramEntry program1 = new ProgramEntry("backupTestProgram1", false, programPaths1);
             ProgramEntry program2 = new ProgramEntry("backupTestProgram2", false, programPaths2);
 
-            Globals.sqlite_api.AddProgram(program1);
-            Globals.sqlite_api.AddProgram(program2);
+            SQLiteAPI.AddProgram(program1);
+            SQLiteAPI.AddProgram(program2);
 
             page = new BackupPage();
             page.supportedPrograms.Clear();
@@ -41,7 +40,7 @@ namespace SettingsRecall.Tests {
         [TestFixtureTearDown]
         public void Cleanup() {
             // Delete test data
-            Globals.sqlite_api.ClearDB();
+            SQLiteAPI.ClearDB();
             Globals.load_save_location = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\BackupTests";
             if (Directory.Exists(Globals.load_save_location)) {
                 DirectoryInfo di = new DirectoryInfo(Globals.load_save_location);

@@ -37,7 +37,7 @@ namespace SettingsRecall
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
             // Get the data for the current programEntry object
-            currentEntry = Globals.sqlite_api.GetProgram(name);
+            currentEntry = SQLiteAPI.GetProgram(name);
             if (currentEntry == null)
             {
                 currentEntry = new ProgramEntry(name, false, new List<string>());
@@ -98,9 +98,9 @@ namespace SettingsRecall
 
             // edit (or add) the entry in the database
             if (newEntry)
-                Globals.sqlite_api.AddProgram(currentEntry);
+                SQLiteAPI.AddProgram(currentEntry);
             else
-                Globals.sqlite_api.EditProgram(currentEntry);
+                SQLiteAPI.EditProgram(currentEntry);
 
             DialogResult = true;
             Close();
@@ -115,7 +115,7 @@ namespace SettingsRecall
                 MessageBoxImage.Warning);
 
             if (messageBoxResult == MessageBoxResult.Yes) {
-                Globals.sqlite_api.DeleteProgram(currentEntry.Name);
+                SQLiteAPI.DeleteProgram(currentEntry.Name);
                 DialogResult = true;
                 Close();
             }

@@ -47,7 +47,7 @@ namespace SettingsRecall
             backupPageLeftList.Items.Clear();
 
             // Get supported programs
-            List<ProgramEntry> programEntries = Globals.sqlite_api.GetProgramList();
+            List<ProgramEntry> programEntries = SQLiteAPI.GetProgramList();
 
             // Filter list down to programs where at least one path for that program exists on the machine
             // Filter program entries by:

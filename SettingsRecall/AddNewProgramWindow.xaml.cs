@@ -51,7 +51,7 @@ namespace SettingsRecall
 
             // Make sure program name isn't already in the DB
             List<string> programList = new List<string>();
-            programList = Globals.sqlite_api.GetProgramNameList();
+            programList = SQLiteAPI.GetProgramNameList();
             
             if (programList != null && programList.Contains(nameText.Text))
             {

@@ -21,9 +21,6 @@ namespace SettingsRecall
             mainWindow = new MainWindow();
             mainWindow.Show();
 
-            // instantiate the SQLite database and API
-            Globals.sqlite_api = new SQLiteAPI();
-
             // instantiate the startup window
             StartupWindow start_window = new StartupWindow();
 

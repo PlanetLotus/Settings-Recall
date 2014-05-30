@@ -8,20 +8,7 @@ using Newtonsoft.Json;
 
 namespace SettingsRecall {
     public class SQLiteAPI {
-        private string ValidateProgramEntry(ProgramEntry entry) {
-            // Validate entry object: Not null
-            if (entry == null)
-                return "Entry cannot be null.";
-
-            // Validate paths: Must be at least length 1
-            if (entry.Paths.Count == 0)
-                return "Entry paths must contain at least one path.";
-
-            // No errors
-            return "";
-        }
-
-        public bool AddProgram(ProgramEntry entry) {
+        public static bool AddProgram(ProgramEntry entry) {
             // Validate entry
             string validation = ValidateProgramEntry(entry);
             if (validation != "") {
@@ -54,7 +41,7 @@ namespace SettingsRecall {
             return true;
         }
 
-        public bool EditProgram(ProgramEntry entry) 
+        public static bool EditProgram(ProgramEntry entry) 
         {
             // TODO: Use a changeset class so that the properties can be nullable
             // That will make this a lot less confusing
@@ -99,7 +86,7 @@ namespace SettingsRecall {
             return true;
         }
 
-        public bool DeleteProgram(string name) {
+        public static bool DeleteProgram(string name) {
             try {
                 SQLiteDatabase.Delete("Program", string.Format("Name = '{0}'", name));
             } catch (Exception e) {
@@ -110,7 +97,7 @@ namespace SettingsRecall {
             return true;
         }
 
-        public List<ProgramEntry> GetProgramList() {
+        public static List<ProgramEntry> GetProgramList() {
             string query = "SELECT Name,IsPermanent,Paths,Description FROM Program ORDER BY Name;";
             DataTable dt;
             List<ProgramEntry> entryList = new List<ProgramEntry>();
@@ -138,7 +125,7 @@ namespace SettingsRecall {
             return entryList;
         }
 
-        public List<string> GetProgramNameList() {
+        public static List<string> GetProgramNameList() {
             List<string> names = new List<string>();
 
             string query = "SELECT Name FROM Program ORDER BY Name;";
@@ -163,7 +150,7 @@ namespace SettingsRecall {
             return names;
         }
 
-        public ProgramEntry GetProgram(string name)
+        public static ProgramEntry GetProgram(string name)
         {
             // query the database for row containing program_ID
             string query = string.Format("SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';", name);
@@ -188,8 +175,21 @@ namespace SettingsRecall {
             return new ProgramEntry(dt.Rows[0]);
         }
 
-        public void ClearDB() {
+        public static void ClearDB() {
             SQLiteDatabase.ClearDB();
+        }
+
+        private static string ValidateProgramEntry(ProgramEntry entry) {
+            // Validate entry object: Not null
+            if (entry == null)
+                return "Entry cannot be null.";
+
+            // Validate paths: Must be at least length 1
+            if (entry.Paths.Count == 0)
+                return "Entry paths must contain at least one path.";
+
+            // No errors
+            return "";
         }
     }
 }
