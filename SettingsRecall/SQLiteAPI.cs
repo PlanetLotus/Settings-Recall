@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace SettingsRecall {
-    public class SQLiteAPI {
+    public static class SQLiteAPI {
         public static bool AddProgram(ProgramEntry entry) {
             // Validate entry
             string validation = ValidateProgramEntry(entry);
