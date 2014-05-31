@@ -8,6 +8,10 @@ using Newtonsoft.Json;
 
 namespace SettingsRecall {
     public static class SQLiteAPI {
+        static SQLiteAPI() {
+            Globals.db = new SQLiteDatabase();
+        }
+
         public static bool AddProgram(ProgramEntry entry) {
             // Validate entry
             string validation = ValidateProgramEntry(entry);
@@ -32,7 +36,7 @@ namespace SettingsRecall {
             // Insert into db
             // If there's a problem, the exception is output to console. If we need to output to GUI, we need to pass that info back from SQLiteDatabase.cs
             try {
-                SQLiteDatabase.Insert("Program", insert);
+                Globals.db.Insert("Program", insert);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -77,7 +81,7 @@ namespace SettingsRecall {
 
             // Insert into db
             try {
-                SQLiteDatabase.Update("Program", update, string.Format("Name = '{0}'", entry.Name));
+                Globals.db.Update("Program", update, string.Format("Name = '{0}'", entry.Name));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -88,7 +92,7 @@ namespace SettingsRecall {
 
         public static bool DeleteProgram(string name) {
             try {
-                SQLiteDatabase.Delete("Program", string.Format("Name = '{0}'", name));
+                Globals.db.Delete("Program", string.Format("Name = '{0}'", name));
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return false;
@@ -103,7 +107,7 @@ namespace SettingsRecall {
             List<ProgramEntry> entryList = new List<ProgramEntry>();
 
             try {
-                dt = SQLiteDatabase.GetDataTable(query);
+                dt = Globals.db.GetDataTable(query);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return entryList;
@@ -131,7 +135,7 @@ namespace SettingsRecall {
             string query = "SELECT Name FROM Program ORDER BY Name;";
             DataTable dt;
             try {
-                dt = SQLiteDatabase.GetDataTable(query);
+                dt = Globals.db.GetDataTable(query);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return names;
@@ -157,7 +161,7 @@ namespace SettingsRecall {
             DataTable dt;
             try
             {
-                dt = SQLiteDatabase.GetDataTable(query);
+                dt = Globals.db.GetDataTable(query);
             }
             catch (Exception e)
             {
@@ -176,7 +180,7 @@ namespace SettingsRecall {
         }
 
         public static void ClearDB() {
-            SQLiteDatabase.ClearDB();
+            Globals.db.ClearDB();
         }
 
         private static string ValidateProgramEntry(ProgramEntry entry) {

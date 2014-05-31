@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Rhino.Mocks;
 
 // After making SQLiteDatabase.cs a static class, this shouldn't/doesn't work anymore! 
 // Fat TODO: Make these tests mock tests so that they become unit tests.
@@ -17,6 +18,7 @@ namespace SettingsRecall {
 
         [TestFixtureSetUp]
         public void Init() {
+            /*
             // Create a testing database
             Console.WriteLine("Initializing tests...");
             SQLiteDatabase.ClearDB();
@@ -34,13 +36,15 @@ namespace SettingsRecall {
             insert.Add("Paths", json_paths);
             insert.Add("Description", "testdescription1");
             SQLiteDatabase.Insert("Program", insert);
+            */
+
         }
 
         [TestFixtureTearDown]
         public void Cleanup() {
             // Delete all data in the db
             Console.WriteLine("Cleaning up tests...");
-            SQLiteDatabase.ClearDB();
+            Globals.db.ClearDB();
         }
 
         [TestCase("asdfasdfasdf")]
