@@ -16,25 +16,13 @@ namespace SettingsRecall {
     public class APITest {
         [TestFixtureSetUp]
         public void Init() {
-            /*
-            // Create a testing database
-            Console.WriteLine("Initializing tests...");
-            SQLiteDatabase.ClearDB();
-
-            // Create some test data directly in the db, without the API
-            List<string> paths = new List<string>();
-            paths.Add("path/to/\"quoted filename.txt\"");
-            paths.Add("path/to/file2.txt");
-            paths.Add("path/to/file3.txt");
-            string json_paths = JsonConvert.SerializeObject(paths);
-
-            Dictionary<string, string> insert = new Dictionary<string, string>();
-            insert.Add("Name", "testprogram1");
-            insert.Add("IsPermanent", "0");
-            insert.Add("Paths", json_paths);
-            insert.Add("Description", "testdescription1");
-            SQLiteDatabase.Insert("Program", insert);
-            */
+            paths = new List<string> { "testpath" };
+            jsonPaths = JsonConvert.SerializeObject(paths);
+            dt.Columns.Add("Name");
+            dt.Columns.Add("IsPermanent");
+            dt.Columns.Add("Paths");
+            dt.Columns.Add("Description");
+            dt.Rows.Add("testprogram1", false, jsonPaths, "");
 
             stubbedDb = MockRepository.GenerateStub<SQLiteDatabase>();
 
@@ -53,14 +41,6 @@ namespace SettingsRecall {
 
         [TestCase("testprogram1")]
         public void Test_GetProgramEntry(string name) {
-            List<string> paths = new List<string> { "testpath" };
-            string jsonPaths = JsonConvert.SerializeObject(paths);
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Name");
-            dt.Columns.Add("IsPermanent");
-            dt.Columns.Add("Paths");
-            dt.Columns.Add("Description");
-            dt.Rows.Add("testprogram1", false, jsonPaths, "");
 
             stubbedDb
                 .Stub(x => x.GetDataTable(string.Format(getProgramSelect, name)))
@@ -69,8 +49,13 @@ namespace SettingsRecall {
             Assert.IsNotNull(SQLiteAPI.GetProgram(name));
         }
 
-        /*
+        [Test]
         public void Test_GetProgramList() {
+            string getProgramListSelect = "SELECT Name,IsPermanent,Paths,Description FROM Program ORDER BY Name;";
+            stubbedDb
+                .Stub(x => x.GetDataTable(getProgramListSelect))
+                .Return(dt);
+
             List<ProgramEntry> entryList = SQLiteAPI.GetProgramList(); 
 
             Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with no parameters returned null");
@@ -79,12 +64,18 @@ namespace SettingsRecall {
 
         [Test]
         public void Test_GetProgramNameList() {
+            string getProgramNameListSelect = "SELECT Name FROM Program ORDER BY Name;";
+            stubbedDb
+                .Stub(x => x.GetDataTable(getProgramNameListSelect))
+                .Return(dt);
+
             List<string> names = SQLiteAPI.GetProgramNameList();
 
             Assert.IsNotNull(names, "Test failed: GetProgramNameList returned null");
             Assert.GreaterOrEqual(names.Count, 1, "Test failed: GetProgramNameList returned less than 1 entry.");
         }
 
+        /*
         [Test]
         public void Test_AddProgramBadPaths() {
             // Verify failure
@@ -162,5 +153,9 @@ namespace SettingsRecall {
 
         private SQLiteDatabase stubbedDb;
         private const string getProgramSelect = "SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';";
+
+        private List<string> paths;
+        private string jsonPaths;
+        private DataTable dt = new DataTable();
     }
 }
