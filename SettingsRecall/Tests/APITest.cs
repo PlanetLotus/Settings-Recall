@@ -82,59 +82,51 @@ namespace SettingsRecall {
             Assert.IsFalse(SQLiteAPI.AddProgram(programEntry1));
         }
 
-        /*
         [Test]
-        // This test depends on assuming GetProgramEntryList works properly
-        // This test depends on assuming GetProgramNameList works properly
         public void Test_AddProgram() {
-            int programEntryCount = SQLiteAPI.GetProgramList().Count;
-
-            // Create object
             List<string> paths = new List<string>() { "vista/path/to/file4.txt" };
             ProgramEntry programEntry = new ProgramEntry("apiTestEntry", false, paths, "Really useful test description");
 
-            // Add program
-            SQLiteAPI.AddProgram(programEntry);
+            Dictionary<string, string> insert = new Dictionary<string, string>();
+            insert.Add("Name", programEntry.Name);
+            insert.Add("IsPermanent", "0");
+            insert.Add("Paths", JsonConvert.SerializeObject(programEntry.Paths));
+            insert.Add("Description", programEntry.Description);
 
-            // Make sure it was added by calling GetProgramEntryList
-            // There should be two entries now
-            List<ProgramEntry> list = SQLiteAPI.GetProgramList();
-            Assert.IsNotNull(list);
-            Assert.AreEqual(programEntryCount + 1, list.Count);
+            stubbedDb
+                .Stub(x => x.Insert("Program", insert))
+                .Return(true);
 
-            // Make sure the name exists once in the Program table
-            List<string> names = SQLiteAPI.GetProgramNameList();
-            Assert.IsNotNull(names);
-            Assert.Contains("apiTestEntry", names);
+            Assert.IsTrue(SQLiteAPI.AddProgram(programEntry));
         }
 
         [Test]
         public void Test_EditProgram() {
-            // Create object
             List<string> paths = new List<string>() { "vista/path/to/file9.txt" };
             ProgramEntry programEntry = new ProgramEntry("testprogram1", false, paths, "Really useful edited test description");
 
-            // Edit entry
-            SQLiteAPI.EditProgram(programEntry);
+            Dictionary<string, string> update = new Dictionary<string, string>();
+            update.Add("Name", programEntry.Name);
+            update.Add("IsPermanent", "0");
+            update.Add("Paths", JsonConvert.SerializeObject(programEntry.Paths));
+            update.Add("Description", programEntry.Description);
 
-            // Find entry in list
-            ProgramEntry editedEntry = SQLiteAPI.GetProgram("testprogram1");
+            stubbedDb
+                .Stub(x => x.Update("Program", update, string.Format("Name = {0}", programEntry.Name)))
+                .Return(true);
 
-            // Check if edited object is equal to test object
-            Assert.AreEqual(programEntry.ToString(), editedEntry.ToString());
-
-            // Re-initialize so we don't lose the data
-            this.Init();
+            Assert.IsTrue(SQLiteAPI.EditProgram(programEntry));
         }
 
         [Test]
         public void Test_DeleteProgram() {
-            Assert.IsTrue(SQLiteAPI.DeleteProgram("testprogram1"));
+            string programName = "testprogram1";
+            stubbedDb
+                .Stub(x => x.Delete("Program", string.Format("Name = {0}", programName)))
+                .Return(true);
 
-            // Re-initialize so that we don't lose the data
-            this.Init();
+            Assert.IsTrue(SQLiteAPI.DeleteProgram(programName));
         }
-        */
 
         private SQLiteDatabase stubbedDb;
         private const string getProgramSelect = "SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';";

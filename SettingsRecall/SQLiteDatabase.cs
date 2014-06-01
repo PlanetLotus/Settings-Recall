@@ -80,7 +80,7 @@ namespace SettingsRecall
         /// <param name="data">A dictionary containing Column names and their new values.</param>
         /// <param name="where">The where clause for the update statement.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Update(string tableName, Dictionary<string, string> data, string where) {
+        public virtual bool Update(string tableName, Dictionary<string, string> data, string where) {
             string vals = "";
             Boolean returnCode = true;
             if (data.Count >= 1) {
@@ -104,7 +104,7 @@ namespace SettingsRecall
         /// <param name="tableName">The table from which to delete.</param>
         /// <param name="where">The where clause for the delete.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Delete(string tableName, string where) {
+        public virtual bool Delete(string tableName, string where) {
             Boolean returnCode = true;
             try {
                 ExecuteNonQuery(string.Format("delete from {0} where {1};", tableName, where));
@@ -121,7 +121,7 @@ namespace SettingsRecall
         /// <param name="tableName">The table into which we insert the data.</param>
         /// <param name="data">A dictionary containing the column names and data for the insert.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Insert(string tableName, Dictionary<string, string> data) {
+        public virtual bool Insert(string tableName, Dictionary<string, string> data) {
             string columns = "";
             string values = "";
             Boolean returnCode = true;
