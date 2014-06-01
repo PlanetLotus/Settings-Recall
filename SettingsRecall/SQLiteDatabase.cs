@@ -23,7 +23,7 @@ namespace SettingsRecall
         /// </summary>
         /// <param name="sql">The SQL to run</param>
         /// <returns>A DataTable containing the result set.</returns>
-        public DataTable GetDataTable(string sql) {
+        public virtual DataTable GetDataTable(string sql) {
             DataTable dt = new DataTable();
             try {
                 SQLiteConnection cnn = new SQLiteConnection(dbConnection);

@@ -14,8 +14,6 @@ namespace SettingsRecall {
 
     [TestFixture]
     public class APITest {
-        string db_file = "../../integrationtest.db";
-
         [TestFixtureSetUp]
         public void Init() {
             /*
@@ -38,26 +36,40 @@ namespace SettingsRecall {
             SQLiteDatabase.Insert("Program", insert);
             */
 
+            stubbedDb = MockRepository.GenerateStub<SQLiteDatabase>();
+
+            Globals.db = stubbedDb;
         }
 
-        [TestFixtureTearDown]
-        public void Cleanup() {
-            // Delete all data in the db
-            Console.WriteLine("Cleaning up tests...");
-            Globals.db.ClearDB();
-        }
-
+        [TestCase("a")]
         [TestCase("asdfasdfasdf")]
-        [TestCase("")]
         public void Test_GetNonExistentProgramEntry(string name) {
+            stubbedDb
+                .Stub(x => x.GetDataTable(string.Format(getProgramSelect, name)))
+                .Return(new DataTable());
+
             Assert.IsNull(SQLiteAPI.GetProgram(name));
         }
 
         [TestCase("testprogram1")]
         public void Test_GetProgramEntry(string name) {
+            List<string> paths = new List<string> { "testpath" };
+            string jsonPaths = JsonConvert.SerializeObject(paths);
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Name");
+            dt.Columns.Add("IsPermanent");
+            dt.Columns.Add("Paths");
+            dt.Columns.Add("Description");
+            dt.Rows.Add("testprogram1", false, jsonPaths, "");
+
+            stubbedDb
+                .Stub(x => x.GetDataTable(string.Format(getProgramSelect, name)))
+                .Return(dt);
+
             Assert.IsNotNull(SQLiteAPI.GetProgram(name));
         }
 
+        /*
         public void Test_GetProgramList() {
             List<ProgramEntry> entryList = SQLiteAPI.GetProgramList(); 
 
@@ -146,5 +158,9 @@ namespace SettingsRecall {
             // Re-initialize so that we don't lose the data
             this.Init();
         }
+        */
+
+        private SQLiteDatabase stubbedDb;
+        private const string getProgramSelect = "SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';";
     }
 }

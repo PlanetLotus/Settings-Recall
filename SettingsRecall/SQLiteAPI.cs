@@ -9,7 +9,8 @@ using Newtonsoft.Json;
 namespace SettingsRecall {
     public static class SQLiteAPI {
         static SQLiteAPI() {
-            Globals.db = new SQLiteDatabase();
+            if (Globals.db == null)
+                Globals.db = new SQLiteDatabase();
         }
 
         public static bool AddProgram(ProgramEntry entry) {
@@ -176,6 +177,7 @@ namespace SettingsRecall {
             }
 
             // create a ProgramEntry object from the DataTable
+            // TODO: Return FirstOrDefault? SingleOrDefault?
             return new ProgramEntry(dt.Rows[0]);
         }
 
