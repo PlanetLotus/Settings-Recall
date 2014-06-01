@@ -75,29 +75,14 @@ namespace SettingsRecall {
             Assert.GreaterOrEqual(names.Count, 1, "Test failed: GetProgramNameList returned less than 1 entry.");
         }
 
-        /*
         [Test]
         public void Test_AddProgramBadPaths() {
-            // Verify failure
+            // This doesn't require a stub because it fails before it touches the db
             ProgramEntry programEntry1 = new ProgramEntry("badtestprogram", false, new List<string>(), "Really useful test description");
             Assert.IsFalse(SQLiteAPI.AddProgram(programEntry1));
         }
 
-        [Test]
-        // This test depends on assuming GetProgramEntryList works properly
-        public void Test_AddDuplicateProgram() {
-            // Get initial count
-            int programEntryCount = SQLiteAPI.GetProgramList().Count;
-
-            // Build new object
-            List<string> paths = new List<string>() { "xp/path/to/file1.txt" };
-            ProgramEntry programEntry = new ProgramEntry("testprogram1", false, paths, "Really useful test description");
-            SQLiteAPI.AddProgram(programEntry);
-
-            // Verify the number of program entries didn't change
-            Assert.AreEqual(programEntryCount, SQLiteAPI.GetProgramList().Count);
-        }
-
+        /*
         [Test]
         // This test depends on assuming GetProgramEntryList works properly
         // This test depends on assuming GetProgramNameList works properly
