@@ -1,21 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 
 namespace SettingsRecall {
     public class CopyHandler {
         string backupDir;
+        IFileSystem fs;
         StreamWriter log;
         bool isDryRun;
 
-        public CopyHandler(string backupDir, string logFileName, bool isDryRun = false) {
-            Directory.CreateDirectory(backupDir);
+        public CopyHandler(string backupDir, string logFileName, bool isDryRun = false, IFileSystem fileSystem = null) {
+            if (fileSystem == null)
+                fs = new FileSystem();
+            else
+                fs = fileSystem;
 
-            this.backupDir = backupDir;
-            log = new StreamWriter(backupDir + logFileName);
+            fs.Directory.CreateDirectory(backupDir);
+
             this.isDryRun = isDryRun;
+            this.backupDir = backupDir;
+            if (isDryRun)
+                log = new StreamWriter(backupDir + logFileName);
+            else
+                log = new StreamWriter(Console.OpenStandardOutput());
         }
 
         public bool InitBackup() {
@@ -33,18 +43,23 @@ namespace SettingsRecall {
             return true;
         }
 
+        public bool CreateProgramFolder(string programDir) {
+            fs.Directory.CreateDirectory(programDir);
+            return true;
+        }
+
         public bool Copy(string source, string dest, bool overwrite = false) {
-            if (!File.Exists(source)) {
+            if (!fs.File.Exists(source)) {
                 log.WriteLine("Source does not exist at " + source);
                 return false;
             }
 
             // Loop through renaming process until dest doesn't exist
-            if (!overwrite && File.Exists(dest)) {
+            if (!overwrite && fs.File.Exists(dest)) {
                 dest += "-1";
                 int fileIncrementer = 1;
 
-                while (File.Exists(dest)) {
+                while (fs.File.Exists(dest)) {
                     dest = dest.Substring(0, dest.Length-1) + fileIncrementer;
                     fileIncrementer++;
                 }
@@ -52,7 +67,7 @@ namespace SettingsRecall {
 
             if (!isDryRun) {
                 try {
-                    File.Copy(source, dest, overwrite);
+                    fs.File.Copy(source, dest, overwrite);
                 } catch {
                     // TODO: Catch specific exceptions and handle accordingly
                     log.WriteLine("Could not copy file " + source + " to " + dest);

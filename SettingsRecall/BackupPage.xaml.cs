@@ -197,7 +197,7 @@ namespace SettingsRecall
             foreach (ProgramEntry program in selectedPrograms) {
                 // Create folder for program in save location
                 string programDir = backupDir + program.Name;
-                Directory.CreateDirectory(programDir);
+                copyHandler.CreateProgramFolder(programDir);
 
                 // Check edge case: Multiple files of same name
                 // Implement later...
