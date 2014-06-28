@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace SettingsRecall.Tests {
     [TestFixture, RequiresSTA]
     class TestBackup {
         BackupPage page;
-        string db_file = "../../integrationtest.db";
 
         [TestFixtureSetUp]
         public void Init() {
+            /*
             // Create test directories and files
             Globals.load_save_location = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\BackupTests";
             string testDataDir = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\TestData\";
@@ -35,17 +38,18 @@ namespace SettingsRecall.Tests {
             page.supportedPrograms.Add(program2);
             page.backupPageRightList.Items.Add("backupTestProgram1");
             page.backupPageRightList.Items.Add("backupTestProgram2");
-        }
+            */
+            List<string> programPaths1 = new List<string>() { @"program1\a.txt", @"program1\b.txt" };
+            ProgramEntry program1 = new ProgramEntry("backupTestProgram1", false, programPaths1);
 
-        [TestFixtureTearDown]
-        public void Cleanup() {
-            // Delete test data
-            SQLiteAPI.ClearDB();
-            Globals.load_save_location = @"C:\Users\Matt\Documents\Visual Studio 2012\Projects\SettingsRecall\SettingsRecall\obj\Debug\BackupTests";
-            if (Directory.Exists(Globals.load_save_location)) {
-                DirectoryInfo di = new DirectoryInfo(Globals.load_save_location);
-                di.Delete(true);
-            }
+            IFileSystem stubbedFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> {
+                { programPaths1[0], new MockFileData("") },
+                { programPaths1[1], new MockFileData("") }
+            });
+
+            Globals.load_save_location = "UNITTEST";
+            page = MockRepository.GenerateStub<BackupPage>(stubbedFileSystem);
+            page.supportedPrograms.Add(program1);
         }
 
         [Test]

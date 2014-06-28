@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Rhino.Mocks;
 
-// After making SQLiteDatabase.cs a static class, this shouldn't/doesn't work anymore! 
-// Fat TODO: Make these tests mock tests so that they become unit tests.
 namespace SettingsRecall {
     using NUnit.Framework;
 
@@ -25,7 +23,6 @@ namespace SettingsRecall {
             dt.Rows.Add("testprogram1", false, jsonPaths, "");
 
             stubbedDb = MockRepository.GenerateStub<SQLiteDatabase>();
-
             Globals.db = stubbedDb;
         }
 

@@ -14,7 +14,7 @@ namespace SettingsRecall {
 
         public CopyHandler(string backupDir, string logFileName, bool isDryRun = false, IFileSystem fileSystem = null) {
             if (fileSystem == null)
-                fs = new FileSystem();
+                fs = new FileSystem();  // Use System.IO
             else
                 fs = fileSystem;
 

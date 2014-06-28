@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,10 +28,16 @@ namespace SettingsRecall
         public List<ProgramEntry> selectedPrograms;
 
         private ListBox activeList;
+        readonly IFileSystem fileSystem;
 
-        public BackupPage()
+        public BackupPage(IFileSystem fileSystem = null)
         {
             InitializeComponent();
+
+            if (fileSystem == null)
+                this.fileSystem = new FileSystem(); // Use System.IO
+            else
+                this.fileSystem = fileSystem;
 
             supportedPrograms = new List<ProgramEntry>();
             selectedPrograms = new List<ProgramEntry>();
@@ -190,7 +197,7 @@ namespace SettingsRecall
             if (!backupDir[backupDir.Length-1].Equals('\\'))
                 backupDir = backupDir + "\\";
 
-            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt");
+            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false, fileSystem);
             copyHandler.InitBackup();
 
             // Loop through selectedPrograms, copying files to save location
