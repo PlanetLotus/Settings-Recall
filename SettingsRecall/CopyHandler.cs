@@ -43,16 +43,18 @@ namespace SettingsRecall {
             return true;
         }
 
-        public bool CreateProgramFolder(string programDir) {
-            fs.Directory.CreateDirectory(programDir);
+        public bool CreateProgramFolder(string programName) {
+            fs.Directory.CreateDirectory(backupDir + programName);
             return true;
         }
 
-        public bool Copy(string source, string dest, bool overwrite = false) {
+        public bool Copy(string source, string relativeDest, bool overwrite = false) {
             if (!fs.File.Exists(source)) {
                 log.WriteLine("Source does not exist at " + source);
                 return false;
             }
+
+            string dest = backupDir + relativeDest;
 
             // Loop through renaming process until dest doesn't exist
             if (!overwrite && fs.File.Exists(dest)) {

@@ -24,20 +24,13 @@ namespace SettingsRecall
         // TODO: Keep these private. They're marked public now so that TestBackup.cs can use them.
         public List<ProgramEntry> supportedPrograms;
         public List<ProgramEntry> unsupportedPrograms;
-        public List<string> supportedProgramNames;
-        public List<ProgramEntry> selectedPrograms;
 
         private ListBox activeList;
         readonly IFileSystem fileSystem;
 
-        public BackupPage(IFileSystem fileSystem = null)
+        public BackupPage()
         {
             InitializeComponent();
-
-            if (fileSystem == null)
-                this.fileSystem = new FileSystem(); // Use System.IO
-            else
-                this.fileSystem = fileSystem;
 
             supportedPrograms = new List<ProgramEntry>();
 
@@ -77,17 +70,11 @@ namespace SettingsRecall
         private void addProgramButton_Click(object sender, RoutedEventArgs e)
         {
             // instantiate dialog box
-            AddNewProgramWindow ANPWindow = new AddNewProgramWindow();
-
-            // configure dialog box and open modally
-            ANPWindow.Owner = App.mainWindow;
+            AddNewProgramWindow ANPWindow = new AddNewProgramWindow { Owner = App.mainWindow };
             ANPWindow.ShowDialog();
 
             if (ANPWindow.DialogResult == false)
-            {
-                // do not continue
                 return;
-            }
 
             // get the name entered into the add dialog
             string programName = ANPWindow.GetProgramName();
@@ -178,8 +165,12 @@ namespace SettingsRecall
             }
         }
 
-        // TODO: Keep this private. It's marked public now so that TestBackup.cs can use it.
-        public void createBackupButton_Click(object sender, RoutedEventArgs e) {
+        private void createBackupButton_Click(object sender, RoutedEventArgs e) {
+            if (backupPageRightList.Items.Count == 0) {
+                Console.WriteLine("Nothing selected to back up!");
+                return;
+            }
+
             // Make sure save directory has been selected
             string backupDir = Globals.load_save_location;
             if (backupDir == null || backupDir.Trim() == "") {
@@ -191,8 +182,7 @@ namespace SettingsRecall
             if (!backupDir[backupDir.Length-1].Equals('\\'))
                 backupDir = backupDir + "\\";
 
-            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false, fileSystem);
-            copyHandler.InitBackup();
+            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false);
 
             IEnumerable<string> selectedProgramNames = backupPageRightList.Items
                 .Cast<ListBoxItem>()
@@ -200,28 +190,7 @@ namespace SettingsRecall
 
             IEnumerable<ProgramEntry> selectedPrograms = supportedPrograms.Where(p => selectedProgramNames.Contains(p.Name));
 
-            // Loop through selectedPrograms, copying files to save location
-            foreach (ProgramEntry program in selectedPrograms) {
-                // Create folder for program in save location
-                string programDir = backupDir + program.Name;
-                copyHandler.CreateProgramFolder(programDir);
-
-                // Check edge case: Multiple files of same name
-                // Implement later...
-                // Get number of versions in each program, x
-                // Get strings that have multiple versions, strList
-                // Create x subdirs in program dir
-                // When copying, if filename in strList, copy to a subdir that doesn't contain filename
-
-                foreach (string path in program.Paths) {
-                    // Copy files at path to programDir
-                    // It's okay (and expected) for not all paths to exist
-                    string filename = path.Split('\\').Last();
-                    copyHandler.Copy(path, programDir + "\\" + filename);
-                }
-            }
-
-            copyHandler.CloseBackup();
+            BackupService.CreateBackup(selectedPrograms, copyHandler);
         }
     }
 }

@@ -109,6 +109,7 @@
     <Compile Include="AddNewProgramWindow.xaml.cs">
       <DependentUpon>AddNewProgramWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BackupService.cs" />
     <Compile Include="CopyHandler.cs" />
     <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Tests\APITest.cs" />
