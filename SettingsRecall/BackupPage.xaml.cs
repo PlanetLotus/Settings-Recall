@@ -40,7 +40,6 @@ namespace SettingsRecall
                 this.fileSystem = fileSystem;
 
             supportedPrograms = new List<ProgramEntry>();
-            selectedPrograms = new List<ProgramEntry>();
 
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
             // Not using ItemsSource here because we don't want the list to be read-only
@@ -50,7 +49,6 @@ namespace SettingsRecall
         private void GetUserPrograms() {
             // Clear lists
             supportedPrograms.Clear();
-            selectedPrograms.Clear();
             backupPageLeftList.Items.Clear();
 
             // Get supported programs
@@ -153,8 +151,6 @@ namespace SettingsRecall
             ListBoxItem selected = (ListBoxItem) backupPageLeftList.SelectedItem;
             backupPageLeftList.Items.Remove(selected);
             backupPageRightList.Items.Add(selected);
-
-            selectedPrograms.Add(supportedPrograms.Where(p => p.Name == selected.Content.ToString()).Single());
         }
 
         private void removeFromBackupButton_Click(object sender, RoutedEventArgs e) {
@@ -162,8 +158,6 @@ namespace SettingsRecall
             ListBoxItem selected = (ListBoxItem) backupPageRightList.SelectedItem;
             backupPageRightList.Items.Remove(selected);
             backupPageLeftList.Items.Add(selected);
-
-            selectedPrograms.RemoveAll(p => p.Name == selected.Content.ToString());
         }
 
         private void showAllProgramsCheckbox_Click(object sender, RoutedEventArgs e) {
@@ -199,6 +193,12 @@ namespace SettingsRecall
 
             CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false, fileSystem);
             copyHandler.InitBackup();
+
+            IEnumerable<string> selectedProgramNames = backupPageRightList.Items
+                .Cast<ListBoxItem>()
+                .Select(lbi => lbi.Content.ToString());
+
+            IEnumerable<ProgramEntry> selectedPrograms = supportedPrograms.Where(p => selectedProgramNames.Contains(p.Name));
 
             // Loop through selectedPrograms, copying files to save location
             foreach (ProgramEntry program in selectedPrograms) {
