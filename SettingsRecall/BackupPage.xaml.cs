@@ -26,7 +26,6 @@ namespace SettingsRecall
         public List<ProgramEntry> unsupportedPrograms;
 
         private ListBox activeList;
-        readonly IFileSystem fileSystem;
 
         public BackupPage()
         {
