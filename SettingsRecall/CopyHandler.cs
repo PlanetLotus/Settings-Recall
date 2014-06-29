@@ -22,10 +22,13 @@ namespace SettingsRecall {
 
             this.isDryRun = isDryRun;
             this.backupDir = backupDir;
-            if (isDryRun)
-                log = new StreamWriter(backupDir + logFileName);
-            else
+
+            if (isDryRun) {
+                FileInfoBase fib = fs.FileInfo.FromFileName(backupDir + logFileName);
+                log = new StreamWriter(fib.Create());
+            } else {
                 log = new StreamWriter(Console.OpenStandardOutput());
+            }
         }
 
         public bool InitBackup() {
