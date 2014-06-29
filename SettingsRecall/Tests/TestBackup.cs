@@ -31,7 +31,7 @@ namespace SettingsRecall.Tests {
             int copyCalls = 0;
             Mock<CopyHandler> mockCopyHandler = new Mock<CopyHandler>(@"C:\Unittest\", "unitTestLog.txt", false, stubbedFileSystem1);
             mockCopyHandler
-                .Setup(foo => foo.Copy(It.IsAny<string>(), It.IsAny<string>(), false))
+                .Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), false))
                 .Callback(() => copyCalls++);
             CopyHandler copyHandler = mockCopyHandler.Object;
 
@@ -58,13 +58,6 @@ namespace SettingsRecall.Tests {
             // Assert
             Assert.AreEqual(selectedPrograms1.Count, createProgramFolderCalls);
         }
-
-        /*
-        [Test]
-        public void Test_BackupWithPathsThatDoNotExist() {
-
-        }
-        */
 
         IFileSystem stubbedFileSystem1;
         IFileSystem stubbedFileSystem2;

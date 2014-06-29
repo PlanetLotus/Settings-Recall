@@ -127,6 +127,7 @@
     <Compile Include="StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tests\CopyHandlerTests.cs" />
     <Compile Include="Tests\ProgramEntryTests.cs" />
     <Compile Include="Tests\TestBackup.cs" />
     <Page Include="AddNewProgramWindow.xaml">
