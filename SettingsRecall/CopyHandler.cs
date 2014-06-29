@@ -51,7 +51,7 @@ namespace SettingsRecall {
             return true;
         }
 
-        public bool Copy(string source, string relativeDest, bool overwrite = false) {
+        public virtual bool Copy(string source, string relativeDest, bool overwrite = false) {
             if (!fs.File.Exists(source)) {
                 log.WriteLine("Source does not exist at " + source);
                 return false;
