@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Rhino.Mocks;
 
 namespace SettingsRecall {
     using NUnit.Framework;
 
     [TestFixture]
     public class APITest {
+        /*
         [TestFixtureSetUp]
         public void Init() {
             paths = new List<string> { "testpath" };
@@ -131,5 +131,6 @@ namespace SettingsRecall {
         private List<string> paths;
         private string jsonPaths;
         private DataTable dt = new DataTable();
+        */
     }
 }

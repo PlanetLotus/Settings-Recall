@@ -46,7 +46,7 @@ namespace SettingsRecall {
             return true;
         }
 
-        public bool CreateProgramFolder(string programName) {
+        public virtual bool CreateProgramFolder(string programName) {
             fs.Directory.CreateDirectory(backupDir + programName);
             return true;
         }
