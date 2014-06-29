@@ -29,7 +29,6 @@ namespace SettingsRecall {
             }
 
             copyHandler.CloseBackup();
-            
         }
     }
 }

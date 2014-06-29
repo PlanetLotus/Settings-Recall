@@ -12,8 +12,6 @@ using Rhino.Mocks;
 namespace SettingsRecall.Tests {
     [TestFixture, RequiresSTA]
     class TestBackup {
-        BackupPage page;
-
         [TestFixtureSetUp]
         public void Init() {
             /*
@@ -39,26 +37,32 @@ namespace SettingsRecall.Tests {
             page.backupPageRightList.Items.Add("backupTestProgram1");
             page.backupPageRightList.Items.Add("backupTestProgram2");
             */
-            List<string> programPaths1 = new List<string>() { @"program1\a.txt", @"program1\b.txt" };
-            ProgramEntry program1 = new ProgramEntry("backupTestProgram1", false, programPaths1);
 
-            IFileSystem stubbedFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> {
-                { programPaths1[0], new MockFileData("") },
-                { programPaths1[1], new MockFileData("") }
-            });
 
-            Globals.load_save_location = "UNITTEST";
-            page = MockRepository.GenerateStub<BackupPage>(stubbedFileSystem);
-            page.supportedPrograms.Add(program1);
+            //page = MockRepository.GenerateStub<BackupPage>(stubbedFileSystem);
+            //page.supportedPrograms.Add(program1);
         }
 
         [Test]
         public void Test_Backup() {
-            page.createBackupButton_Click(null, null);
+            // Arrange
+            List<string> programPaths1 = new List<string>() { @"program1\a.txt", @"program1\b.txt" };
+            IFileSystem stubbedFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> {
+                { programPaths1[0], new MockFileData("") },
+                { programPaths1[1], new MockFileData("") }
+            });
+            CopyHandler copyHandler = new CopyHandler(@"C:\Unittest\", "unitTestLog.txt", false, stubbedFileSystem);
 
-            DirectoryInfo di = new DirectoryInfo(Globals.load_save_location);
-            Assert.AreEqual(2, di.GetDirectories().Length);
-            Assert.AreEqual(6, di.GetFiles("*.*", SearchOption.AllDirectories).Length);
+            ProgramEntry program1 = new ProgramEntry("backupTestProgram1", false, programPaths1);
+            List<ProgramEntry> selectedPrograms = new List<ProgramEntry> { program1 };
+
+            // Act
+            BackupService.CreateBackup(selectedPrograms, copyHandler);
+
+            // Assert
+            //DirectoryInfo di = new DirectoryInfo(Globals.load_save_location);
+            //Assert.AreEqual(2, di.GetDirectories().Length);
+            //Assert.AreEqual(6, di.GetFiles("*.*", SearchOption.AllDirectories).Length);
         }
     }
 }
