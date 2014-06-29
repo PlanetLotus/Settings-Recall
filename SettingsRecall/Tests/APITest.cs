@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Moq;
 
 namespace SettingsRecall {
     using NUnit.Framework;
 
     [TestFixture]
     public class APITest {
-        /*
         [TestFixtureSetUp]
         public void Init() {
             paths = new List<string> { "testpath" };
@@ -22,16 +22,16 @@ namespace SettingsRecall {
             dt.Columns.Add("Description");
             dt.Rows.Add("testprogram1", false, jsonPaths, "");
 
-            stubbedDb = MockRepository.GenerateStub<SQLiteDatabase>();
-            Globals.db = stubbedDb;
+            stubbedDb = new Mock<SQLiteDatabase>();
+            Globals.db = stubbedDb.Object;
         }
 
         [TestCase("a")]
         [TestCase("asdfasdfasdf")]
         public void Test_GetNonExistentProgramEntry(string name) {
             stubbedDb
-                .Stub(x => x.GetDataTable(string.Format(getProgramSelect, name)))
-                .Return(new DataTable());
+                .Setup(x => x.GetDataTable(string.Format(getProgramSelect, name)))
+                .Returns(new DataTable());
 
             Assert.IsNull(SQLiteAPI.GetProgram(name));
         }
@@ -40,8 +40,8 @@ namespace SettingsRecall {
         public void Test_GetProgramEntry(string name) {
 
             stubbedDb
-                .Stub(x => x.GetDataTable(string.Format(getProgramSelect, name)))
-                .Return(dt);
+                .Setup(x => x.GetDataTable(string.Format(getProgramSelect, name)))
+                .Returns(dt);
 
             Assert.IsNotNull(SQLiteAPI.GetProgram(name));
         }
@@ -50,8 +50,8 @@ namespace SettingsRecall {
         public void Test_GetProgramList() {
             string getProgramListSelect = "SELECT Name,IsPermanent,Paths,Description FROM Program ORDER BY Name;";
             stubbedDb
-                .Stub(x => x.GetDataTable(getProgramListSelect))
-                .Return(dt);
+                .Setup(x => x.GetDataTable(getProgramListSelect))
+                .Returns(dt);
 
             List<ProgramEntry> entryList = SQLiteAPI.GetProgramList(); 
 
@@ -63,8 +63,8 @@ namespace SettingsRecall {
         public void Test_GetProgramNameList() {
             string getProgramNameListSelect = "SELECT Name FROM Program ORDER BY Name;";
             stubbedDb
-                .Stub(x => x.GetDataTable(getProgramNameListSelect))
-                .Return(dt);
+                .Setup(x => x.GetDataTable(getProgramNameListSelect))
+                .Returns(dt);
 
             List<string> names = SQLiteAPI.GetProgramNameList();
 
@@ -91,8 +91,8 @@ namespace SettingsRecall {
             insert.Add("Description", programEntry.Description);
 
             stubbedDb
-                .Stub(x => x.Insert("Program", insert))
-                .Return(true);
+                .Setup(x => x.Insert("Program", insert))
+                .Returns(true);
 
             Assert.IsTrue(SQLiteAPI.AddProgram(programEntry));
         }
@@ -109,8 +109,8 @@ namespace SettingsRecall {
             update.Add("Description", programEntry.Description);
 
             stubbedDb
-                .Stub(x => x.Update("Program", update, string.Format("Name = {0}", programEntry.Name)))
-                .Return(true);
+                .Setup(x => x.Update("Program", update, string.Format("Name = {0}", programEntry.Name)))
+                .Returns(true);
 
             Assert.IsTrue(SQLiteAPI.EditProgram(programEntry));
         }
@@ -119,18 +119,17 @@ namespace SettingsRecall {
         public void Test_DeleteProgram() {
             string programName = "testprogram1";
             stubbedDb
-                .Stub(x => x.Delete("Program", string.Format("Name = {0}", programName)))
-                .Return(true);
+                .Setup(x => x.Delete("Program", string.Format("Name = {0}", programName)))
+                .Returns(true);
 
             Assert.IsTrue(SQLiteAPI.DeleteProgram(programName));
         }
 
-        private SQLiteDatabase stubbedDb;
+        private Mock<SQLiteDatabase> stubbedDb;
         private const string getProgramSelect = "SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';";
 
         private List<string> paths;
         private string jsonPaths;
         private DataTable dt = new DataTable();
-        */
     }
 }
