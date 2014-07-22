@@ -65,7 +65,7 @@ namespace SettingsRecall {
                 int fileIncrementer = 1;
 
                 while (fs.File.Exists(dest)) {
-                    dest = dest.Substring(0, dest.Length-1) + fileIncrementer;
+                    dest = dest.Substring(0, dest.Length - 1) + fileIncrementer;
                     fileIncrementer++;
                 }
             }

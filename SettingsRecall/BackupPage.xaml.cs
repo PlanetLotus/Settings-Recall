@@ -5,15 +5,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace SettingsRecall
-{
+namespace SettingsRecall {
     /// <summary>
     /// Interaction logic for BackupPage.xaml
     /// </summary>
-    public partial class BackupPage : UserControl
-    {
-        public BackupPage()
-        {
+    public partial class BackupPage : UserControl {
+        public BackupPage() {
             InitializeComponent();
 
             supportedPrograms = new List<ProgramEntry>();
@@ -50,9 +47,8 @@ namespace SettingsRecall
 
             unsupportedPrograms = programEntries.Where(entry => !supportedPrograms.Contains(entry)).ToList();
         }
-        
-        private void addProgramButton_Click(object sender, RoutedEventArgs e)
-        {
+
+        private void addProgramButton_Click(object sender, RoutedEventArgs e) {
             // instantiate dialog box
             AddNewProgramWindow ANPWindow = new AddNewProgramWindow { Owner = App.mainWindow };
             ANPWindow.ShowDialog();
@@ -75,11 +71,10 @@ namespace SettingsRecall
         }
 
         private void listSelectionChanged(object sender, SelectionChangedEventArgs e) {
-            activeList = (ListBox) sender;
+            activeList = (ListBox)sender;
         }
 
-        private void editProgramButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void editProgramButton_Click(object sender, RoutedEventArgs e) {
             string programName = "";
 
             if (activeList == backupPageLeftList && backupPageLeftList.SelectedValue != null)
@@ -100,8 +95,7 @@ namespace SettingsRecall
                 GetUserPrograms();
         }
 
-        private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void chooseFolderButton_Click(object sender, RoutedEventArgs e) {
             System.Windows.Forms.DialogResult result; // return value of dialog box
 
             // open a dialog
@@ -119,14 +113,14 @@ namespace SettingsRecall
 
         private void addToBackupButton_Click(object sender, RoutedEventArgs e) {
             // Remove from left list, add to right list
-            ListBoxItem selected = (ListBoxItem) backupPageLeftList.SelectedItem;
+            ListBoxItem selected = (ListBoxItem)backupPageLeftList.SelectedItem;
             backupPageLeftList.Items.Remove(selected);
             backupPageRightList.Items.Add(selected);
         }
 
         private void removeFromBackupButton_Click(object sender, RoutedEventArgs e) {
             // Remove from right list, add to left list
-            ListBoxItem selected = (ListBoxItem) backupPageRightList.SelectedItem;
+            ListBoxItem selected = (ListBoxItem)backupPageRightList.SelectedItem;
             backupPageRightList.Items.Remove(selected);
             backupPageLeftList.Items.Add(selected);
         }
@@ -141,8 +135,8 @@ namespace SettingsRecall
                 }
             } else {
                 // There's probably a better way to remove from a collection...
-                for (int i = backupPageLeftList.Items.Count-1; i >= 0; i--) {
-                    ListBoxItem item = (ListBoxItem) backupPageLeftList.Items[i];
+                for (int i = backupPageLeftList.Items.Count - 1; i >= 0; i--) {
+                    ListBoxItem item = (ListBoxItem)backupPageLeftList.Items[i];
                     if (unsupportedPrograms.Any(p => p.Name == item.Content.ToString()))
                         backupPageLeftList.Items.RemoveAt(i);
                 }
@@ -163,7 +157,7 @@ namespace SettingsRecall
             }
 
             // Make sure save directory has a trailing slash (so we can append to it)
-            if (!backupDir[backupDir.Length-1].Equals('\\'))
+            if (!backupDir[backupDir.Length - 1].Equals('\\'))
                 backupDir = backupDir + "\\";
 
             CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false);

@@ -53,7 +53,7 @@ namespace SettingsRecall {
                 .Setup(x => x.GetDataTable(getProgramListSelect))
                 .Returns(dt);
 
-            List<ProgramEntry> entryList = SQLiteAPI.GetProgramList(); 
+            List<ProgramEntry> entryList = SQLiteAPI.GetProgramList();
 
             Assert.IsNotNull(entryList, "Test failed: GetProgramEntryList with no parameters returned null");
             Assert.GreaterOrEqual(entryList.Count, 1, "Test failed: GetProgramEntryList returned less than 1 entry.");

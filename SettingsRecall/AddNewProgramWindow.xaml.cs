@@ -13,17 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace SettingsRecall
-{
-    /// <summary>
-    /// Interaction logic for AddNewProgramWindow.xaml
-    /// </summary>
-    public partial class AddNewProgramWindow : Window
-    {
+namespace SettingsRecall {
+    public partial class AddNewProgramWindow : Window {
         private string programName { get; set; } // name entered
 
-        public AddNewProgramWindow()
-        {
+        public AddNewProgramWindow() {
             InitializeComponent();
 
             // Give window focus to the first control in tab order
@@ -31,19 +25,13 @@ namespace SettingsRecall
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-        /// <summary>
-        /// Get the name entered into the form
-        /// </summary>
-        /// <returns></returns>
         public string GetProgramName() {
             return programName;
         }
 
-        private void OKButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void OKButton_Click(object sender, RoutedEventArgs e) {
             // Make sure a name was entered
-            if (string.IsNullOrEmpty(nameText.Text))
-            {
+            if (string.IsNullOrEmpty(nameText.Text)) {
                 ErrorMessageBox nullErrorBox = new ErrorMessageBox("Please enter a name!");
                 nullErrorBox.show();
                 return;
@@ -52,31 +40,24 @@ namespace SettingsRecall
             // Make sure program name isn't already in the DB
             List<string> programList = new List<string>();
             programList = SQLiteAPI.GetProgramNameList();
-            
-            if (programList != null && programList.Contains(nameText.Text))
-            {
+
+            if (programList != null && programList.Contains(nameText.Text)) {
                 ErrorMessageBox errorBox = new ErrorMessageBox("This program already exists");
                 errorBox.show();
                 return;
             }
 
-            // Everything is OK
             programName = nameText.Text;
             DialogResult = true;
         }
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            // cancelled
+        private void cancelButton_Click(object sender, RoutedEventArgs e) {
             DialogResult = false;
         }
 
-        private void nameText_KeyUp(object sender, KeyEventArgs e)
-        {
+        private void nameText_KeyUp(object sender, KeyEventArgs e) {
             if (e.Key == Key.Enter)
-            {
                 OKButton_Click(OKButton, null);
-            }
         }
 
     }

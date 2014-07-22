@@ -10,8 +10,7 @@ namespace SettingsRecall {
         public static string GetOSFriendlyName() {
             string result = string.Empty;
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem");
-            foreach (ManagementObject os in searcher.Get())
-            {
+            foreach (ManagementObject os in searcher.Get()) {
                 result = os["Caption"].ToString();
                 break;
             }
@@ -44,8 +43,7 @@ namespace SettingsRecall {
         /// </summary>
         /// <param name="path">A full path</param>
         /// <returns>Filename</returns>
-        public static string TrimFilename(string path)
-        {
+        public static string TrimFilename(string path) {
             return path.Trim().Split('\\').Last();
         }
 

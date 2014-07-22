@@ -15,21 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 
-namespace SettingsRecall
-{
-    /// <summary>
-    /// Interaction logic for EditProgramWindow.xaml
-    /// </summary>
-    public partial class EditProgramWindow : Window
-    {
-
+namespace SettingsRecall {
+    public partial class EditProgramWindow : Window {
         // Window global variables
         private ProgramEntry currentEntry;
         private bool newEntry = false;
         private ObservableCollection<string> fileCollection;
-        
-        public EditProgramWindow(string name)
-        {
+
+        public EditProgramWindow(string name) {
             InitializeComponent();
 
             // Give window focus to the first control in tab order
@@ -38,8 +31,7 @@ namespace SettingsRecall
 
             // Get the data for the current programEntry object
             currentEntry = SQLiteAPI.GetProgram(name);
-            if (currentEntry == null)
-            {
+            if (currentEntry == null) {
                 currentEntry = new ProgramEntry(name, false, new List<string>());
                 newEntry = true;
             }
@@ -48,13 +40,10 @@ namespace SettingsRecall
             descriptionText.Text = currentEntry.Description;
 
             // populate the list of files
-            if (currentEntry.Paths.Count > 0)
-            {
+            if (currentEntry.Paths.Count > 0) {
                 fileCollection = new ObservableCollection<string>(currentEntry.Paths);
                 deleteFilesButton.IsEnabled = true;
-            }
-            else
-            {
+            } else {
                 fileCollection = new ObservableCollection<string>();
                 deleteFilesButton.IsEnabled = false;
             }
@@ -62,8 +51,7 @@ namespace SettingsRecall
             fileListBox.ItemsSource = fileCollection;
         }
 
-        private void addFilesButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void addFilesButton_Click(object sender, RoutedEventArgs e) {
             // Open a file browser dialog
             OpenFileDialog openDlg = new OpenFileDialog();
             openDlg.Multiselect = true;
@@ -80,8 +68,7 @@ namespace SettingsRecall
             deleteFilesButton.IsEnabled = true;
         }
 
-        private void deleteFilesButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void deleteFilesButton_Click(object sender, RoutedEventArgs e) {
             List<string> selectedFiles = fileListBox.SelectedItems.Cast<string>().ToList();
             foreach (string item in selectedFiles)
                 fileCollection.Remove(item);
@@ -90,8 +77,7 @@ namespace SettingsRecall
                 deleteFilesButton.IsEnabled = false;
         }
 
-        private void saveButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void saveButton_Click(object sender, RoutedEventArgs e) {
             currentEntry.Name = programNameText.Text;
             currentEntry.Description = descriptionText.Text;
             currentEntry.Paths = fileCollection.ToList();

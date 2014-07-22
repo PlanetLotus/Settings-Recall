@@ -21,7 +21,7 @@ namespace SettingsRecall {
         public void Test_BadPaths() {
             List<string> paths1 = new List<string>() { null, "path2" };
             List<string> paths2 = new List<string>() { "path1", "" };
-            List<string> paths3 = new List<string>() { "path1", "   "};
+            List<string> paths3 = new List<string>() { "path1", "   " };
 
             // Verify failure
             Assert.Throws(typeof(ArgumentException), () => new ProgramEntry("badtestprogram", false, paths1, "Really useful test description"));

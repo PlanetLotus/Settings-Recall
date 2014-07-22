@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 using System.Data;
 using Newtonsoft.Json;
 
-namespace SettingsRecall
-{
-    public class ProgramEntry
-    {
+namespace SettingsRecall {
+    public class ProgramEntry {
         public ProgramEntry() {
             Name = "";
             IsPermanent = false;
@@ -17,7 +15,7 @@ namespace SettingsRecall
             Paths = new List<string>();
         }
 
-        public ProgramEntry(string name, bool isPermanent, List<string> paths, string description="") {
+        public ProgramEntry(string name, bool isPermanent, List<string> paths, string description = "") {
             Name = validateName(name);
             IsPermanent = isPermanent;
             Paths = validatePaths(paths);
@@ -41,12 +39,11 @@ namespace SettingsRecall
             string paths = "";
             StringBuilder pathBuilder = new StringBuilder();
 
-            foreach (string path in Paths)
-            {
+            foreach (string path in Paths) {
                 pathBuilder.Append(path + ", ");
             }
             // Cut off extra comma
-            if (pathBuilder.Length > 1) paths = pathBuilder.ToString().Substring(0, pathBuilder.Length-2);
+            if (pathBuilder.Length > 1) paths = pathBuilder.ToString().Substring(0, pathBuilder.Length - 2);
 
             str = string.Format("*****\r\nName: {0}\r\nIsPermanent: {1}\r\nPaths: {2}\r\nDescription: {3}\r\n*****",
                 Name,

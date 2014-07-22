@@ -12,29 +12,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace SettingsRecall
-{
-    /// <summary>
-    /// Interaction logic for StartupWindow.xaml
-    /// </summary>
-    public partial class StartupWindow : Window
-    {
-        public string main_page;
+namespace SettingsRecall {
+    public partial class StartupWindow : Window {
+        public string mainPage;
 
-        public StartupWindow()
-        {
+        public StartupWindow() {
             InitializeComponent();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            main_page = "backup";
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            mainPage = "backup";
             this.Close();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            main_page = "restore";
+        private void Button_Click_2(object sender, RoutedEventArgs e) {
+            mainPage = "restore";
             this.Close();
         }
 

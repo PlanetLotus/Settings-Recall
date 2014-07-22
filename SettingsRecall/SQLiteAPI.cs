@@ -46,8 +46,7 @@ namespace SettingsRecall {
             return true;
         }
 
-        public static bool EditProgram(ProgramEntry entry) 
-        {
+        public static bool EditProgram(ProgramEntry entry) {
             // TODO: Use a changeset class so that the properties can be nullable
             // That will make this a lot less confusing
 
@@ -119,10 +118,9 @@ namespace SettingsRecall {
                 Console.WriteLine("No rows returned for GetProgramList.");
                 return entryList;
             }
-            
+
             // create a ProgramEntry object for each row in the DataTable
-            foreach (DataRow row in dt.Rows)
-            {
+            foreach (DataRow row in dt.Rows) {
                 ProgramEntry entry = new ProgramEntry(row);
                 entryList.Add(entry); // add to list
             }
@@ -151,21 +149,17 @@ namespace SettingsRecall {
             // Convert datatable to list
             foreach (DataRow row in dt.Rows)
                 names.Add(row["Name"].ToString());
-            
+
             return names;
         }
 
-        public static ProgramEntry GetProgram(string name)
-        {
+        public static ProgramEntry GetProgram(string name) {
             string query = string.Format("SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';", name);
             DataTable dt;
 
-            try
-            {
+            try {
                 dt = Globals.db.GetDataTable(query);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return null;
             }

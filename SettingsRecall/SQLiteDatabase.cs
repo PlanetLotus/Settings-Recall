@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 
-namespace SettingsRecall
-{
+namespace SettingsRecall {
     // This class was borrowed from:
     // http://www.dreamincode.net/forums/topic/157830-using-sqlite-with-c%23/
     public class SQLiteDatabase {

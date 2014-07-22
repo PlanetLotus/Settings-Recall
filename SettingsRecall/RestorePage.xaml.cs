@@ -15,20 +15,14 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Collections.ObjectModel;
 
-namespace SettingsRecall
-{
-    /// <summary>
-    /// Interaction logic for RestorePage.xaml
-    /// </summary>
-    public partial class RestorePage : UserControl
-    {
+namespace SettingsRecall {
+    public partial class RestorePage : UserControl {
         private ObservableCollection<string> restorablePrograms;
         private ObservableCollection<string> addedPrograms;
         private IEnumerable<ProgramEntry> allDbPrograms;
         private IEnumerable<string> allDbProgramNames;
 
-        public RestorePage()
-        {
+        public RestorePage() {
             InitializeComponent();
             Globals.load_save_location = null;
             restorablePrograms = new ObservableCollection<string>();
@@ -40,8 +34,7 @@ namespace SettingsRecall
         }
 
         // click 'choose folder' button
-        private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void chooseFolderButton_Click(object sender, RoutedEventArgs e) {
             System.Windows.Forms.DialogResult result; // return value of dialog box
 
             // open a dialog
@@ -85,15 +78,13 @@ namespace SettingsRecall
             restorablePrograms.Clear();
             string[] dirs = Directory.GetDirectories(restoreDir);
 
-            foreach (string progName in dirs)
-            {
+            foreach (string progName in dirs) {
                 if (allDbProgramNames.Contains(Helpers.TrimFilename(progName)))
                     restorablePrograms.Add(progName.Split('\\').Last());
             }
         }
 
-        private void addButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void addButton_Click(object sender, RoutedEventArgs e) {
             // Make sure something is selected
             if (restorePageLeftList.SelectedIndex == -1)
                 return;
@@ -104,14 +95,12 @@ namespace SettingsRecall
             restorablePrograms.Remove(selected);
 
             // Enable the 'Restore' button if necessary
-            if (addedPrograms.Count > 0 && Globals.load_save_location != null)
-            {
+            if (addedPrograms.Count > 0 && Globals.load_save_location != null) {
                 restoreButton.IsEnabled = true;
             }
         }
 
-        private void removeButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void removeButton_Click(object sender, RoutedEventArgs e) {
             // Make sure something is selected
             if (restorePageRightList.SelectedIndex == -1)
                 return;
@@ -122,8 +111,7 @@ namespace SettingsRecall
             addedPrograms.Remove(selected);
 
             // Disable the 'Restore button if necessary
-            if (addedPrograms.Count == 0 || Globals.load_save_location == null)
-            {
+            if (addedPrograms.Count == 0 || Globals.load_save_location == null) {
                 restoreButton.IsEnabled = false;
             }
         }
