@@ -132,9 +132,9 @@ namespace SettingsRecall {
 
         public static List<string> GetProgramNameList() {
             List<string> names = new List<string>();
-
             string query = "SELECT Name FROM Program ORDER BY Name;";
             DataTable dt;
+
             try {
                 dt = Globals.db.GetDataTable(query);
             } catch (Exception e) {
@@ -143,7 +143,7 @@ namespace SettingsRecall {
             }
 
             // Make sure rows were returned
-            if (dt.Rows.Count < 1) {
+            if (dt.Rows.Count == 0) {
                 Console.WriteLine("No rows returned for GetProgramNameList.");
                 return names;
             }
@@ -157,9 +157,9 @@ namespace SettingsRecall {
 
         public static ProgramEntry GetProgram(string name)
         {
-            // query the database for row containing program_ID
             string query = string.Format("SELECT Name,IsPermanent,Paths,Description FROM Program WHERE Name = '{0}';", name);
             DataTable dt;
+
             try
             {
                 dt = Globals.db.GetDataTable(query);
@@ -170,14 +170,11 @@ namespace SettingsRecall {
                 return null;
             }
 
-            // Make sure rows were returned
             if (dt.Rows.Count < 1) {
                 Console.WriteLine("No rows returned for Name == {0}", name);
                 return null;
             }
 
-            // create a ProgramEntry object from the DataTable
-            // TODO: Return FirstOrDefault? SingleOrDefault?
             return new ProgramEntry(dt.Rows[0]);
         }
 
@@ -186,15 +183,12 @@ namespace SettingsRecall {
         }
 
         private static string ValidateProgramEntry(ProgramEntry entry) {
-            // Validate entry object: Not null
             if (entry == null)
                 return "Entry cannot be null.";
 
-            // Validate paths: Must be at least length 1
             if (entry.Paths.Count == 0)
                 return "Entry paths must contain at least one path.";
 
-            // No errors
             return "";
         }
     }
