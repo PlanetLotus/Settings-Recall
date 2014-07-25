@@ -1,24 +1,13 @@
-﻿using System;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SettingsRecall {
     public partial class AddNewProgramWindow : Window {
-        private string programName { get; set; } // name entered
-
         public AddNewProgramWindow() {
             InitializeComponent();
+
+            errorMessage = new ErrorMessage(this);
 
             // Give window focus to the first control in tab order
             Loaded += (sender, e) =>
@@ -30,20 +19,20 @@ namespace SettingsRecall {
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e) {
+            // Clear any previous errors
+            errorMessage.ClearAllErrors();
+
             // Make sure a name was entered
             if (string.IsNullOrEmpty(nameText.Text)) {
-                ErrorMessageBox nullErrorBox = new ErrorMessageBox("Please enter a name!");
-                nullErrorBox.show();
+                errorMessage.AddErrorLabel("Please enter a name.");
                 return;
             }
 
             // Make sure program name isn't already in the DB
-            List<string> programList = new List<string>();
-            programList = SQLiteAPI.GetProgramNameList();
+            List<string> programList = SQLiteAPI.GetProgramNameList();
 
-            if (programList != null && programList.Contains(nameText.Text)) {
-                ErrorMessageBox errorBox = new ErrorMessageBox("This program already exists");
-                errorBox.show();
+            if (programList.Contains(nameText.Text)) {
+                errorMessage.AddErrorLabel("This program already exists.");
                 return;
             }
 
@@ -60,5 +49,7 @@ namespace SettingsRecall {
                 OKButton_Click(OKButton, null);
         }
 
+        private ErrorMessage errorMessage;
+        private string programName { get; set; }
     }
 }
