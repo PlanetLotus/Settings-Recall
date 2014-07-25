@@ -49,6 +49,10 @@ namespace SettingsRecall {
             ShowInWindow();
         }
 
+        public void ClearAllErrors() {
+            stackPanel.Children.Clear();
+        }
+
         private static BrushConverter converter = new BrushConverter();
         private Brush textBrush = (Brush)converter.ConvertFromString("#a94442");
         private StackPanel stackPanel;
