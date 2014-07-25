@@ -125,9 +125,6 @@
     <Compile Include="RestorePage.xaml.cs">
       <DependentUpon>RestorePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StartupWindow.xaml.cs">
-      <DependentUpon>StartupWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Tests\CopyHandlerTests.cs" />
     <Compile Include="Tests\ProgramEntryTests.cs" />
     <Compile Include="Tests\TestBackup.cs" />
@@ -159,10 +156,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="RestorePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="StartupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
