@@ -1,29 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
-using System.Collections.ObjectModel;
 
 namespace SettingsRecall {
-    public partial class RestorePage : UserControl {
-        private ObservableCollection<string> restorablePrograms;
-        private ObservableCollection<string> addedPrograms;
-        private IEnumerable<ProgramEntry> allDbPrograms;
-        private IEnumerable<string> allDbProgramNames;
-
+    public partial class RestorePage : StackPanel {
         public RestorePage() {
             InitializeComponent();
+            errorMessage = new ErrorMessage(this);
             Globals.load_save_location = null;
             restorablePrograms = new ObservableCollection<string>();
             addedPrograms = new ObservableCollection<string>();
@@ -57,13 +44,13 @@ namespace SettingsRecall {
             // Find database file
             string[] dbFileMatches = Directory.GetFiles(restoreDir, "*.db");
 
+            errorMessage.ClearAllErrors();
+
             if (dbFileMatches.Length == 0) {
-                ErrorMessageBox err = new ErrorMessageBox("Restore info not found.");
-                err.show();
+                errorMessage.AddErrorLabel("Restore info not found.");
                 return;
             } else if (dbFileMatches.Length > 1) {
-                ErrorMessageBox err = new ErrorMessageBox("Multiple possible databases found.");
-                err.show();
+                errorMessage.AddErrorLabel("Multiple possible databases found.");
                 return;
             }
 
@@ -145,5 +132,11 @@ namespace SettingsRecall {
                 }
             }
         }
+
+        private ObservableCollection<string> restorablePrograms;
+        private ObservableCollection<string> addedPrograms;
+        private IEnumerable<ProgramEntry> allDbPrograms;
+        private IEnumerable<string> allDbProgramNames;
+        private ErrorMessage errorMessage;
     }
 }
