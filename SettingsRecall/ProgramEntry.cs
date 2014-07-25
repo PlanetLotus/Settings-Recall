@@ -9,17 +9,17 @@ using Newtonsoft.Json;
 namespace SettingsRecall {
     public class ProgramEntry {
         public ProgramEntry() {
-            Name = "";
-            IsPermanent = false;
-            Description = "";
-            Paths = new List<string>();
+            name = "";
+            isPermanent = false;
+            description = "";
+            paths = new List<string>();
         }
 
         public ProgramEntry(string name, bool isPermanent, List<string> paths, string description = "") {
-            Name = validateName(name);
-            IsPermanent = isPermanent;
-            Paths = validatePaths(paths);
-            Description = validateDescription(description);
+            Name = name;
+            this.isPermanent = isPermanent;
+            Paths = paths;
+            Description = description;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace SettingsRecall {
         public ProgramEntry(DataRow row) {
             // Assign each ProgramEntry field
             Name = row["Name"].ToString();
-            IsPermanent = row["IsPermanent"].ToString() == "1" ? true : false;
+            isPermanent = row["IsPermanent"].ToString() == "1" ? true : false;
             Paths = JsonConvert.DeserializeObject<List<string>>(row["Paths"].ToString());
             Description = row["Description"].ToString();
         }
@@ -86,10 +86,9 @@ namespace SettingsRecall {
             return description.Trim();
         }
 
-        private string name;
-        private List<string> paths;
-        private string description;
-        public bool IsPermanent { get; set; }
+        public bool IsPermanent {
+            get { return isPermanent; }
+        }
 
         public string Name {
             get { return name; }
@@ -105,5 +104,10 @@ namespace SettingsRecall {
             get { return description; }
             set { description = validateDescription(value); }
         }
+
+        private string name;
+        private List<string> paths;
+        private string description;
+        private bool isPermanent;
     }
 }
