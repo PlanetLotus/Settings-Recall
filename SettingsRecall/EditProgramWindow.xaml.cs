@@ -1,27 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Microsoft.Win32;
 
 namespace SettingsRecall {
     public partial class EditProgramWindow : Window {
-        // Window global variables
-        private ProgramEntry currentEntry;
-        private bool newEntry = false;
-        private ObservableCollection<string> fileCollection;
-
         public EditProgramWindow(string name) {
             InitializeComponent();
 
@@ -30,25 +17,23 @@ namespace SettingsRecall {
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
             // Get the data for the current programEntry object
-            currentEntry = SQLiteAPI.GetProgram(name);
-            if (currentEntry == null) {
-                currentEntry = new ProgramEntry(name, false, new List<string>());
+            if (name != null)
+                currentEntry = SQLiteAPI.GetProgram(name);
+
+            if (name == null || currentEntry == null) {
+                currentEntry = new ProgramEntry();
                 newEntry = true;
-            }
-
-            programNameText.Text = name;
-            descriptionText.Text = currentEntry.Description;
-
-            // populate the list of files
-            if (currentEntry.Paths.Count > 0) {
-                fileCollection = new ObservableCollection<string>(currentEntry.Paths);
-                deleteFilesButton.IsEnabled = true;
+                programNameText.IsEnabled = true;
             } else {
-                fileCollection = new ObservableCollection<string>();
-                deleteFilesButton.IsEnabled = false;
-            }
+                programNameText.Text = name;
+                descriptionText.Text = currentEntry.Description;
+                fileCollection = new ObservableCollection<string>(currentEntry.Paths);
 
-            fileListBox.ItemsSource = fileCollection;
+                if (currentEntry.Paths.Count != 0)
+                    deleteFilesButton.IsEnabled = true;
+
+                fileListBox.ItemsSource = fileCollection;
+            }
         }
 
         private void addFilesButton_Click(object sender, RoutedEventArgs e) {
@@ -56,9 +41,7 @@ namespace SettingsRecall {
             OpenFileDialog openDlg = new OpenFileDialog();
             openDlg.Multiselect = true;
 
-            Nullable<bool> result = openDlg.ShowDialog();
-
-            if (result == false)
+            if (openDlg.ShowDialog() == false)
                 return;
 
             // Add paths to list
@@ -73,7 +56,7 @@ namespace SettingsRecall {
             foreach (string item in selectedFiles)
                 fileCollection.Remove(item);
 
-            if (fileCollection.Count < 1)
+            if (fileCollection.Count == 0)
                 deleteFilesButton.IsEnabled = false;
         }
 
@@ -84,11 +67,10 @@ namespace SettingsRecall {
 
             // edit (or add) the entry in the database
             if (newEntry)
-                SQLiteAPI.AddProgram(currentEntry);
+                DialogResult = SQLiteAPI.AddProgram(currentEntry);
             else
-                SQLiteAPI.EditProgram(currentEntry);
+                DialogResult = SQLiteAPI.EditProgram(currentEntry);
 
-            DialogResult = true;
             Close();
         }
 
@@ -101,10 +83,13 @@ namespace SettingsRecall {
                 MessageBoxImage.Warning);
 
             if (messageBoxResult == MessageBoxResult.Yes) {
-                SQLiteAPI.DeleteProgram(currentEntry.Name);
-                DialogResult = true;
+                DialogResult = SQLiteAPI.DeleteProgram(currentEntry.Name);
                 Close();
             }
         }
+
+        private ProgramEntry currentEntry;
+        private bool newEntry = false;
+        private ObservableCollection<string> fileCollection;
     }
 }

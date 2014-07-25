@@ -106,9 +106,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddNewProgramWindow.xaml.cs">
-      <DependentUpon>AddNewProgramWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BackupService.cs" />
     <Compile Include="CopyHandler.cs" />
     <Compile Include="ErrorMessage.cs" />
@@ -127,10 +124,6 @@
     <Compile Include="Tests\CopyHandlerTests.cs" />
     <Compile Include="Tests\ProgramEntryTests.cs" />
     <Compile Include="Tests\TestBackup.cs" />
-    <Page Include="AddNewProgramWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BackupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
