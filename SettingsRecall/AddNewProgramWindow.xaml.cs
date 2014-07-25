@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace SettingsRecall {
@@ -7,7 +8,7 @@ namespace SettingsRecall {
         public AddNewProgramWindow() {
             InitializeComponent();
 
-            errorMessage = new ErrorMessage(this);
+            errorMessage = new ErrorMessage((Panel)this.Content);
 
             // Give window focus to the first control in tab order
             Loaded += (sender, e) =>

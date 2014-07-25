@@ -4,8 +4,8 @@ using System.Windows.Media;
 
 namespace SettingsRecall {
     class ErrorMessage : Border {
-        public ErrorMessage(Window parentWindow) {
-            window = parentWindow;
+        public ErrorMessage(Panel panel) {
+            windowContent = panel;
 
             CornerRadius = new CornerRadius(4);
             Margin = new Thickness(0, 5, 0, 0);
@@ -15,8 +15,8 @@ namespace SettingsRecall {
             Child = stackPanel;
         }
 
-        public ErrorMessage(string bodyText, Window parentWindow) {
-            window = parentWindow;
+        public ErrorMessage(string bodyText, Panel panel) {
+            windowContent = panel;
 
             CornerRadius = new CornerRadius(4);
             BorderBrush = (Brush)converter.ConvertFromString("#ebccd1");
@@ -29,12 +29,12 @@ namespace SettingsRecall {
         }
 
         public void ShowInWindow() {
-            if (!((Panel)window.Content).Children.Contains(this))
-                ((Panel)window.Content).Children.Add(this);
+            if (!windowContent.Children.Contains(this))
+                windowContent.Children.Add(this);
         }
 
         public void RemoveFromWindow() {
-            ((Panel)window.Content).Children.Remove(this);
+            windowContent.Children.Remove(this);
         }
 
         public void AddErrorLabel(string errorText) {
@@ -56,6 +56,6 @@ namespace SettingsRecall {
         private static BrushConverter converter = new BrushConverter();
         private Brush textBrush = (Brush)converter.ConvertFromString("#a94442");
         private StackPanel stackPanel;
-        private Window window;
+        private Panel windowContent;
     }
 }
