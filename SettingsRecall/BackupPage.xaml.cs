@@ -14,6 +14,7 @@ namespace SettingsRecall {
             InitializeComponent();
 
             supportedPrograms = new List<ProgramEntry>();
+            saveDir = null;
 
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
             // Not using ItemsSource here because we don't want the list to be read-only
@@ -93,12 +94,10 @@ namespace SettingsRecall {
             open_dialog.ShowNewFolderButton = true;
             result = open_dialog.ShowDialog();
 
-            // set global variable
-            if (result == System.Windows.Forms.DialogResult.OK)
-                Globals.load_save_location = open_dialog.SelectedPath;
-
-            // display directory in label
-            folder_label.Content = Globals.load_save_location;
+            if (result == System.Windows.Forms.DialogResult.OK) {
+                saveDir = open_dialog.SelectedPath.Trim();
+                folder_label.Content = saveDir;
+            }
         }
 
         private void addToBackupButton_Click(object sender, RoutedEventArgs e) {
@@ -140,17 +139,16 @@ namespace SettingsRecall {
             }
 
             // Make sure save directory has been selected
-            string backupDir = Globals.load_save_location;
-            if (backupDir == null || backupDir.Trim() == "") {
+            if (saveDir == null || saveDir == "") {
                 Console.WriteLine("Must set save location before creating backup.");
                 return;
             }
 
             // Make sure save directory has a trailing slash (so we can append to it)
-            if (!backupDir[backupDir.Length - 1].Equals('\\'))
-                backupDir = backupDir + "\\";
+            if (!saveDir[saveDir.Length - 1].Equals('\\'))
+                saveDir = saveDir + "\\";
 
-            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false);
+            CopyHandler copyHandler = new CopyHandler(saveDir, "backup_log.txt", false);
 
             IEnumerable<string> selectedProgramNames = backupPageRightList.Items
                 .Cast<ListBoxItem>()
@@ -164,5 +162,6 @@ namespace SettingsRecall {
         private List<ProgramEntry> supportedPrograms;
         private List<ProgramEntry> unsupportedPrograms;
         private ListBox activeList;
+        private string saveDir;
     }
 }
