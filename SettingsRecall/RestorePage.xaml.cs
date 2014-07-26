@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SettingsRecall.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -53,7 +54,7 @@ namespace SettingsRecall {
             }
 
             allDbPrograms = SQLiteAPI.GetProgramList();
-            allDbProgramNames = allDbPrograms.Select(p => p.Name).ToList();
+            HashSet<string> allDbProgramNames = allDbPrograms.Select(p => p.Name).ToHashSet();
 
             // Display directory in label
             folderLabel.Content = restoreDir;
@@ -133,7 +134,6 @@ namespace SettingsRecall {
         private ObservableCollection<string> restorablePrograms;
         private ObservableCollection<string> addedPrograms;
         private IEnumerable<ProgramEntry> allDbPrograms;
-        private IEnumerable<string> allDbProgramNames;
         private ErrorMessage errorMessage;
         private string restoreDir;
     }
