@@ -11,7 +11,7 @@ namespace SettingsRecall {
         public RestorePage() {
             InitializeComponent();
             errorMessage = new ErrorMessage(this);
-            Globals.load_save_location = null;
+            restoreDir = null;
             restorablePrograms = new ObservableCollection<string>();
             addedPrograms = new ObservableCollection<string>();
 
@@ -31,15 +31,13 @@ namespace SettingsRecall {
 
             // set global variable
             if (result == System.Windows.Forms.DialogResult.OK)
-                Globals.load_save_location = open_dialog.SelectedPath;
+                restoreDir = open_dialog.SelectedPath;
             else
                 return;
 
             // Make sure save directory has a trailing slash (so we can append to it)
-            if (!Globals.load_save_location.Last().Equals('\\'))
-                Globals.load_save_location += "\\";
-
-            string restoreDir = Globals.load_save_location;
+            if (!restoreDir.Last().Equals('\\'))
+                restoreDir += "\\";
 
             // Find database file
             string[] dbFileMatches = Directory.GetFiles(restoreDir, "*.db");
@@ -58,7 +56,7 @@ namespace SettingsRecall {
             allDbProgramNames = allDbPrograms.Select(p => p.Name).ToList();
 
             // Display directory in label
-            folderLabel.Content = Globals.load_save_location;
+            folderLabel.Content = restoreDir;
 
             // Generate list of restorable programs, based on db, filtered by directories backed up
             // TODO: Write unit test for directory backed up that's not in db
@@ -82,9 +80,8 @@ namespace SettingsRecall {
             restorablePrograms.Remove(selected);
 
             // Enable the 'Restore' button if necessary
-            if (addedPrograms.Count > 0 && Globals.load_save_location != null) {
+            if (addedPrograms.Count > 0 && restoreDir != null)
                 restoreButton.IsEnabled = true;
-            }
         }
 
         private void removeButton_Click(object sender, RoutedEventArgs e) {
@@ -98,7 +95,7 @@ namespace SettingsRecall {
             addedPrograms.Remove(selected);
 
             // Disable the 'Restore button if necessary
-            if (addedPrograms.Count == 0 || Globals.load_save_location == null) {
+            if (addedPrograms.Count == 0 || restoreDir == null) {
                 restoreButton.IsEnabled = false;
             }
         }
@@ -107,7 +104,7 @@ namespace SettingsRecall {
             IEnumerable<ProgramEntry> selectedPrograms = allDbPrograms.Where(p => addedPrograms.Contains(p.Name));
 
             foreach (ProgramEntry program in selectedPrograms) {
-                string backupProgramDir = Globals.load_save_location + program.Name;
+                string backupProgramDir = restoreDir + program.Name;
 
                 if (!Directory.Exists(backupProgramDir)) {
                     Console.WriteLine(backupProgramDir + " does not exist in the backup folder.");
@@ -138,5 +135,6 @@ namespace SettingsRecall {
         private IEnumerable<ProgramEntry> allDbPrograms;
         private IEnumerable<string> allDbProgramNames;
         private ErrorMessage errorMessage;
+        private string restoreDir;
     }
 }
