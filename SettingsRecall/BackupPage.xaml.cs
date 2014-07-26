@@ -14,7 +14,7 @@ namespace SettingsRecall {
             InitializeComponent();
 
             supportedPrograms = new List<ProgramEntry>();
-            saveDir = null;
+            backupDir = null;
 
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
             // Not using ItemsSource here because we don't want the list to be read-only
@@ -95,8 +95,8 @@ namespace SettingsRecall {
             result = open_dialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK) {
-                saveDir = open_dialog.SelectedPath.Trim();
-                folder_label.Content = saveDir;
+                backupDir = open_dialog.SelectedPath.Trim();
+                folder_label.Content = backupDir;
             }
         }
 
@@ -139,16 +139,16 @@ namespace SettingsRecall {
             }
 
             // Make sure save directory has been selected
-            if (saveDir == null || saveDir == "") {
+            if (backupDir == null || backupDir == "") {
                 Console.WriteLine("Must set save location before creating backup.");
                 return;
             }
 
             // Make sure save directory has a trailing slash (so we can append to it)
-            if (!saveDir[saveDir.Length - 1].Equals('\\'))
-                saveDir = saveDir + "\\";
+            if (!backupDir.Last().Equals('\\'))
+                backupDir += "\\";
 
-            CopyHandler copyHandler = new CopyHandler(saveDir, "backup_log.txt", false);
+            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false);
 
             IEnumerable<string> selectedProgramNames = backupPageRightList.Items
                 .Cast<ListBoxItem>()
@@ -162,6 +162,6 @@ namespace SettingsRecall {
         private List<ProgramEntry> supportedPrograms;
         private List<ProgramEntry> unsupportedPrograms;
         private ListBox activeList;
-        private string saveDir;
+        private string backupDir;
     }
 }
