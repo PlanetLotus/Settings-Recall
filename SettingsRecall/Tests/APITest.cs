@@ -1,11 +1,7 @@
-﻿using System;
+﻿using Moq;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Moq;
 
 namespace SettingsRecall {
     using NUnit.Framework;
@@ -38,7 +34,6 @@ namespace SettingsRecall {
 
         [TestCase("testprogram1")]
         public void Test_GetProgramEntry(string name) {
-
             stubbedDb
                 .Setup(x => x.GetDataTable(string.Format(getProgramSelect, name)))
                 .Returns(dt);
