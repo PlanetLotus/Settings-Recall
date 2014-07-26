@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SettingsRecall.Utility;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -12,16 +14,20 @@ namespace SettingsRecall {
 
             supportedPrograms = new List<ProgramEntry>();
             backupDir = null;
+            leftListItems = new ObservableCollection<ListBoxItem>();
+            rightListItems = new ObservableCollection<ListBoxItem>();
 
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
-            // Not using ItemsSource here because we don't want the list to be read-only
             GetUserPrograms();
+
+            backupPageLeftList.ItemsSource = leftListItems;
+            backupPageRightList.ItemsSource = rightListItems;
         }
 
         private void GetUserPrograms() {
             // Clear lists
             supportedPrograms.Clear();
-            backupPageLeftList.Items.Clear();
+            leftListItems.Clear();
 
             // Get supported programs
             List<ProgramEntry> programEntries = SQLiteAPI.GetProgramList();
@@ -37,7 +43,7 @@ namespace SettingsRecall {
 
                         ListBoxItem item = new ListBoxItem();
                         item.Content = entry.Name;
-                        backupPageLeftList.Items.Add(item);
+                        leftListItems.Add(item);
                         break;
                     }
                 }
@@ -48,10 +54,7 @@ namespace SettingsRecall {
 
         private void addProgramButton_Click(object sender, RoutedEventArgs e) {
             // instantiate edit window
-            EditProgramWindow editWindow = new EditProgramWindow(null);
-
-            // open the edit window dialog
-            editWindow.Owner = App.mainWindow;
+            EditProgramWindow editWindow = new EditProgramWindow(null) { Owner = App.mainWindow };
             bool? programEdited = editWindow.ShowDialog();
 
             if (programEdited.HasValue && programEdited.Value == true)
@@ -93,15 +96,15 @@ namespace SettingsRecall {
         private void addToBackupButton_Click(object sender, RoutedEventArgs e) {
             // Remove from left list, add to right list
             ListBoxItem selected = (ListBoxItem)backupPageLeftList.SelectedItem;
-            backupPageLeftList.Items.Remove(selected);
-            backupPageRightList.Items.Add(selected);
+            leftListItems.Remove(selected);
+            rightListItems.Add(selected);
         }
 
         private void removeFromBackupButton_Click(object sender, RoutedEventArgs e) {
             // Remove from right list, add to left list
             ListBoxItem selected = (ListBoxItem)backupPageRightList.SelectedItem;
-            backupPageRightList.Items.Remove(selected);
-            backupPageLeftList.Items.Add(selected);
+            leftListItems.Add(selected);
+            rightListItems.Remove(selected);
         }
 
         private void showAllProgramsCheckbox_Click(object sender, RoutedEventArgs e) {
@@ -110,14 +113,13 @@ namespace SettingsRecall {
                     ListBoxItem item = new ListBoxItem();
                     item.Content = entry.Name;
                     item.IsEnabled = false;
-                    backupPageLeftList.Items.Add(item);
+                    leftListItems.Add(item);
                 }
             } else {
-                // There's probably a better way to remove from a collection...
                 for (int i = backupPageLeftList.Items.Count - 1; i >= 0; i--) {
                     ListBoxItem item = (ListBoxItem)backupPageLeftList.Items[i];
                     if (unsupportedPrograms.Any(p => p.Name == item.Content.ToString()))
-                        backupPageLeftList.Items.RemoveAt(i);
+                        leftListItems.RemoveAt(i);
                 }
             }
         }
@@ -140,15 +142,18 @@ namespace SettingsRecall {
 
             CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false);
 
-            IEnumerable<string> selectedProgramNames = backupPageRightList.Items
+            HashSet<string> selectedProgramNames = backupPageRightList.Items
                 .Cast<ListBoxItem>()
-                .Select(lbi => lbi.Content.ToString());
+                .Select(lbi => lbi.Content.ToString())
+                .ToHashSet();
 
             IEnumerable<ProgramEntry> selectedPrograms = supportedPrograms.Where(p => selectedProgramNames.Contains(p.Name));
 
             BackupService.CreateBackup(selectedPrograms, copyHandler);
         }
 
+        private ObservableCollection<ListBoxItem> leftListItems;
+        private ObservableCollection<ListBoxItem> rightListItems;
         private List<ProgramEntry> supportedPrograms;
         private List<ProgramEntry> unsupportedPrograms;
         private ListBox activeList;
