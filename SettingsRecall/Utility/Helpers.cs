@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows.Forms;
 
 namespace SettingsRecall {
     class Helpers {
@@ -20,6 +21,24 @@ namespace SettingsRecall {
             }
 
             return parentDirPath;
+        }
+
+        public static string GetFolderPathFromDialog() {
+            FolderBrowserDialog open_dialog = new FolderBrowserDialog { ShowNewFolderButton = true };
+            DialogResult result = open_dialog.ShowDialog();
+
+            string folderPath = null;
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+                folderPath = open_dialog.SelectedPath;
+            else
+                return folderPath;
+
+            // Make sure save directory has a trailing slash (so we can append to it)
+            if (!folderPath.Last().Equals('\\'))
+                folderPath = folderPath.Trim() + "\\";
+
+            return folderPath;
         }
     }
 }

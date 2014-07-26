@@ -23,22 +23,9 @@ namespace SettingsRecall {
 
         // click 'choose folder' button
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e) {
-            System.Windows.Forms.DialogResult result; // return value of dialog box
+            string restoreDir = Helpers.GetFolderPathFromDialog();
 
-            // open a dialog
-            System.Windows.Forms.FolderBrowserDialog open_dialog = new System.Windows.Forms.FolderBrowserDialog();
-            open_dialog.ShowNewFolderButton = true;
-            result = open_dialog.ShowDialog();
-
-            // set global variable
-            if (result == System.Windows.Forms.DialogResult.OK)
-                restoreDir = open_dialog.SelectedPath;
-            else
-                return;
-
-            // Make sure save directory has a trailing slash (so we can append to it)
-            if (!restoreDir.Last().Equals('\\'))
-                restoreDir += "\\";
+            if (restoreDir == null) return;
 
             // Find database file
             string[] dbFileMatches = Directory.GetFiles(restoreDir, "*.db");

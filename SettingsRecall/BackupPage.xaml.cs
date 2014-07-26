@@ -6,9 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace SettingsRecall {
-    /// <summary>
-    /// Interaction logic for BackupPage.xaml
-    /// </summary>
     public partial class BackupPage : StackPanel {
         public BackupPage() {
             InitializeComponent();
@@ -87,17 +84,10 @@ namespace SettingsRecall {
         }
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e) {
-            System.Windows.Forms.DialogResult result; // return value of dialog box
+            string backupDir = Helpers.GetFolderPathFromDialog();
 
-            // open a dialog
-            System.Windows.Forms.FolderBrowserDialog open_dialog = new System.Windows.Forms.FolderBrowserDialog();
-            open_dialog.ShowNewFolderButton = true;
-            result = open_dialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK) {
-                backupDir = open_dialog.SelectedPath.Trim();
+            if (backupDir != null)
                 folder_label.Content = backupDir;
-            }
         }
 
         private void addToBackupButton_Click(object sender, RoutedEventArgs e) {
