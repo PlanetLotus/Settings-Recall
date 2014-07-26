@@ -109,7 +109,8 @@
     <Compile Include="BackupService.cs" />
     <Compile Include="CopyHandler.cs" />
     <Compile Include="ErrorMessage.cs" />
-    <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Utility\Extensions.cs" />
+    <Compile Include="Utility\Helpers.cs" />
     <Compile Include="Tests\APITest.cs" />
     <Compile Include="ProgramEntry.cs" />
     <Compile Include="EditProgramWindow.xaml.cs">
