@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="SettingsRecall.BackupPage"
+﻿<StackPanel x:Class="SettingsRecall.BackupPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="510" d:DesignWidth="770">
+      Width="770" Margin="5">
 
     <Grid>
         <ListBox HorizontalAlignment="Left" Height="395" Margin="10,50,0,0" VerticalAlignment="Top" Width="320" Name="backupPageLeftList" SelectionChanged="listSelectionChanged" />
@@ -18,4 +18,4 @@
         <Button x:Name="editProgramButton" Content="Edit Selected Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" Margin="635,16,0,0" Click="editProgramButton_Click"/>
         <CheckBox x:Name="showAllProgramsCheckbox" Content="Show All Programs" HorizontalAlignment="Left" Margin="19,472,0,0" VerticalAlignment="Top" Click="showAllProgramsCheckbox_Click"/>
     </Grid>
-</UserControl>
+</StackPanel>

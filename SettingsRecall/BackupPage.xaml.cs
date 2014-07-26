@@ -9,7 +9,7 @@ namespace SettingsRecall {
     /// <summary>
     /// Interaction logic for BackupPage.xaml
     /// </summary>
-    public partial class BackupPage : UserControl {
+    public partial class BackupPage : StackPanel {
         public BackupPage() {
             InitializeComponent();
 
