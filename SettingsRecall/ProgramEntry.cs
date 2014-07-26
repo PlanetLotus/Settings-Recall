@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
-using Newtonsoft.Json;
+using System.Linq;
 
 namespace SettingsRecall {
     public class ProgramEntry {
@@ -35,23 +33,13 @@ namespace SettingsRecall {
         }
 
         public override string ToString() {
-            string str;
-            string paths = "";
-            StringBuilder pathBuilder = new StringBuilder();
+            string paths = string.Join(", ", Paths);
 
-            foreach (string path in Paths) {
-                pathBuilder.Append(path + ", ");
-            }
-            // Cut off extra comma
-            if (pathBuilder.Length > 1) paths = pathBuilder.ToString().Substring(0, pathBuilder.Length - 2);
-
-            str = string.Format("*****\r\nName: {0}\r\nIsPermanent: {1}\r\nPaths: {2}\r\nDescription: {3}\r\n*****",
+            return string.Format("*****\r\nName: {0}\r\nIsPermanent: {1}\r\nPaths: {2}\r\nDescription: {3}\r\n*****",
                 Name,
                 IsPermanent,
                 Description,
                 paths);
-
-            return str;
         }
 
         private string validateName(string name) {
