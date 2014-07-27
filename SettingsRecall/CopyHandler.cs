@@ -62,16 +62,15 @@ namespace SettingsRecall {
                         string.Format("{0} already exists. Overwrite? (\"No\" will rename file)", dest),
                         "Overwrite file?",
                         MessageBoxButton.YesNo);
-                    if (result == MessageBoxResult.OK || result == MessageBoxResult.Yes)
-                        overwriteSetting = OverwriteEnum.Overwrite;
-                    else
+
+                    if (result == MessageBoxResult.No)
                         dest = GetUniqueFileDestination(dest);
                 }
             }
 
             if (!isDryRun) {
                 try {
-                    fs.File.Copy(source, dest, overwriteSetting == OverwriteEnum.Overwrite);
+                    fs.File.Copy(source, dest);
                 } catch {
                     // TODO: Catch specific exceptions and handle accordingly
                     log.WriteLine("Could not copy file " + source + " to " + dest);
