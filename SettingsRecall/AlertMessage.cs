@@ -9,7 +9,6 @@ namespace SettingsRecall {
 
             CornerRadius = new CornerRadius(4);
             Margin = new Thickness(0, 5, 0, 0);
-            Background = (Brush)converter.ConvertFromString("#f2dede");
             stackPanel = new StackPanel();
             Child = stackPanel;
         }
@@ -23,7 +22,6 @@ namespace SettingsRecall {
             windowContent = panel;
 
             CornerRadius = new CornerRadius(4);
-            Background = backgroundBrush;
             stackPanel = new StackPanel();
             Child = stackPanel;
 
@@ -65,8 +63,6 @@ namespace SettingsRecall {
         }
 
         private static BrushConverter converter = new BrushConverter();
-        private Brush textBrush = (Brush)converter.ConvertFromString("#a94442");
-        private Brush backgroundBrush = (Brush)converter.ConvertFromString("#f2dede");
         private StackPanel stackPanel;
         private Panel windowContent;
     }
