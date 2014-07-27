@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SettingsRecall {
     public static class BackupService {
-        public static void CreateBackup(IEnumerable<ProgramEntry> selectedPrograms, CopyHandler copyHandler, OverwriteEnum overwriteSetting) {
+        public static void CreateBackup(IEnumerable<ProgramEntry> selectedPrograms, CopyHandler copyHandler) {
             copyHandler.InitBackup();
 
             // Loop through selectedPrograms, copying files to save location
@@ -23,7 +23,7 @@ namespace SettingsRecall {
                     // Copy files at path to programDir
                     // It's okay (and expected) for not all paths to exist
                     string filename = path.Split('\\').Last();
-                    copyHandler.Copy(path, program.Name + "\\" + filename, overwriteSetting);
+                    copyHandler.Copy(path, program.Name + "\\" + filename);
                 }
             }
 

@@ -15,6 +15,13 @@ namespace SettingsRecall {
 
             fs.Directory.CreateDirectory(backupDir);
 
+            // If backupDir already exists, make sure it's empty
+            // This prevents duplicates (due to renaming) of the same program's files
+            if (Directory.EnumerateFileSystemEntries(backupDir).Any()) {
+                DirectoryInfo dir = new DirectoryInfo(backupDir);
+                dir.Empty();
+            }
+
             this.isDryRun = isDryRun;
             this.backupDir = backupDir;
 

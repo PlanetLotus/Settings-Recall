@@ -35,7 +35,7 @@ namespace SettingsRecall.Tests {
             CopyHandler copyHandler = mockCopyHandler.Object;
 
             // Act
-            BackupService.CreateBackup(selectedPrograms1, copyHandler, OverwriteEnum.Overwrite);
+            BackupService.CreateBackup(selectedPrograms1, copyHandler);
 
             // Assert
             Assert.AreEqual(programPaths1.Count + 1, copyCalls);    // + 1 for InitBackup
@@ -52,7 +52,7 @@ namespace SettingsRecall.Tests {
             CopyHandler copyHandler = mockCopyHandler.Object;
 
             // Act
-            BackupService.CreateBackup(selectedPrograms1, copyHandler, OverwriteEnum.Overwrite);
+            BackupService.CreateBackup(selectedPrograms1, copyHandler);
 
             // Assert
             Assert.AreEqual(selectedPrograms1.Count, createProgramFolderCalls);

@@ -16,8 +16,5 @@
         <Button Content="Add Other Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Margin="513,16,0,0" Click="addProgramButton_Click"/>
         <Button x:Name="editProgramButton" Content="Edit Selected Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" Margin="635,16,0,0" Click="editProgramButton_Click"/>
         <CheckBox x:Name="showAllProgramsCheckbox" Content="Show All Programs" HorizontalAlignment="Left" Margin="19,472,0,0" VerticalAlignment="Top" Click="showAllProgramsCheckbox_Click"/>
-        <RadioButton GroupName="OverwriteSetting" Content="Overwrite" x:Name="Overwrite" Margin="300,472,400,0" IsChecked="True"/>
-        <RadioButton GroupName="OverwriteSetting" Content="Rename" x:Name="Rename" Margin="375,472,335,0"/>
-        <RadioButton GroupName="OverwriteSetting" Content="Ask Me" x:Name="Ask" Margin="440,472,260,0"/>
     </Grid>
 </StackPanel>

@@ -92,6 +92,11 @@ namespace SettingsRecall {
 
             if (backupDir != null)
                 folder_label.Content = backupDir;
+
+            if (Directory.EnumerateFileSystemEntries(backupDir).Any())
+                alertMessage.AddAlertLabel(
+                    "Warning! This backup folder is not empty and its contents will be erased as soon as Create Backup is clicked.",
+                    AlertMessage.AlertLevel.Warn);
         }
 
         private void addToBackupButton_Click(object sender, RoutedEventArgs e) {
@@ -139,16 +144,6 @@ namespace SettingsRecall {
                 return;
             }
 
-            // Make sure save directory has a trailing slash (so we can append to it)
-            if (!backupDir.Last().Equals('\\'))
-                backupDir += "\\";
-
-            OverwriteEnum overwrite = OverwriteEnum.Ask;
-            if (Overwrite.IsChecked == true)
-                overwrite = OverwriteEnum.Overwrite;
-            else if (Rename.IsChecked == true)
-                overwrite = OverwriteEnum.Rename;
-
             CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt");
 
             HashSet<string> selectedProgramNames = backupPageRightList.Items
@@ -158,7 +153,7 @@ namespace SettingsRecall {
 
             IEnumerable<ProgramEntry> selectedPrograms = supportedPrograms.Where(p => selectedProgramNames.Contains(p.Name));
 
-            BackupService.CreateBackup(selectedPrograms, copyHandler, overwrite);
+            BackupService.CreateBackup(selectedPrograms, copyHandler);
         }
 
         private ObservableCollection<ListBoxItem> leftListItems;
