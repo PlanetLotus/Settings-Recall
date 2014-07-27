@@ -108,7 +108,7 @@
     </ApplicationDefinition>
     <Compile Include="BackupService.cs" />
     <Compile Include="CopyHandler.cs" />
-    <Compile Include="ErrorMessage.cs" />
+    <Compile Include="AlertMessage.cs" />
     <Compile Include="Utility\Extensions.cs" />
     <Compile Include="Utility\Helpers.cs" />
     <Compile Include="Tests\APITest.cs" />

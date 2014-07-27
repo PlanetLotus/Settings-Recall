@@ -11,7 +11,7 @@ namespace SettingsRecall {
     public partial class RestorePage : StackPanel {
         public RestorePage() {
             InitializeComponent();
-            errorMessage = new ErrorMessage(this);
+            alertMessage = new AlertMessage(this);
             restoreDir = null;
             restorablePrograms = new ObservableCollection<string>();
             addedPrograms = new ObservableCollection<string>();
@@ -29,13 +29,13 @@ namespace SettingsRecall {
             // Find database file
             string[] dbFileMatches = Directory.GetFiles(restoreDir, "*.db");
 
-            errorMessage.ClearAllErrors();
+            alertMessage.ClearAllAlerts();
 
             if (dbFileMatches.Length == 0) {
-                errorMessage.AddErrorLabel("Restore info not found.");
+                alertMessage.AddAlertLabel("Restore info not found.");
                 return;
             } else if (dbFileMatches.Length > 1) {
-                errorMessage.AddErrorLabel("Multiple possible databases found.");
+                alertMessage.AddAlertLabel("Multiple possible databases found.");
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace SettingsRecall {
         private ObservableCollection<string> restorablePrograms;
         private ObservableCollection<string> addedPrograms;
         private IEnumerable<ProgramEntry> allDbPrograms;
-        private ErrorMessage errorMessage;
+        private AlertMessage alertMessage;
         private string restoreDir;
     }
 }

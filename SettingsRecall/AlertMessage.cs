@@ -3,28 +3,31 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace SettingsRecall {
-    class ErrorMessage : Border {
-        public ErrorMessage(Panel panel) {
+    class AlertMessage : Border {
+        public AlertMessage(Panel panel) {
             windowContent = panel;
 
             CornerRadius = new CornerRadius(4);
             Margin = new Thickness(0, 5, 0, 0);
-            BorderBrush = (Brush)converter.ConvertFromString("#ebccd1");
             Background = (Brush)converter.ConvertFromString("#f2dede");
             stackPanel = new StackPanel();
             Child = stackPanel;
         }
 
-        public ErrorMessage(string bodyText, Panel panel) {
+        public enum AlertLevel {
+            Warn,
+            Error
+        }
+
+        public AlertMessage(string bodyText, Panel panel) {
             windowContent = panel;
 
             CornerRadius = new CornerRadius(4);
-            BorderBrush = (Brush)converter.ConvertFromString("#ebccd1");
-            Background = (Brush)converter.ConvertFromString("#f2dede");
+            Background = backgroundBrush;
             stackPanel = new StackPanel();
             Child = stackPanel;
 
-            AddErrorLabel(bodyText);
+            AddAlertLabel(bodyText);
             ShowInWindow();
         }
 
@@ -37,24 +40,33 @@ namespace SettingsRecall {
             windowContent.Children.Remove(this);
         }
 
-        public void AddErrorLabel(string errorText) {
+        public void AddAlertLabel(string alertText, AlertLevel alertLevel = AlertLevel.Error) {
             foreach (Label label in stackPanel.Children) {
-                if (label.Content.ToString() == errorText)
+                if (label.Content.ToString() == alertText)
                     return;
             }
 
-            Label errorLabel = new Label { Content = errorText, Foreground = textBrush };
-            stackPanel.Children.Add(errorLabel);
+            Brush labelBackgroundBrush = (Brush)converter.ConvertFromString("#f2dede");
+            Brush labelForegroundBrush = (Brush)converter.ConvertFromString("#a94442");
+
+            if (alertLevel == AlertLevel.Warn) {
+                labelBackgroundBrush = (Brush)converter.ConvertFromString("#fcf8e3");
+                labelForegroundBrush = (Brush)converter.ConvertFromString("#8a6d3b");
+            }
+
+            Label alertLabel = new Label { Content = alertText, Foreground = labelForegroundBrush, Background = labelBackgroundBrush };
+            stackPanel.Children.Add(alertLabel);
 
             ShowInWindow();
         }
 
-        public void ClearAllErrors() {
+        public void ClearAllAlerts() {
             stackPanel.Children.Clear();
         }
 
         private static BrushConverter converter = new BrushConverter();
         private Brush textBrush = (Brush)converter.ConvertFromString("#a94442");
+        private Brush backgroundBrush = (Brush)converter.ConvertFromString("#f2dede");
         private StackPanel stackPanel;
         private Panel windowContent;
     }
