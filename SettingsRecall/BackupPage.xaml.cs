@@ -16,6 +16,7 @@ namespace SettingsRecall {
             backupDir = null;
             leftListItems = new ObservableCollection<ListBoxItem>();
             rightListItems = new ObservableCollection<ListBoxItem>();
+            errorMessage = new ErrorMessage(this);
 
             // Initialize the left list with the names of the supported programs whose paths exist on the machine
             GetUserPrograms();
@@ -125,14 +126,16 @@ namespace SettingsRecall {
         }
 
         private void createBackupButton_Click(object sender, RoutedEventArgs e) {
+            errorMessage.ClearAllErrors();
+
             if (backupPageRightList.Items.Count == 0) {
-                Console.WriteLine("Nothing selected to back up!");
+                errorMessage.AddErrorLabel("No programs selected to back up!");
                 return;
             }
 
             // Make sure save directory has been selected
             if (backupDir == null || backupDir == "") {
-                Console.WriteLine("Must set save location before creating backup.");
+                errorMessage.AddErrorLabel("Must set save location before creating backup.");
                 return;
             }
 
@@ -158,5 +161,6 @@ namespace SettingsRecall {
         private List<ProgramEntry> unsupportedPrograms;
         private ListBox activeList;
         private string backupDir;
+        private ErrorMessage errorMessage;
     }
 }

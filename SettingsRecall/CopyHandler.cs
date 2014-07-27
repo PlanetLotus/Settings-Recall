@@ -34,9 +34,9 @@ namespace SettingsRecall {
             log.WriteLine("");
             log.WriteLine("Backup started at " + DateTime.Now);
 
-            // Backup database file
+            // Backup database file - Always overwrite
             string dbFileName = Globals.dbLocation.Split(new char[] { '\\', '/' }).Last();
-            return Copy(Globals.dbLocation, dbFileName);
+            return Copy(Globals.dbLocation, dbFileName, overwrite: true);
         }
 
         public bool InitRestore() {
