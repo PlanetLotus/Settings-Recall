@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+using SettingsRecall.Utility;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
@@ -29,12 +30,12 @@ namespace SettingsRecall.Tests {
             int copyCalls = 0;
             Mock<CopyHandler> mockCopyHandler = new Mock<CopyHandler>(@"C:\Unittest\", "unitTestLog.txt", false, stubbedFileSystem1);
             mockCopyHandler
-                .Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), false))
+                .Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), OverwriteEnum.Overwrite))
                 .Callback(() => copyCalls++);
             CopyHandler copyHandler = mockCopyHandler.Object;
 
             // Act
-            BackupService.CreateBackup(selectedPrograms1, copyHandler);
+            BackupService.CreateBackup(selectedPrograms1, copyHandler, OverwriteEnum.Overwrite);
 
             // Assert
             Assert.AreEqual(programPaths1.Count + 1, copyCalls);    // + 1 for InitBackup
@@ -51,7 +52,7 @@ namespace SettingsRecall.Tests {
             CopyHandler copyHandler = mockCopyHandler.Object;
 
             // Act
-            BackupService.CreateBackup(selectedPrograms1, copyHandler);
+            BackupService.CreateBackup(selectedPrograms1, copyHandler, OverwriteEnum.Overwrite);
 
             // Assert
             Assert.AreEqual(selectedPrograms1.Count, createProgramFolderCalls);

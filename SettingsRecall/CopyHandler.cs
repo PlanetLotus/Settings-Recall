@@ -1,15 +1,12 @@
-﻿using System;
+﻿using SettingsRecall.Utility;
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Windows;
 
 namespace SettingsRecall {
     public class CopyHandler {
-        string backupDir;
-        IFileSystem fs;
-        StreamWriter log;
-        bool isDryRun;
-
         public CopyHandler(string backupDir, string logFileName, bool isDryRun = false, IFileSystem fileSystem = null) {
             if (fileSystem == null)
                 fs = new FileSystem();  // Use System.IO
@@ -36,7 +33,7 @@ namespace SettingsRecall {
 
             // Backup database file - Always overwrite
             string dbFileName = Globals.dbLocation.Split(new char[] { '\\', '/' }).Last();
-            return Copy(Globals.dbLocation, dbFileName, overwrite: true);
+            return Copy(Globals.dbLocation, dbFileName, OverwriteEnum.Overwrite);
         }
 
         public bool InitRestore() {
@@ -49,7 +46,7 @@ namespace SettingsRecall {
             return true;
         }
 
-        public virtual bool Copy(string source, string relativeDest, bool overwrite = false) {
+        public virtual bool Copy(string source, string relativeDest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
             if (!fs.File.Exists(source)) {
                 log.WriteLine("Source does not exist at " + source);
                 return false;
@@ -57,20 +54,24 @@ namespace SettingsRecall {
 
             string dest = backupDir + relativeDest;
 
-            // Loop through renaming process until dest doesn't exist
-            if (!overwrite && fs.File.Exists(dest)) {
-                dest += "-1";
-                int fileIncrementer = 1;
-
-                while (fs.File.Exists(dest)) {
-                    dest = dest.Substring(0, dest.Length - 1) + fileIncrementer;
-                    fileIncrementer++;
+            if (fs.File.Exists(dest)) {
+                if (overwriteSetting == OverwriteEnum.Rename) {
+                    dest = GetUniqueFileDestination(dest);
+                } else if (overwriteSetting == OverwriteEnum.Ask) {
+                    MessageBoxResult result = MessageBox.Show(
+                        string.Format("{0} already exists. Overwrite? (\"No\" will rename file)", dest),
+                        "Overwrite file?",
+                        MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.OK || result == MessageBoxResult.Yes)
+                        overwriteSetting = OverwriteEnum.Overwrite;
+                    else
+                        dest = GetUniqueFileDestination(dest);
                 }
             }
 
             if (!isDryRun) {
                 try {
-                    fs.File.Copy(source, dest, overwrite);
+                    fs.File.Copy(source, dest, overwriteSetting == OverwriteEnum.Overwrite);
                 } catch {
                     // TODO: Catch specific exceptions and handle accordingly
                     log.WriteLine("Could not copy file " + source + " to " + dest);
@@ -94,5 +95,23 @@ namespace SettingsRecall {
             log.Close();
             return true;
         }
+
+        private string GetUniqueFileDestination(string originalDest) {
+            // Loop through renaming process until dest doesn't exist
+            string dest = originalDest + "-1";
+            int fileIncrementer = 1;
+
+            while (fs.File.Exists(dest)) {
+                dest = dest.Substring(0, dest.Length - 1) + fileIncrementer;
+                fileIncrementer++;
+            }
+
+            return dest;
+        }
+
+        private string backupDir;
+        private IFileSystem fs;
+        private StreamWriter log;
+        private bool isDryRun;
     }
 }

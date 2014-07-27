@@ -143,7 +143,13 @@ namespace SettingsRecall {
             if (!backupDir.Last().Equals('\\'))
                 backupDir += "\\";
 
-            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt", false);
+            OverwriteEnum overwrite = OverwriteEnum.Ask;
+            if (Overwrite.IsChecked == true)
+                overwrite = OverwriteEnum.Overwrite;
+            else if (Rename.IsChecked == true)
+                overwrite = OverwriteEnum.Rename;
+
+            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt");
 
             HashSet<string> selectedProgramNames = backupPageRightList.Items
                 .Cast<ListBoxItem>()
@@ -152,7 +158,7 @@ namespace SettingsRecall {
 
             IEnumerable<ProgramEntry> selectedPrograms = supportedPrograms.Where(p => selectedProgramNames.Contains(p.Name));
 
-            BackupService.CreateBackup(selectedPrograms, copyHandler);
+            BackupService.CreateBackup(selectedPrograms, copyHandler, overwrite);
         }
 
         private ObservableCollection<ListBoxItem> leftListItems;

@@ -125,6 +125,7 @@
     <Compile Include="Tests\CopyHandlerTests.cs" />
     <Compile Include="Tests\ProgramEntryTests.cs" />
     <Compile Include="Tests\TestBackup.cs" />
+    <Compile Include="Utility\OverwriteEnum.cs" />
     <Page Include="BackupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
