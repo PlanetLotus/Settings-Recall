@@ -22,10 +22,10 @@ namespace SettingsRecall {
             this.backupDir = backupDir;
 
             if (isDryRun) {
+                log = new StreamWriter(Console.OpenStandardOutput());
+            } else {
                 FileInfoBase fib = fs.FileInfo.FromFileName(backupDir + logFileName);
                 log = new StreamWriter(fib.Create());
-            } else {
-                log = new StreamWriter(Console.OpenStandardOutput());
             }
         }
 
@@ -36,7 +36,7 @@ namespace SettingsRecall {
 
             // Backup database file
             string dbFileName = Globals.dbLocation.Split(new char[] { '\\', '/' }).Last();
-            return Copy(Globals.dbLocation, backupDir + dbFileName);
+            return Copy(Globals.dbLocation, dbFileName);
         }
 
         public bool InitRestore() {

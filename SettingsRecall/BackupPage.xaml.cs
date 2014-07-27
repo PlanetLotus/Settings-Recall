@@ -87,7 +87,7 @@ namespace SettingsRecall {
         }
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e) {
-            string backupDir = Helpers.GetFolderPathFromDialog();
+            backupDir = Helpers.GetFolderPathFromDialog();
 
             if (backupDir != null)
                 folder_label.Content = backupDir;

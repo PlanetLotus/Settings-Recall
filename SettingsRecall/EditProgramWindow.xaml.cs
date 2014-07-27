@@ -23,6 +23,7 @@ namespace SettingsRecall {
                 currentEntry = new ProgramEntry();
                 newEntry = true;
                 programNameText.IsEnabled = true;
+                fileCollection = new ObservableCollection<string>();
             } else {
                 programNameText.Text = name;
                 descriptionText.Text = currentEntry.Description;
@@ -30,9 +31,9 @@ namespace SettingsRecall {
 
                 if (currentEntry.Paths.Count != 0)
                     deleteFilesButton.IsEnabled = true;
-
-                fileListBox.ItemsSource = fileCollection;
             }
+
+            fileListBox.ItemsSource = fileCollection;
         }
 
         private void addFilesButton_Click(object sender, RoutedEventArgs e) {

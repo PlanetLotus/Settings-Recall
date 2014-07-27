@@ -21,7 +21,6 @@ namespace SettingsRecall {
             restoreButton.IsEnabled = false;
         }
 
-        // click 'choose folder' button
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e) {
             string restoreDir = Helpers.GetFolderPathFromDialog();
 
@@ -40,6 +39,8 @@ namespace SettingsRecall {
                 return;
             }
 
+            Globals.dbLocation = dbFileMatches.Single();
+
             allDbPrograms = SQLiteAPI.GetProgramList();
             HashSet<string> allDbProgramNames = allDbPrograms.Select(p => p.Name).ToHashSet();
 
@@ -51,9 +52,11 @@ namespace SettingsRecall {
             restorablePrograms.Clear();
             string[] dirs = Directory.GetDirectories(restoreDir);
 
-            foreach (string progName in dirs) {
-                if (allDbProgramNames.Contains(Helpers.TrimFilename(progName)))
-                    restorablePrograms.Add(progName.Split('\\').Last());
+            foreach (string dir in dirs) {
+                string programName = Helpers.TrimFilename(dir);
+
+                if (allDbProgramNames.Contains(programName))
+                    restorablePrograms.Add(programName);
             }
         }
 
