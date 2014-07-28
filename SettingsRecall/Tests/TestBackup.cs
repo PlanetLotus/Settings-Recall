@@ -30,7 +30,7 @@ namespace SettingsRecall.Tests {
             int copyCalls = 0;
             Mock<CopyHandler> mockCopyHandler = new Mock<CopyHandler>(@"C:\Unittest\", "unitTestLog.txt", false, stubbedFileSystem1);
             mockCopyHandler
-                .Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), OverwriteEnum.Overwrite))
+                .Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<OverwriteEnum>()))
                 .Callback(() => copyCalls++);
             CopyHandler copyHandler = mockCopyHandler.Object;
 

@@ -17,8 +17,8 @@ namespace SettingsRecall {
 
             // If backupDir already exists, make sure it's empty
             // This prevents duplicates (due to renaming) of the same program's files
-            if (Directory.EnumerateFileSystemEntries(backupDir).Any()) {
-                DirectoryInfo dir = new DirectoryInfo(backupDir);
+            if (fs.Directory.GetFileSystemEntries(backupDir).Any()) {
+                DirectoryInfoBase dir = fs.DirectoryInfo.FromDirectoryName(backupDir);
                 dir.Empty();
             }
 
