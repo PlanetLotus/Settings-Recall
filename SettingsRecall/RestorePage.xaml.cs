@@ -13,7 +13,6 @@ namespace SettingsRecall {
             InitializeComponent();
             alertMessage = new AlertMessage(this);
             restoreDir = null;
-            restorablePrograms = new ObservableCollection<string>();
             addedPrograms = new ObservableCollection<string>();
 
             restorePageLeftList.ItemsSource = restorablePrograms;
@@ -22,7 +21,7 @@ namespace SettingsRecall {
         }
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e) {
-            string restoreDir = Helpers.GetFolderPathFromDialog();
+            restoreDir = Helpers.GetFolderPathFromDialog();
 
             if (restoreDir == null) return;
 
@@ -49,15 +48,11 @@ namespace SettingsRecall {
 
             // Generate list of restorable programs, based on db, filtered by directories backed up
             // TODO: Write unit test for directory backed up that's not in db
-            restorablePrograms.Clear();
-            string[] dirs = Directory.GetDirectories(restoreDir);
+            IEnumerable<string> restorableProgramsEnumerable = Directory.GetDirectories(restoreDir)
+                .Select(dir => Helpers.TrimFilename(dir))
+                .Where(programName => allDbProgramNames.Contains(programName));
 
-            foreach (string dir in dirs) {
-                string programName = Helpers.TrimFilename(dir);
-
-                if (allDbProgramNames.Contains(programName))
-                    restorablePrograms.Add(programName);
-            }
+            restorablePrograms = new ObservableCollection<string>(restorableProgramsEnumerable);
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e) {
@@ -92,33 +87,23 @@ namespace SettingsRecall {
         }
 
         private void restoreButton_Click(object sender, RoutedEventArgs e) {
-            IEnumerable<ProgramEntry> selectedPrograms = allDbPrograms.Where(p => addedPrograms.Contains(p.Name));
+            alertMessage.ClearAllAlerts();
 
-            foreach (ProgramEntry program in selectedPrograms) {
-                string backupProgramDir = restoreDir + program.Name;
-
-                if (!Directory.Exists(backupProgramDir)) {
-                    Console.WriteLine(backupProgramDir + " does not exist in the backup folder.");
-                    continue;
-                }
-
-                // Copy each file in backup folder
-                foreach (string filePath in Directory.GetFiles(backupProgramDir)) {
-                    // Copy file to each path in ProgramEntry with a matching filename that exists on this machine
-                    // Overwrites files, but does not create directories
-                    string fileName = Helpers.TrimFilename(filePath);
-
-                    foreach (string matchedPath in program.Paths.Where(path => path.EndsWith(fileName))) {
-                        if (!Directory.Exists(Helpers.GetParentFromFile(matchedPath)))
-                            continue;
-
-                        Console.WriteLine("Copying " + fileName + " to " + matchedPath);
-
-                        if (File.Exists(matchedPath))
-                            Console.WriteLine("Overwriting " + matchedPath);
-                    }
-                }
+            if (restorePageRightList.Items.Count == 0) {
+                alertMessage.AddAlertLabel("No programs selected to restore!");
+                return;
             }
+
+            // Make sure save directory has been selected
+            if (restoreDir == null || restoreDir == "") {
+                alertMessage.AddAlertLabel("Must set load location before restoring backup.");
+                return;
+            }
+
+            IEnumerable<ProgramEntry> selectedPrograms = allDbPrograms.Where(p => addedPrograms.Contains(p.Name));
+            CopyHandler copyHandler = new CopyHandler(restoreDir);
+
+            RestoreService.RestoreBackup(selectedPrograms, copyHandler);
         }
 
         private ObservableCollection<string> restorablePrograms;

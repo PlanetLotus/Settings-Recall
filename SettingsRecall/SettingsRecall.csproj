@@ -109,6 +109,7 @@
     <Compile Include="BackupService.cs" />
     <Compile Include="CopyHandler.cs" />
     <Compile Include="AlertMessage.cs" />
+    <Compile Include="RestoreService.cs" />
     <Compile Include="Utility\Extensions.cs" />
     <Compile Include="Utility\Helpers.cs" />
     <Compile Include="Tests\APITest.cs" />
