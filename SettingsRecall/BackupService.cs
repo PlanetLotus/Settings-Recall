@@ -5,7 +5,7 @@ using System.Linq;
 namespace SettingsRecall {
     public static class BackupService {
         public static void CreateBackup(IEnumerable<ProgramEntry> selectedPrograms, CopyHandler copyHandler) {
-            copyHandler.InitBackup();
+            copyHandler.InitBackup(logFileName);
 
             // Loop through selectedPrograms, copying files to save location
             foreach (ProgramEntry program in selectedPrograms) {
@@ -23,11 +23,14 @@ namespace SettingsRecall {
                     // Copy files at path to programDir
                     // It's okay (and expected) for not all paths to exist
                     string filename = path.Split('\\').Last();
-                    copyHandler.Copy(path, program.Name + "\\" + filename);
+                    string actualDest = copyHandler.Copy(path, program.Name + "\\" + filename);
+                    copyHandler.AddJsonPath(program.Name, path, actualDest);
                 }
             }
 
             copyHandler.CloseBackup();
         }
+
+        private const string logFileName = "backup_log.txt";
     }
 }

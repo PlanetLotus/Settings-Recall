@@ -28,7 +28,7 @@ namespace SettingsRecall.Tests {
         public void Test_BackupCopiesFiles() {
             // Arrange
             int copyCalls = 0;
-            Mock<CopyHandler> mockCopyHandler = new Mock<CopyHandler>(@"C:\Unittest\", "unitTestLog.txt", false, stubbedFileSystem1);
+            Mock<CopyHandler> mockCopyHandler = new Mock<CopyHandler>(@"C:\Unittest\", false, stubbedFileSystem1);
             mockCopyHandler
                 .Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<OverwriteEnum>()))
                 .Callback(() => copyCalls++);
@@ -38,14 +38,14 @@ namespace SettingsRecall.Tests {
             BackupService.CreateBackup(selectedPrograms1, copyHandler);
 
             // Assert
-            Assert.AreEqual(programPaths1.Count + 1, copyCalls);    // + 1 for InitBackup
+            Assert.AreEqual(programPaths1.Count, copyCalls);
         }
 
         [Test]
         public void Test_BackupProgramDirectoriesAreCreated() {
             // Arrange
             int createProgramFolderCalls = 0;
-            Mock<CopyHandler> mockCopyHandler = new Mock<CopyHandler>(@"C:\Unittest\", "unitTestLog.txt", false, stubbedFileSystem2);
+            Mock<CopyHandler> mockCopyHandler = new Mock<CopyHandler>(@"C:\Unittest\", false, stubbedFileSystem2);
             mockCopyHandler
                 .Setup(a => a.CreateProgramFolder(It.IsAny<string>()))
                 .Callback(() => createProgramFolderCalls++);

@@ -1,5 +1,7 @@
-﻿using SettingsRecall.Utility;
+﻿using Newtonsoft.Json;
+using SettingsRecall.Utility;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -7,11 +9,18 @@ using System.Windows;
 
 namespace SettingsRecall {
     public class CopyHandler {
-        public CopyHandler(string backupDir, string logFileName, bool isDryRun = false, IFileSystem fileSystem = null) {
+        public CopyHandler(string backupDir, bool isDryRun = false, IFileSystem fileSystem = null) {
             if (fileSystem == null)
                 fs = new FileSystem();  // Use System.IO
             else
                 fs = fileSystem;
+
+            this.isDryRun = isDryRun;
+            this.backupDir = backupDir;
+        }
+
+        public bool InitBackup(string logFileName) {
+            backupData = new List<BackupDataModel>();
 
             fs.Directory.CreateDirectory(backupDir);
 
@@ -22,41 +31,41 @@ namespace SettingsRecall {
                 dir.Empty();
             }
 
-            this.isDryRun = isDryRun;
-            this.backupDir = backupDir;
-
             if (isDryRun) {
                 log = new StreamWriter(Console.OpenStandardOutput());
             } else {
                 FileInfoBase fib = fs.FileInfo.FromFileName(backupDir + logFileName);
                 log = new StreamWriter(fib.Create());
             }
-        }
 
-        public bool InitBackup() {
-            log.WriteLine("DO NOT MODIFY THIS FILE. IT MAY BE USED TO RESTORE YOUR SETTINGS TO THE CORRECT LOCATION.");
-            log.WriteLine("");
             log.WriteLine("Backup started at " + DateTime.Now);
-
-            // Backup database file - Always overwrite
-            string dbFileName = Globals.dbLocation.Split(new char[] { '\\', '/' }).Last();
-            return Copy(Globals.dbLocation, dbFileName, OverwriteEnum.Overwrite);
+            return true;
         }
 
-        public bool InitRestore() {
+        public bool InitRestore(string logFileName) {
+            if (isDryRun) {
+                log = new StreamWriter(Console.OpenStandardOutput());
+            } else {
+                FileInfoBase fib = fs.FileInfo.FromFileName(backupDir + logFileName);
+                log = new StreamWriter(fib.Create());
+            }
+
             log.WriteLine("Restore started at " + DateTime.Now);
             return true;
         }
 
         public virtual bool CreateProgramFolder(string programName) {
             fs.Directory.CreateDirectory(backupDir + programName);
+            backupData.Add(
+                new BackupDataModel { ProgramName = programName, SourceToDestPaths = new Dictionary<string, string>() });
+
             return true;
         }
 
-        public virtual bool Copy(string source, string relativeDest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
+        public virtual string Copy(string source, string relativeDest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
             if (!fs.File.Exists(source)) {
                 log.WriteLine("Source does not exist at " + source);
-                return false;
+                return null;
             }
 
             string dest = backupDir + relativeDest;
@@ -81,18 +90,28 @@ namespace SettingsRecall {
                 } catch {
                     // TODO: Catch specific exceptions and handle accordingly
                     log.WriteLine("Could not copy file " + source + " to " + dest);
-                    return false;
+                    return null;
                 }
             }
 
             log.WriteLine("Copied " + source + " to " + dest);
 
-            return true;
+            return dest;
+        }
+
+        public virtual void AddJsonPath(string programName, string source, string actualDestination) {
+            backupData
+                .Single(entry => entry.ProgramName == programName)
+                .SourceToDestPaths.Add(source, actualDestination);
         }
 
         public bool CloseBackup() {
             log.WriteLine("Backup finished at " + DateTime.Now);
             log.Close();
+
+            string jsonData = JsonConvert.SerializeObject(backupData);
+            fs.File.WriteAllText(backupDir + "backupData.json", jsonData);
+
             return true;
         }
 
@@ -115,9 +134,15 @@ namespace SettingsRecall {
             return dest;
         }
 
+        private sealed class BackupDataModel {
+            public string ProgramName { get; set; }
+            public Dictionary<string, string> SourceToDestPaths { get; set; }
+        }
+
         private string backupDir;
         private IFileSystem fs;
         private StreamWriter log;
+        private List<BackupDataModel> backupData;
         private bool isDryRun;
     }
 }

@@ -144,7 +144,7 @@ namespace SettingsRecall {
                 return;
             }
 
-            CopyHandler copyHandler = new CopyHandler(backupDir, "backup_log.txt");
+            CopyHandler copyHandler = new CopyHandler(backupDir);
 
             HashSet<string> selectedProgramNames = backupPageRightList.Items
                 .Cast<ListBoxItem>()
