@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using SettingsRecall.Utility;
+﻿using SettingsRecall.Utility;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -20,8 +18,6 @@ namespace SettingsRecall {
         }
 
         public bool InitBackup(string logFileName) {
-            backupData = new List<BackupDataModel>();
-
             fs.Directory.CreateDirectory(backupDir);
 
             // If backupDir already exists, make sure it's empty
@@ -56,9 +52,6 @@ namespace SettingsRecall {
 
         public virtual bool CreateProgramFolder(string programName) {
             fs.Directory.CreateDirectory(backupDir + programName);
-            backupData.Add(
-                new BackupDataModel { ProgramName = programName, SourceToDestPaths = new Dictionary<string, string>() });
-
             return true;
         }
 
@@ -99,18 +92,11 @@ namespace SettingsRecall {
             return dest;
         }
 
-        public virtual void AddJsonPath(string programName, string source, string actualDestination) {
-            backupData
-                .Single(entry => entry.ProgramName == programName)
-                .SourceToDestPaths.Add(source, actualDestination);
-        }
-
-        public bool CloseBackup() {
+        public bool CloseBackup(string jsonData, string backupDataFileName) {
             log.WriteLine("Backup finished at " + DateTime.Now);
             log.Close();
 
-            string jsonData = JsonConvert.SerializeObject(backupData);
-            fs.File.WriteAllText(backupDir + "backupData.json", jsonData);
+            fs.File.WriteAllText(backupDir + backupDataFileName, jsonData);
 
             return true;
         }
@@ -134,15 +120,9 @@ namespace SettingsRecall {
             return dest;
         }
 
-        private sealed class BackupDataModel {
-            public string ProgramName { get; set; }
-            public Dictionary<string, string> SourceToDestPaths { get; set; }
-        }
-
         private string backupDir;
         private IFileSystem fs;
         private StreamWriter log;
-        private List<BackupDataModel> backupData;
         private bool isDryRun;
     }
 }
