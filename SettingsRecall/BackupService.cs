@@ -22,6 +22,8 @@ namespace SettingsRecall {
                     string actualDest = copyHandler.Copy(path, program.Name + "\\" + filename);
                     backupModel.SourceToDestPaths.Add(path, actualDest);
                 }
+
+                backupData.Add(backupModel);
             }
 
             string jsonData = JsonConvert.SerializeObject(backupData);
