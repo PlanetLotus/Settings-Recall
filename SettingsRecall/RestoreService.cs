@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BackupDataModel = SettingsRecall.BackupService.BackupDataModel;
 
 namespace SettingsRecall {
     public class RestoreService {
-        public static void RestoreBackup(IEnumerable<ProgramEntry> selectedPrograms, CopyHandler copyHandler) {
+        public static void RestoreBackup(IEnumerable<BackupDataModel> selectedPrograms, CopyHandler copyHandler) {
             /*
              * This can either rely on what's in the .db file or what's in the log file. The .db file is easier to
              * read from but the log file is necessary to rely on in the case of multiple versions...it needs to know

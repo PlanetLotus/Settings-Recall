@@ -30,7 +30,7 @@ namespace SettingsRecall {
             copyHandler.CloseBackup(jsonData, backupDataFileName);
         }
 
-        private sealed class BackupDataModel {
+        public sealed class BackupDataModel {
             public string ProgramName { get; set; }
             public Dictionary<string, string> SourceToDestPaths { get; set; }
         }
