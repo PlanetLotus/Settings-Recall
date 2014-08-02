@@ -50,6 +50,9 @@ namespace SettingsRecall {
             }
 
             unsupportedPrograms = programEntries.Where(entry => !supportedPrograms.Contains(entry)).ToList();
+
+            selectAllButton.IsEnabled = supportedPrograms.Count != 0;
+            selectNoneButton.IsEnabled = supportedPrograms.Count != 0;
         }
 
         private void addProgramButton_Click(object sender, RoutedEventArgs e) {
@@ -102,6 +105,16 @@ namespace SettingsRecall {
                         programListBoxItems.RemoveAt(i);
                 }
             }
+        }
+
+        private void selectAllButton_Click(object sender, RoutedEventArgs e) {
+            foreach (ProgramListBoxItem item in programListBoxItems.Where(item => item.IsSupported && !item.IsChecked))
+                item.IsChecked = true;
+        }
+
+        private void selectNoneButton_Click(object sender, RoutedEventArgs e) {
+            foreach (ProgramListBoxItem item in programListBoxItems.Where(item => item.IsSupported && item.IsChecked))
+                item.IsChecked = false;
         }
 
         private void createBackupButton_Click(object sender, RoutedEventArgs e) {

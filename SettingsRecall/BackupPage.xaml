@@ -6,13 +6,15 @@
       mc:Ignorable="d" 
       Width="770" Margin="5">
     <Grid>
-        <ListBox ItemsSource="{Binding ProgramListItems}" HorizontalAlignment="Left" Height="395" Margin="10,50,0,0" VerticalAlignment="Top" Width="750" x:Name="backupPageProgramList">
+        <ListBox ItemsSource="{Binding ProgramListItems}" HorizontalAlignment="Left" Height="349" Margin="10,96,0,0" VerticalAlignment="Top" Width="750" x:Name="backupPageProgramList">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsSupported}" Margin="5,3,0,3" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button Name="selectAllButton" Content="Select All" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="19,56,0,0" IsEnabled="False" Click="selectAllButton_Click" />
+        <Button Name="selectNoneButton" Content="Select None" HorizontalAlignment="Left" VerticalAlignment="Top" Width="78" Margin="100,56,0,0" IsEnabled="False" Click="selectNoneButton_Click" />
         <Button Content="Create Backup" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86" Margin="645,466,0,0" Click="createBackupButton_Click"/>
         <Button Content="Choose Save Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="19,13,0,0" Click="chooseFolderButton_Click"/>
         <Label x:Name="folder_label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,10,0,0" Width="301"/>
