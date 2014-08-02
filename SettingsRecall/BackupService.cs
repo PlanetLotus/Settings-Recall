@@ -19,7 +19,7 @@ namespace SettingsRecall {
                     // Copy files at path to programDir
                     // It's okay (and expected) for not all paths to exist
                     string filename = path.Split('\\').Last();
-                    string actualDest = copyHandler.Copy(path, program.Name + "\\" + filename);
+                    string actualDest = copyHandler.Copy(path, copyHandler.BackupDir + program.Name + "\\" + filename);
                     backupModel.SourceToDestPaths.Add(path, actualDest);
                 }
 

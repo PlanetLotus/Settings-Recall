@@ -55,13 +55,11 @@ namespace SettingsRecall {
             return true;
         }
 
-        public virtual string Copy(string source, string relativeDest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
+        public virtual string Copy(string source, string dest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
             if (!fs.File.Exists(source)) {
                 log.WriteLine("Source does not exist at " + source);
                 return null;
             }
-
-            string dest = backupDir + relativeDest;
 
             if (fs.File.Exists(dest)) {
                 if (overwriteSetting == OverwriteEnum.Rename) {
@@ -79,10 +77,10 @@ namespace SettingsRecall {
 
             if (!isDryRun) {
                 try {
-                    fs.File.Copy(source, dest);
-                } catch {
+                    fs.File.Copy(source, dest, overwriteSetting == OverwriteEnum.Overwrite);
+                } catch (Exception ex) {
                     // TODO: Catch specific exceptions and handle accordingly
-                    log.WriteLine("Could not copy file " + source + " to " + dest);
+                    log.WriteLine("Could not copy file {0} to {1}: {2}", source, dest, ex.Message);
                     return null;
                 }
             }
@@ -105,6 +103,10 @@ namespace SettingsRecall {
             log.WriteLine("Restore finished at " + DateTime.Now);
             log.Close();
             return true;
+        }
+
+        public string BackupDir {
+            get { return backupDir; }
         }
 
         private string GetUniqueFileDestination(string originalDest) {
