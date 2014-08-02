@@ -9,7 +9,7 @@
         <ListBox ItemsSource="{Binding ProgramListItems}" HorizontalAlignment="Left" Height="349" Margin="10,96,0,0" VerticalAlignment="Top" Width="750" x:Name="backupPageProgramList">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsSupported}" Margin="5,3,0,3" />
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsSupported}" Visibility="{Binding Visibility}" Margin="5,3,0,3" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 
 namespace SettingsRecall {
     public class ProgramListBoxItem : INotifyPropertyChanged {
@@ -28,6 +29,14 @@ namespace SettingsRecall {
             }
         }
 
+        public Visibility Visibility {
+            get { return visibility; }
+            set {
+                visibility = value;
+                NotifyPropertyChanged("Visibility");
+            }
+        }
+
         protected void NotifyPropertyChanged(string strPropertyName) {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(strPropertyName));
@@ -36,5 +45,6 @@ namespace SettingsRecall {
         private string name;
         private bool isChecked;
         private bool isSupported;
+        private Visibility visibility;
     }
 }

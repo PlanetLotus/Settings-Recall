@@ -17,7 +17,6 @@ namespace SettingsRecall {
             programListBoxItems = new ObservableCollection<ProgramListBoxItem>();
             alertMessage = new AlertMessage(this);
 
-            // Initialize the left list with the names of the supported programs whose paths exist on the machine
             GetUserPrograms();
 
             backupPageProgramList.ItemsSource = programListBoxItems;
@@ -26,37 +25,29 @@ namespace SettingsRecall {
         public ObservableCollection<ListBoxItem> ProgramListItems { get; set; }
 
         private void GetUserPrograms() {
-            // Clear lists
             supportedPrograms.Clear();
             programListBoxItems.Clear();
 
-            // Get supported programs
             List<ProgramEntry> programEntries = SQLiteAPI.GetProgramList();
 
-            // Filter list down to programs where at least one path for that program exists on the machine
-            // Filter program entries by:
-            // - At least one path in the entry exists on user's computer
             foreach (ProgramEntry entry in programEntries) {
-                Console.WriteLine(entry.Name);
-                foreach (string path in entry.Paths) {
-                    if (File.Exists(path) || Directory.Exists(path)) {
-                        supportedPrograms.Add(entry);
+                bool isSupported = entry.Paths.Any(path => File.Exists(path) || Directory.Exists(path));
+                Visibility visibility = isSupported ? Visibility.Visible : Visibility.Collapsed;
 
-                        ProgramListBoxItem item = new ProgramListBoxItem { IsChecked = false, Name = entry.Name, IsSupported = true };
-                        programListBoxItems.Add(item);
-                        break;
-                    }
-                }
+                ProgramListBoxItem item = new ProgramListBoxItem {
+                    IsChecked = false, Name = entry.Name, IsSupported = isSupported, Visibility = visibility
+                };
+                programListBoxItems.Add(item);
+
+                if (isSupported)
+                    supportedPrograms.Add(entry);
             }
-
-            unsupportedPrograms = programEntries.Where(entry => !supportedPrograms.Contains(entry)).ToList();
 
             selectAllButton.IsEnabled = supportedPrograms.Count != 0;
             selectNoneButton.IsEnabled = supportedPrograms.Count != 0;
         }
 
         private void addProgramButton_Click(object sender, RoutedEventArgs e) {
-            // instantiate edit window
             EditProgramWindow editWindow = new EditProgramWindow(null) { Owner = App.mainWindow };
             bool? programEdited = editWindow.ShowDialog();
 
@@ -69,7 +60,6 @@ namespace SettingsRecall {
 
             if (programName == null || programName == "") return;
 
-            // instantiate edit window
             EditProgramWindow editWindow = new EditProgramWindow(programName);
 
             // open the edit window dialog
@@ -93,17 +83,12 @@ namespace SettingsRecall {
         }
 
         private void showAllProgramsCheckbox_Click(object sender, RoutedEventArgs e) {
-            if (showAllProgramsCheckbox.IsChecked.HasValue && showAllProgramsCheckbox.IsChecked.Value == true) {
-                foreach (ProgramEntry entry in unsupportedPrograms) {
-                    ProgramListBoxItem item = new ProgramListBoxItem { Name = entry.Name, IsChecked = false, IsSupported = false };
-                    programListBoxItems.Add(item);
-                }
+            if (showAllProgramsCheckbox.IsChecked == true) {
+                foreach (ProgramListBoxItem item in programListBoxItems.Where(item => !item.IsSupported))
+                    item.Visibility = Visibility.Visible;
             } else {
-                for (int i = backupPageProgramList.Items.Count - 1; i >= 0; i--) {
-                    ProgramListBoxItem item = (ProgramListBoxItem)backupPageProgramList.Items[i];
-                    if (unsupportedPrograms.Any(p => p.Name == item.Name))
-                        programListBoxItems.RemoveAt(i);
-                }
+                foreach (ProgramListBoxItem item in programListBoxItems.Where(item => !item.IsSupported))
+                    item.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -146,8 +131,6 @@ namespace SettingsRecall {
 
         private ObservableCollection<ProgramListBoxItem> programListBoxItems;
         private List<ProgramEntry> supportedPrograms;
-        private List<ProgramEntry> unsupportedPrograms;
-        private ListBox activeList;
         private string backupDir;
         private AlertMessage alertMessage;
     }
