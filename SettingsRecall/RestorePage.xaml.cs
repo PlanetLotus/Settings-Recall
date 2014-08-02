@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SettingsRecall.Utility;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -15,9 +14,7 @@ namespace SettingsRecall {
             InitializeComponent();
             alertMessage = new AlertMessage(this);
             restoreDir = null;
-            addedPrograms = new ObservableCollection<string>();
 
-            restorePageRightList.ItemsSource = addedPrograms;
             restoreButton.IsEnabled = false;
         }
 
@@ -48,49 +45,34 @@ namespace SettingsRecall {
 
             // Generate list of restorable programs, based on json data, filtered by directories backed up
             // TODO: Write unit test for directory backed up that's not in json data
-            IEnumerable<string> restorableProgramsEnumerable = Directory.GetDirectories(restoreDir)
+            IEnumerable<ProgramListBoxItem> restorableProgramsEnumerable = Directory.GetDirectories(restoreDir)
                 .Select(dir => Helpers.TrimFilename(dir))
-                .Where(programName => allDbProgramNames.Contains(programName));
+                .Where(programName => allDbProgramNames.Contains(programName))
+                .Select(name => new ProgramListBoxItem { Name = name, Visibility = Visibility.Visible, IsSupported = true, IsChecked = false });
 
-            restorablePrograms = new ObservableCollection<string>(restorableProgramsEnumerable);
-            restorePageLeftList.ItemsSource = restorablePrograms;
+            programListBoxItems = new ObservableCollection<ProgramListBoxItem>(restorableProgramsEnumerable);
+            restorePageProgramList.ItemsSource = programListBoxItems;
+
+            selectAllButton.IsEnabled = programListBoxItems.Count != 0;
+            selectNoneButton.IsEnabled = programListBoxItems.Count != 0;
         }
 
-        private void addButton_Click(object sender, RoutedEventArgs e) {
-            // Make sure something is selected
-            if (restorePageLeftList.SelectedIndex == -1)
-                return;
-
-            // Remove from left list, add to right list
-            string selected = restorePageLeftList.SelectedItem.ToString();
-            addedPrograms.Add(selected);
-            restorablePrograms.Remove(selected);
-
-            // Enable the 'Restore' button if necessary
-            if (addedPrograms.Count > 0 && restoreDir != null)
-                restoreButton.IsEnabled = true;
+        private void selectAllButton_Click(object sender, RoutedEventArgs e) {
+            foreach (ProgramListBoxItem item in programListBoxItems.Where(item => item.IsSupported && !item.IsChecked))
+                item.IsChecked = true;
         }
 
-        private void removeButton_Click(object sender, RoutedEventArgs e) {
-            // Make sure something is selected
-            if (restorePageRightList.SelectedIndex == -1)
-                return;
-
-            // Remove from right list, add to left list
-            string selected = restorePageRightList.SelectedItem.ToString();
-            restorablePrograms.Add(selected);
-            addedPrograms.Remove(selected);
-
-            // Disable the 'Restore button if necessary
-            if (addedPrograms.Count == 0 || restoreDir == null) {
-                restoreButton.IsEnabled = false;
-            }
+        private void selectNoneButton_Click(object sender, RoutedEventArgs e) {
+            foreach (ProgramListBoxItem item in programListBoxItems.Where(item => item.IsSupported && item.IsChecked))
+                item.IsChecked = false;
         }
 
         private void restoreButton_Click(object sender, RoutedEventArgs e) {
             alertMessage.ClearAllAlerts();
 
-            if (restorePageRightList.Items.Count == 0) {
+            List<ProgramListBoxItem> checkedItems = programListBoxItems.Where(item => item.IsChecked).ToList();
+
+            if (checkedItems.Count == 0) {
                 alertMessage.AddAlertLabel("No programs selected to restore!");
                 return;
             }
@@ -101,14 +83,15 @@ namespace SettingsRecall {
                 return;
             }
 
-            IEnumerable<BackupDataModel> selectedPrograms = allBackedUpPrograms.Where(p => addedPrograms.Contains(p.ProgramName));
+            HashSet<string> selectedProgramNames = checkedItems.Select(item => item.Name).ToHashSet();
+            IEnumerable<BackupDataModel> selectedPrograms = allBackedUpPrograms.Where(p => selectedProgramNames.Contains(p.ProgramName));
+
             CopyHandler copyHandler = new CopyHandler(restoreDir);
 
             RestoreService.RestoreBackup(selectedPrograms, copyHandler);
         }
 
-        private ObservableCollection<string> restorablePrograms;
-        private ObservableCollection<string> addedPrograms;
+        private ObservableCollection<ProgramListBoxItem> programListBoxItems;
         private IEnumerable<BackupDataModel> allBackedUpPrograms;
         private AlertMessage alertMessage;
         private string restoreDir;

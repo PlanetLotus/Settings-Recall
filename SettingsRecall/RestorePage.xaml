@@ -7,12 +7,17 @@
       Width="770" Margin="5">
 
     <Grid>
-        <ListBox x:Name="restorePageLeftList" HorizontalAlignment="Left" Height="395" Margin="10,50,0,0" VerticalAlignment="Top" Width="320"/>
-        <ListBox x:Name="restorePageRightList" HorizontalAlignment="Left" Height="395" Margin="440,50,0,0" VerticalAlignment="Top" Width="320"/>
-        <Button x:Name="removeButton" Content="Remove" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,249,0,0" Click="removeButton_Click"/>
-        <Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="347,214,0,0" Click="addButton_Click"/>
+        <ListBox ItemsSource="{Binding ProgramListItems}" HorizontalAlignment="Left" Height="349" Margin="10,96,0,0" VerticalAlignment="Top" Width="750" x:Name="restorePageProgramList">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsSupported}" Visibility="{Binding Visibility}" Margin="5,3,0,3" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Name="selectAllButton" Content="Select All" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="19,56,0,0" IsEnabled="False" Click="selectAllButton_Click" />
+        <Button Name="selectNoneButton" Content="Select None" HorizontalAlignment="Left" VerticalAlignment="Top" Width="78" Margin="100,56,0,0" IsEnabled="False" Click="selectNoneButton_Click" />
         <Button x:Name="restoreButton" Content="Restore Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="632,466,0,0" Click="restoreButton_Click"/>
         <Button x:Name="chooseLoadFolderButton" Content="Choose Load Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="19,13,0,0" Click="chooseFolderButton_Click"/>
-        <Label x:Name="folderLabel" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,10,0,0" Width="301"/>
+        <Label x:Name="folderLabel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,10,0,0" Width="301"/>
     </Grid>
 </StackPanel>
