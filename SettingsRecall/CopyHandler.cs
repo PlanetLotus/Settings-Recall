@@ -65,6 +65,25 @@ namespace SettingsRecall {
             return null;
         }
 
+        public bool CloseBackup(string jsonData, string backupDataFileName) {
+            log.WriteLine("Backup finished at " + DateTime.Now);
+            log.Close();
+
+            fs.File.WriteAllText(backupDir + backupDataFileName, jsonData);
+
+            return true;
+        }
+
+        public bool CloseRestore() {
+            log.WriteLine("Restore finished at " + DateTime.Now);
+            log.Close();
+            return true;
+        }
+
+        public string BackupDir {
+            get { return backupDir; }
+        }
+
         private string CopyFile(string source, string dest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
             if (fs.File.Exists(dest)) {
                 if (overwriteSetting == OverwriteEnum.Rename) {
@@ -132,25 +151,6 @@ namespace SettingsRecall {
             // Copy all files
             foreach (string newPath in fs.Directory.GetFiles(source, "*.*", SearchOption.AllDirectories))
                 fs.File.Copy(newPath, newPath.Replace(source, dest), overwriteSetting == OverwriteEnum.Overwrite);
-        }
-
-        public bool CloseBackup(string jsonData, string backupDataFileName) {
-            log.WriteLine("Backup finished at " + DateTime.Now);
-            log.Close();
-
-            fs.File.WriteAllText(backupDir + backupDataFileName, jsonData);
-
-            return true;
-        }
-
-        public bool CloseRestore() {
-            log.WriteLine("Restore finished at " + DateTime.Now);
-            log.Close();
-            return true;
-        }
-
-        public string BackupDir {
-            get { return backupDir; }
         }
 
         private string GetUniqueFileDestination(string originalDest) {
