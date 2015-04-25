@@ -25,6 +25,7 @@ namespace SettingsRecall {
         public virtual DataTable GetDataTable(string sql) {
             DataTable dt = new DataTable();
             try {
+                Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
                 SQLiteConnection cnn = new SQLiteConnection(dbConnection);
                 cnn.Open();
                 SQLiteCommand mycommand = new SQLiteCommand(cnn);

@@ -51,6 +51,16 @@ namespace SettingsRecall {
             deleteFilesButton.IsEnabled = true;
         }
 
+        private void addFolderButton_Click(object sender, RoutedEventArgs e) {
+            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath)) {
+                fileCollection.Add(dialog.SelectedPath);
+                deleteFilesButton.IsEnabled = true;
+            }
+        }
+
         private void deleteFilesButton_Click(object sender, RoutedEventArgs e) {
             List<string> selectedFiles = fileListBox.SelectedItems.Cast<string>().ToList();
             foreach (string item in selectedFiles)

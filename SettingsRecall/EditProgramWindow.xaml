@@ -8,7 +8,8 @@
             <Button x:Name="deleteProgramButton" Content="Delete Program" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="10,417,0,0" Height="22" Click="deleteProgramButton_Click" TabIndex="5"/>
             <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="252,417,0,0" IsCancel="True" Height="22" TabIndex="4"/>
             <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="332,417,0,0" Click="saveButton_Click" Height="22" TabIndex="3"/>
-            <Button x:Name="deleteFilesButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="91,332,0,0" IsEnabled="False" Height="22" Click="deleteFilesButton_Click" TabIndex="1"/>
+            <Button x:Name="deleteFilesButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="171,332,0,0" IsEnabled="False" Height="22" Click="deleteFilesButton_Click" TabIndex="1"/>
+            <Button x:Name="addFolderButton" Content="Add Folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="91,332,0,0" Height="22" Click="addFolderButton_Click" TabIndex="0"/>
             <Button x:Name="addFilesButton" Content="Add Files" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="11,332,0,0" Height="22" Click="addFilesButton_Click" TabIndex="0"/>
             <TextBox x:Name="descriptionText" HorizontalAlignment="Left" Height="48" Margin="81,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="326" SpellCheck.IsEnabled="True" VerticalScrollBarVisibility="Auto" TabIndex="2"/>
             <Label Content="Program Name:&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="11,6,0,0" Height="27" Width="93"/>
