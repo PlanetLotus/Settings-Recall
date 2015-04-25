@@ -56,11 +56,16 @@ namespace SettingsRecall {
         }
 
         public virtual string Copy(string source, string dest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
-            if (!fs.File.Exists(source)) {
-                log.WriteLine("Source does not exist at " + source);
-                return null;
-            }
+            if (fs.File.Exists(source))
+                return CopyFile(source, dest, overwriteSetting);
+            else if (fs.Directory.Exists(source))
+                return CopyFolder(source, dest, overwriteSetting);
 
+            log.WriteLine("Source does not exist at " + source);
+            return null;
+        }
+
+        private string CopyFile(string source, string dest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
             if (fs.File.Exists(dest)) {
                 if (overwriteSetting == OverwriteEnum.Rename) {
                     dest = GetUniqueFileDestination(dest);
@@ -90,6 +95,45 @@ namespace SettingsRecall {
             return dest;
         }
 
+        private string CopyFolder(string source, string dest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
+            if (fs.Directory.Exists(dest)) {
+                if (overwriteSetting == OverwriteEnum.Rename) {
+                    dest = GetUniqueFolderDestination(dest);
+                } else if (overwriteSetting == OverwriteEnum.Ask) {
+                    MessageBoxResult result = MessageBox.Show(
+                        string.Format("{0} already exists. Overwrite? (\"No\" will rename file)", dest),
+                        "Overwrite file?",
+                        MessageBoxButton.YesNo);
+
+                    if (result == MessageBoxResult.No)
+                        dest = GetUniqueFolderDestination(dest);
+                }
+            }
+
+            if (!isDryRun) {
+                try {
+                    DoCopyFolder(source, dest, overwriteSetting);
+                } catch (Exception ex) {
+                    // TODO: Catch specific exceptions and handle accordingly
+                    log.WriteLine("Could not copy directory {0} to {1}: {2}", source, dest, ex.Message);
+                    return null;
+                }
+            }
+
+            log.WriteLine("Copied " + source + " to " + dest);
+            return dest;
+        }
+
+        private void DoCopyFolder(string source, string dest, OverwriteEnum overwriteSetting = OverwriteEnum.Rename) {
+            // Create all of the directories
+            foreach (string dirPath in fs.Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
+                fs.Directory.CreateDirectory(dirPath.Replace(source, dest));
+
+            // Copy all files
+            foreach (string newPath in fs.Directory.GetFiles(source, "*.*", SearchOption.AllDirectories))
+                fs.File.Copy(newPath, newPath.Replace(source, dest), overwriteSetting == OverwriteEnum.Overwrite);
+        }
+
         public bool CloseBackup(string jsonData, string backupDataFileName) {
             log.WriteLine("Backup finished at " + DateTime.Now);
             log.Close();
@@ -117,6 +161,19 @@ namespace SettingsRecall {
             while (fs.File.Exists(dest)) {
                 dest = dest.Substring(0, dest.Length - 1) + fileIncrementer;
                 fileIncrementer++;
+            }
+
+            return dest;
+        }
+
+        private string GetUniqueFolderDestination(string originalDest) {
+            // Loop through renaming process until dest doesn't exist
+            string dest = originalDest + "-1";
+            int incrementer = 1;
+
+            while (fs.Directory.Exists(dest)) {
+                dest = dest.Substring(0, dest.Length - 1) + incrementer;
+                incrementer++;
             }
 
             return dest;
